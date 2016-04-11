@@ -21,3 +21,6 @@ build/
 .project
 .settings/
 
+# IntelliJ Idea project files
+.idea/
+*.iml
