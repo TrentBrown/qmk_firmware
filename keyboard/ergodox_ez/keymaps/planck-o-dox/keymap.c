@@ -5,8 +5,9 @@
 #include "sleep_led.h"
 #include "action.h"
 
-// ultimod
+// ultimate
 #include "ultimod.h"
+#include "ultilayer.h"
 
 // planck-o-dox
 #include "keymap.h"
