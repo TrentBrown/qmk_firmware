@@ -72,6 +72,12 @@ void process_action_nocache(keyrecord_t *record)
 __attribute__ ((weak))
 void process_action_kb(keyrecord_t *record) {}
 
+//#ifndef NO_PLUGIN
+//void plugin_process_action_before_hook(keyrecord_t *record, action_t action) {}
+//void plugin_process_action_after_hook(keyrecord_t *record, action_t action) {}
+//#endif
+
+
 void process_action(keyrecord_t *record)
 {
     keyevent_t event = record->event;
@@ -95,6 +101,12 @@ void process_action(keyrecord_t *record)
         // clear the potential weak mods left by previously pressed keys
         clear_weak_mods();
     }
+
+#ifndef NO_PLUGIN
+    if (plugin_process_action_before_hook(record, action))
+        return;
+#endif
+
     switch (action.kind.id) {
         /* Key and Mods */
         case ACT_LMODS:
@@ -372,6 +384,10 @@ void process_action(keyrecord_t *record)
         default:
             break;
     }
+
+#ifndef NO_PLUGIN
+    plugin_process_action_after_hook(record, action);
+#endif
 }
 
 

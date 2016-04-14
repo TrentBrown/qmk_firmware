@@ -61,6 +61,11 @@ void action_function(keyrecord_t *record, uint8_t id, uint8_t opt);
 /* keyboard-specific key event (pre)processing */
 void process_action_kb(keyrecord_t *record);
 
+#ifndef NO_PLUGIN
+bool plugin_process_action_before_hook(keyrecord_t *record, action_t action);
+bool plugin_process_action_after_hook(keyrecord_t *record, action_t action);
+#endif
+
 /* Utilities for actions.  */
 #if !defined(NO_ACTION_LAYER) && defined(PREVENT_STUCK_MODIFIERS)
 extern bool disable_action_cache;
