@@ -131,11 +131,18 @@ plugin_process_action_before_hook
         g_modifier_bit = MOD_BIT(g_code);
 
     g_is_layer_modifier = false;
-    switch (g_code)
+    switch (action.kind.id)
     {
-        case KC_PGDOWN:
+        case ACT_LAYER:
+        case ACT_LAYER_TAP:
+        case ACT_LAYER_TAP_EXT:
             g_is_layer_modifier = true;
-            g_layer = EMOTICON_KEYMAP;
+
+            // Yuck:
+            keypos_t key = p_record->event.key;
+            uint16_t keycode = keymap_key_to_keycode(layer_switch_get_layer(key), key);
+            g_layer = keycode & 0xFF;
+
             break;
     }
 
