@@ -64,7 +64,7 @@ Planck:
                     KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_ENTER,
         KC_NO,      KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_RSHIFT,
         // --------------------------------------------------------------------------------
-                                F(A(SYM)),  F(A(BAN)),  F(A(NAF)),  KC_RALT,    KC_RCTRL,
+                                KC_PGDOWN,  F(A(BAN)),  F(A(NAF)),  KC_RALT,    KC_RCTRL,
 
         F(A(EMO)),  KC_NO,
         KC_NO,

@@ -35,13 +35,28 @@ static uint16_t locked_timeout = ULTIMOD_TIMEOUT_LOCKED_DEFAULT;  // Leaving loc
 #define STATE_LOCKED 4
 
 
+// Modifier type
+#define TYPE_NONE 0
+#define TYPE_LAYER 1
+#define TYPE_STANDARD 2
+
+
 // todo: Put these in a fake class (structure)?
 static int g_state = STATE_NONE;
+static bool g_is_modifier = false;
+static bool g_is_standard_modifier = false;
+static bool g_is_layer_modifier = false;
 static keypos_t g_modifier_key;
 static uint16_t g_modifier_pressed_time = 0;
 static uint16_t g_modifier_released_time = 0;
 static uint16_t g_last_action_time = 0;
 static uint8_t g_modifier_bit = 0;
+static uint8_t g_layer = 0;
+static bool g_pressed = false;
+static bool g_released = false;
+static uint16_t g_event_time = 0;
+static uint16_t g_code = 0;
+
 
 
 // Forward declarations of local functions
@@ -49,7 +64,7 @@ uint8_t mod_flag_to_bits(uint8_t flag);
 bool is_same_key(keypos_t first, keypos_t second);
 bool timed_out(uint16_t first, uint16_t second, uint16_t timeout);
 void ultimod_clear();
-bool regular_before_hook
+bool character_before_hook
     (
         keyrecord_t* p_record,
         action_t action
@@ -59,7 +74,7 @@ bool modifier_before_hook
         keyrecord_t* p_record,
         action_t action
     );
-bool regular_after_hook
+bool character_after_hook
     (
         keyrecord_t* p_record,
         action_t action
@@ -97,13 +112,40 @@ plugin_process_action_before_hook
         action_t action
     )
 {
-    const uint16_t code = action.code;
-    const bool is_modifier = (code == KC_LSHIFT || code == KC_RSHIFT || code == KC_LALT || code == KC_RALT || code == KC_LGUI || code == KC_RGUI || code == KC_LCTRL || code == KC_RCTRL);
-    bool consumed;
-    if (is_modifier)
+    bool consumed = false;
+
+    g_pressed = p_record->event.pressed;
+    g_released = !g_pressed;
+
+    g_event_time = p_record->event.time;
+
+    if (g_pressed)
+        g_modifier_pressed_time = g_event_time;
+    if (g_released)
+        g_modifier_released_time = g_event_time;
+
+    g_code = action.code;
+
+    g_is_standard_modifier = (g_code == KC_LSHIFT || g_code == KC_RSHIFT || g_code == KC_LALT || g_code == KC_RALT || g_code == KC_LGUI || g_code == KC_RGUI || g_code == KC_LCTRL || g_code == KC_RCTRL);
+    if (g_is_standard_modifier)
+        g_modifier_bit = MOD_BIT(g_code);
+
+    g_is_layer_modifier = false;
+    switch (g_code)
+    {
+        case KC_PGDOWN:
+            g_is_layer_modifier = true;
+            g_layer = EMOTICON_KEYMAP;
+            break;
+    }
+
+    g_is_modifier = (g_is_standard_modifier || g_is_layer_modifier);
+
+    if (g_is_modifier)
         consumed = modifier_before_hook(p_record, action);
     else
-        consumed = regular_before_hook(p_record, action);
+        consumed = character_before_hook(p_record, action);
+
     return consumed;
 }
 
@@ -117,19 +159,17 @@ plugin_process_action_after_hook
 {
     bool consumed = false;
 
-    const uint16_t code = action.code;
-    const bool is_modifier = (code == KC_LSHIFT || code == KC_RSHIFT || code == KC_LALT || code == KC_RALT || code == KC_LGUI || code == KC_RGUI || code == KC_LCTRL || code == KC_RCTRL);
-    if (is_modifier)
+    if (g_is_modifier)
         consumed = modifier_after_hook(p_record, action);
     else
-        consumed = regular_after_hook(p_record, action);
+        consumed = character_after_hook(p_record, action);
 
     return consumed;
 }
 
 
 bool
-regular_before_hook
+character_before_hook
     (
         keyrecord_t* p_record,
         action_t action
@@ -137,8 +177,7 @@ regular_before_hook
 {
     bool consumed = false;
 
-    const uint16_t code = action.code;
-    if (code == KC_ESCAPE)
+    if (g_code == KC_ESCAPE)
     {
         ultimod_escape(p_record);
         consumed = true;
@@ -149,7 +188,7 @@ regular_before_hook
 
 
 bool
-regular_after_hook
+character_after_hook
     (
         keyrecord_t* p_record,
         action_t action
@@ -157,15 +196,13 @@ regular_after_hook
 {
     const bool consumed = false;
 
-    const bool pressed = p_record->event.pressed;
-
     switch (g_state)
     {
         case STATE_NONE:
             break;
 
         case STATE_HELD:
-            if (pressed)
+            if (g_pressed)
                 g_state = STATE_MOMENTARY;
             break;
 
@@ -173,7 +210,7 @@ regular_after_hook
             break;
 
         case STATE_ONE_SHOT:
-            if (pressed)
+            if (g_pressed)
                 transition_to_state_none();
             break;
 
@@ -208,29 +245,14 @@ modifier_after_hook
 {
     bool consumed = false;
 
-    const uint16_t code = action.code;
-
-    const bool pressed = p_record->event.pressed;
-    const bool released = !pressed;
-    
-    if (pressed)
-        g_modifier_bit = MOD_BIT(code);
-    
     // Make sure modifier chord matches exactly
     //    if (g_modifier_bit != get_mods())
     //        return;
 
-    const uint16_t event_time = p_record->event.time;
-
-    if (pressed)
-        g_modifier_pressed_time = event_time;
-    if (released)
-        g_modifier_released_time = event_time;
-
     switch (g_state)
     {
         case STATE_NONE:
-            if (pressed)
+            if (g_pressed)
             {
                 g_modifier_key = p_record->event.key;
                 g_state = STATE_HELD;
@@ -239,15 +261,15 @@ modifier_after_hook
             break;
 
         case STATE_HELD:
-            if (released)
+            if (g_released)
             {
-                if (timed_out(event_time, g_modifier_pressed_time, single_tap_timeout))
+                if (timed_out(g_event_time, g_modifier_pressed_time, single_tap_timeout))
                 {
                     transition_to_state_none();
                 }
                 else
                 {
-                    g_last_action_time = event_time;
+                    g_last_action_time = g_event_time;
                     g_state = STATE_ONE_SHOT;
                 }
                 consumed = true;
@@ -255,7 +277,7 @@ modifier_after_hook
             break;
 
         case STATE_MOMENTARY:
-            if (released)
+            if (g_released)
             {
                 transition_to_state_none();
                 consumed = true;
@@ -263,9 +285,9 @@ modifier_after_hook
             break;
 
         case STATE_ONE_SHOT:
-            if (pressed)
+            if (g_pressed)
             {
-                if (timed_out(event_time, g_modifier_released_time, double_tap_timeout))
+                if (timed_out(g_event_time, g_modifier_released_time, double_tap_timeout))
                     transition_to_state_none();
                 else
                     g_state = STATE_LOCKED;
@@ -274,7 +296,7 @@ modifier_after_hook
             break;
 
         case STATE_LOCKED:
-            if (pressed)
+            if (g_pressed)
             {
                 transition_to_state_none();
                 consumed = true;
@@ -282,8 +304,12 @@ modifier_after_hook
             break;
     }
 
-    // Not clear to me why we have to to do this in all cases, but…
-    add_mods(g_modifier_bit);
+    // Not clear to me why we have to to do this
+    if (g_state != STATE_NONE)
+    {
+        add_mods(g_modifier_bit);
+        layer_on(g_layer);
+    }
 
     return consumed;
 }
@@ -340,24 +366,6 @@ void
 transition_to_state_none()
 {
     ultimod_clear();
-}
-
-
-void
-ultimod_clear()
-{
-    clear_keyboard();
-
-    ergodox_led_all_off();
-
-    g_modifier_bit = 0;
-    g_modifier_pressed_time = 0;
-    g_modifier_released_time = 0;
-    g_last_action_time = 0;
-    g_modifier_key.col = 0;
-    g_modifier_key.row = 0;
-
-    g_state = STATE_NONE;
 }
 
 
@@ -447,3 +455,30 @@ is_same_key
         return false;
     return true;
 }
+
+
+void
+ultimod_clear()
+{
+    clear_keyboard();
+    layer_clear();
+
+    ergodox_led_all_off();
+
+    g_state = STATE_NONE;
+    g_is_modifier = false;
+    g_is_standard_modifier = false;
+    g_is_layer_modifier = false;
+    g_modifier_key.col = 0;
+    g_modifier_key.row = 0;
+    g_modifier_bit = 0;
+    g_modifier_pressed_time = 0;
+    g_modifier_released_time = 0;
+    g_last_action_time = 0;
+    g_layer = 0;
+    g_pressed = false;
+    g_released = false;
+    g_event_time = 0;
+    g_code = 0;
+}
+
