@@ -7,7 +7,6 @@
 
 // ultimate
 #include "ultimod.h"
-#include "ultilayer.h"
 
 // planck-o-dox
 #include "keymap.h"

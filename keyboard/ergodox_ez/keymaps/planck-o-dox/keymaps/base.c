@@ -7,7 +7,7 @@ Ergodox:
     ,--------------------------------------------------.           ,--------------------------------------------------.
     | Escape | Undo | Cut  | Copy |Paste |      |      |           |  <<  | Pause|  >>  |  V-  | Mute |  V+  |   Base |
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-    | Tab    |  Q   |  W   |  E   |  R   |  T   |      |           |      |   Y  |   U  |   I  |   O  |   P  |   Swap |
+    | Tab    |  Q   |  W   |  E   |  R   |  T   |  :-) |           | (-:  |   Y  |   U  |   I  |   O  |   P  |   Swap |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     | Command|  A   |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   ;  |  Enter |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -16,11 +16,11 @@ Ergodox:
       | Ctl  |Option| NAF  | BAN  |Symbol|                                       |Symbol|  BAN |  NAF |Option|  Ctl |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
-                                           |      |  :-) |       | (-:  |      |
+                                           |      |      |       |      |      |
                                     ,------|------|------|       |------+------+------.
-                                    |Back  |      |      |       |      |      |      |
+                                    |Back  |      | Home |       | PgUp |      |      |
                                     |Space |Delete|------|       |------| Hyper| Space|
-                                    |      |      |      |       |      |      |      |
+                                    |      |      |  End |       | PgDn |      |      |
                                     `--------------------'       `--------------------'
 
 
@@ -45,30 +45,30 @@ Planck:
 
         // --------------------------------------------------------------------------------
         KC_ESCAPE,  LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), KC_NO,      KC_NO,
-        KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_NO,
+        KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       MO(A(EMO)),
         KC_LGUI,    KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
         KC_LSHIFT,  KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_NO,
         // --------------------------------------------------------------------------------
         KC_LCTRL,   KC_LALT,    MO(A(NAF)), MO(A(BAN)), MO(A(SYM)),
 
-                                                                    KC_NO,      MO(A(EMO)),
-                                                                                KC_NO,
-                                                        KC_BSPACE,  KC_DELETE,  KC_NO,
+                                                                    KC_NO,      KC_NO,
+                                                                                KC_HOME,
+                                                        KC_BSPACE,  KC_DELETE,  KC_END,
 
 
         // Right  KC_MPRV,    KC_MPLY,    KC_MNXT
 
         // --------------------------------------------------------------------------------
         KC_MPRV,    KC_MPLY,    KC_MNXT,    KC_VOLD,    KC_MUTE,    KC_VOLU,    TO(K(BAS), ON_PRESS),
-        KC_NO,      KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       LGUI(KC_TAB),
+        MO(A(EMO)), KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       LGUI(KC_TAB),
                     KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_ENTER,
         KC_NO,      KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_RSHIFT,
         // --------------------------------------------------------------------------------
                                 MO(A(SYM)), MO(A(BAN)), MO(A(NAF)),    KC_RALT,    KC_RCTRL,
 
-        MO(A(EMO)), KC_NO,
-        KC_NO,
-        KC_NO,      MO(K(HYPER)),     KC_SPACE
+        KC_NO,      KC_NO,
+        KC_PGUP,
+        KC_PGDOWN,  MO(K(HYPER)),     KC_SPACE
     )
 
 
