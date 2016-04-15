@@ -190,6 +190,13 @@ character_before_hook
         consumed = true;
     }
 
+    // Not clear to me why we have to to do this
+    if (g_state != STATE_NONE)
+    {
+        add_mods(g_modifier_bit);
+        layer_on(g_layer);
+    }
+
     return consumed;
 }
 
@@ -231,20 +238,6 @@ character_after_hook
 
 bool
 modifier_before_hook
-    (
-        keyrecord_t* p_record,
-        action_t action
-    )
-{
-    return false;
-}
-
-
-// TODO: Move some of the following to the "before" so that we can consume the chars. Avoids problem with IntelliJ.
-// for example, where double-tap of shift does something.
-
-bool
-modifier_after_hook
     (
         keyrecord_t* p_record,
         action_t action
@@ -310,6 +303,22 @@ modifier_after_hook
             }
             break;
     }
+
+    return consumed;
+}
+
+
+// TODO: Move some of the following to the "before" so that we can consume the chars. Avoids problem with IntelliJ.
+// for example, where double-tap of shift does something.
+
+bool
+modifier_after_hook
+    (
+        keyrecord_t* p_record,
+        action_t action
+    )
+{
+    bool consumed = false;
 
     // Not clear to me why we have to to do this
     if (g_state != STATE_NONE)
