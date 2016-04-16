@@ -21,18 +21,24 @@
 
 
 // State machine states
-#define STATE_NONE 0
-#define STATE_HELD 1
-#define STATE_MOMENTARY 2
-#define STATE_ONE_SHOT 3
-#define STATE_LOCKED 4
+typedef enum UltimodMachineState
+{
+    NO_STATE,
+    HELD_STATE,
+    MOMENTARY_STATE,
+    ONE_SHOT_STATE,
+    LOCKED_STATE
+} UltimodMachineState;
 
 
 // Modifier type
 // todo: use these:
-#define TYPE_NONE 0
-#define TYPE_LAYER 1
-#define TYPE_CHARACTER 2
+typedef enum UltimodModifierType
+{
+    TYPE_NONE,
+    TYPE_LAYER,
+    TYPE_CHARACTER
+} UltimodModifierType;
 
 
 typedef struct UltimodSettings
@@ -67,7 +73,7 @@ typedef struct UltimodEvent
 // State machine state valid across multiple events
 typedef struct UltimodMachine
 {
-    int state;
+    UltimodMachineState state;
     bool is_modifier;
     bool is_standard_modifier;
     bool is_layer_modifier;
@@ -160,7 +166,7 @@ ultimod_event_reset()
 void
 ultimod_machine_reset()
 {
-    ultimod.machine.state = STATE_NONE;
+    ultimod.machine.state = NO_STATE;
     ultimod.machine.is_modifier = false;
     ultimod.machine.is_standard_modifier = false;
     ultimod.machine.is_layer_modifier = false;
@@ -268,23 +274,23 @@ character_after_hook()
 
     switch (ultimod.machine.state)
     {
-        case STATE_NONE:
+        case NO_STATE:
             break;
 
-        case STATE_HELD:
+        case HELD_STATE:
             if (ultimod.event.pressed)
-                ultimod.machine.state = STATE_MOMENTARY;
+                ultimod.machine.state = MOMENTARY_STATE;
             break;
 
-        case STATE_MOMENTARY:
+        case MOMENTARY_STATE:
             break;
 
-        case STATE_ONE_SHOT:
+        case ONE_SHOT_STATE:
             if (ultimod.event.pressed)
                 transition_to_state_none();
             break;
 
-        case STATE_LOCKED:
+        case LOCKED_STATE:
             break;
     }
 
@@ -313,16 +319,16 @@ modifier_after_hook()
 
     switch (ultimod.machine.state)
     {
-        case STATE_NONE:
+        case NO_STATE:
             if (ultimod.event.pressed)
             {
                 ultimod.machine.modifier_key = p_keyrecord->event.key;
-                ultimod.machine.state = STATE_HELD;
+                ultimod.machine.state = HELD_STATE;
                 consumed = true;
             }
             break;
 
-        case STATE_HELD:
+        case HELD_STATE:
             if (ultimod.event.released)
             {
                 if (timed_out(ultimod.event.time, ultimod.machine.modifier_pressed_time, single_tap_timeout))
@@ -332,13 +338,13 @@ modifier_after_hook()
                 else
                 {
                     ultimod.machine.last_action_time = ultimod.event.time;
-                    ultimod.machine.state = STATE_ONE_SHOT;
+                    ultimod.machine.state = ONE_SHOT_STATE;
                 }
                 consumed = true;
             }
             break;
 
-        case STATE_MOMENTARY:
+        case MOMENTARY_STATE:
             if (ultimod.event.released)
             {
                 transition_to_state_none();
@@ -346,18 +352,18 @@ modifier_after_hook()
             }
             break;
 
-        case STATE_ONE_SHOT:
+        case ONE_SHOT_STATE:
             if (ultimod.event.pressed)
             {
                 if (timed_out(ultimod.event.time, ultimod.machine.modifier_released_time, double_tap_timeout))
                     transition_to_state_none();
                 else
-                    ultimod.machine.state = STATE_LOCKED;
+                    ultimod.machine.state = LOCKED_STATE;
                 consumed = true;
             }
             break;
 
-        case STATE_LOCKED:
+        case LOCKED_STATE:
             if (ultimod.event.pressed)
             {
                 transition_to_state_none();
@@ -367,7 +373,7 @@ modifier_after_hook()
     }
 
     // Not clear to me why we have to to do this
-    if (ultimod.machine.state != STATE_NONE)
+    if (ultimod.machine.state != NO_STATE)
     {
         add_mods(ultimod.machine.modifier_bit);
         layer_on(ultimod.machine.layer);
@@ -383,21 +389,21 @@ void ultimod_matrix_scan()
 
     switch (ultimod.machine.state)
     {
-        case STATE_NONE:
+        case NO_STATE:
             break;
 
-        case STATE_HELD:
+        case HELD_STATE:
             break;
 
-        case STATE_MOMENTARY:
+        case MOMENTARY_STATE:
             break;
 
-        case STATE_ONE_SHOT:
+        case ONE_SHOT_STATE:
             if (timed_out(now, ultimod.machine.last_action_time, one_shot_timeout))
                 transition_to_state_none();
             break;
 
-        case STATE_LOCKED:
+        case LOCKED_STATE:
             if (timed_out(now, ultimod.machine.last_action_time, locked_timeout))
                 transition_to_state_none();
             break;
@@ -437,19 +443,19 @@ void ultimod_set_leds()
 
     switch (ultimod.machine.state)
     {
-        case STATE_NONE:
+        case NO_STATE:
             break;
 
-        case STATE_HELD:
-        case STATE_MOMENTARY:
+        case HELD_STATE:
+        case MOMENTARY_STATE:
             ergodox_right_led_2_on();  // Green
             break;
 
-        case STATE_ONE_SHOT:
+        case ONE_SHOT_STATE:
             ergodox_right_led_3_on();  // Blue
             break;
 
-        case STATE_LOCKED:
+        case LOCKED_STATE:
             ergodox_right_led_1_on();  // Red
             break;
     }
