@@ -1,3 +1,12 @@
+What's a Planck-o-Dox, you ask?
+
+Nothing so exotic as a morphing keyboard.
+
+It's a layout that works for both.
+
+The thing is, it is NOT easy to switch back and forth between an ortholinear keyboard and a staggered keyboard. Sorry, it's just not. When I'm away from my desk, I can't lug my Ergodox along. It's big, bulky, has two cables, two boards (duh). And I can't use my laptap keyboard. Solution? A lovely Planck keyboard to take along.
+
+
 This is my strongly-opinionated Mac OSX Ergodox layout.
 
 I needed something to take my mind off of my anxious waiting for my new ErogoDox Ez to get built and sent to me. I really like what I came up with. Maybe others will find some of this useful, too.

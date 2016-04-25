@@ -103,26 +103,26 @@ What I came up with:
 | F   | !      | "F&#42;&#42;k" (Really wanted this on home row and not using "B" for "bang" frees that up for "bullet")      |
 | G   | `      | "Grave accent mark"                                                                                   |
 | H   | #      | "Hash" Could have used P for "Pound", but there's too much competition (plus, percent, pipe)          |
-| I   | ∞      | "Infinity" Not a very practical character, but oh so chill.                                           |
-| J   | &      | "Join", "conJunction", "Jampersand" (Also: Uses same finger as the standard shift-7)                  |
-| K   | $      | "Kash". FWIW, it's the mirror of the left hand's middle finger "D" ("Dollar") and standard shift-4.  |
-| L   | &#124; | Pipe looks like lowercase "l".                                                                        |
-| M   | —      | "eM-dash". I'm a typography geek. "Please come to my cocktail party from 6:00—10:00 PM, Saturday"     |
+| I   | |      | Pipe looks like a sans-serif "I".                                                                     |
+| J   | "      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
+| K   | '      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
+| L   | &#124; | Lame mnemonics: "Lampersand", "Link"                                                                  |
+| M   | $      | "Money"                                                                                               |
 | N   | ≠      | "Not equal" (Am torn between this and "eN-dash" or "!=" sequence)                                     |
 | O   | ©      | Looks circular (And "C" is taken by caret, which has nowhere else to go)                              |
 | P   | %      | "Percent"                                                                                             |
 | ;   | +      | Could have used "P" key just above, but "Percent" is there, and would rather have "Plus" on home row. |
-| Q   | ÷      | "Quotient" (Don't use this much, but don't know what else to put here) TODO: Consider question mark here |
+| Q   | ¿      | "Question mark" (upside down). So I can show off my high school Spanish skilz.                        |
 | R   | ®      | "Registration mark"                                                                                   |
 | S   | *      | "Star", "Splat", "aSteriSk"                                                                           |
 | T   | ~      | "Tilde"                                                                                               |
 | U   | _      | "Underscore"  Would have liked this on the home row, but at least it's no longer a double-pinkie char.|
 | V   | √      | Looks like a checkmark.                                                                               |
-| W   | ≈      | "Water", "Wave". Whatever...                                                                          |
+| W   | ≈      | "Water", "Wave". "eqWivalent" Whatever...                                                                          |
 | X   | ¬      | Character denotes negation, kinda. "Ex it out."                                                       |
-| Y   | ±      | "Your mileage may vary"                                                                               |
-| Z   | Ø      | "Zip", "Zilch", "Zero".                                                         |
-| /   | ¿      | Same position as normal question mark on alpha layer. So I can show off my high school Spanish skilz. |
+| Y   | —      | "wYde dash" (em-dash). I'm a typography geek. "Please come to my cocktail party from 6:00—10:00 PM, Saturday"   |
+| Z   | Ø      | "Zip", "Zilch", "Zero".                                                                               |
+| /   | \      | Same position as forward slash on base layer. Makes sense that it is being modified here.             |
 | .   | …      | Ellipis character on the dot key. Replaces Option-. on a Mac.                                         |
 
 */
