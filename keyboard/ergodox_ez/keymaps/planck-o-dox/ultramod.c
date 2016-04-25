@@ -8,8 +8,8 @@
 #include "timer.h"
 #include "keycode.h"
 
-// ultimod
-#include "ultimod.h"
+// ultramod
+#include "ultramod.h"
 
 
 // TODO: Document this. This is a state machine. Use Markdown
@@ -23,27 +23,27 @@
 
 
 // State machine states
-typedef enum UltimodMachineState
+typedef enum UltramodMachineState
 {
     NORMAL_STATE,
     HELD_STATE,
     MOMENTARY_STATE,
     ONE_SHOT_STATE,
     LOCKED_STATE
-} UltimodMachineState;
+} UltramodMachineState;
 
 
 // Modifier type
 // todo: use these:
-typedef enum UltimodModifierType
+typedef enum UltramodModifierType
 {
     NO_MODIFIER,
     LAYER_MODIFIER,
     CHARACTER_MODIFIER
-} UltimodModifierType;
+} UltramodModifierType;
 
 
-typedef struct UltimodSettings
+typedef struct UltramodSettings
 {
     // Unit for timeouts are milliseconds and a zero value means "never time out"
 
@@ -58,11 +58,11 @@ typedef struct UltimodSettings
 
     // Leaving locked state if the user hasn't typed any characters
     uint16_t locked_timeout;
-} UltimodSettings;
+} UltramodSettings;
 
 
 // State valid during processing of a single event
-typedef struct UltimodEvent
+typedef struct UltramodEvent
 {
     uint16_t code;
     bool pressed;
@@ -72,40 +72,40 @@ typedef struct UltimodEvent
     bool is_modifier;
     bool is_standard_modifier;
     bool is_layer_modifier;
-} UltimodEvent;
+} UltramodEvent;
 
 
 // State valid across multiple events
-typedef struct UltimodMachine
+typedef struct UltramodMachine
 {
-    UltimodMachineState state;
+    UltramodMachineState state;
     keypos_t modifier_key;
     uint16_t modifier_pressed_time;
     uint16_t modifier_released_time;
     uint16_t last_action_time;
     uint8_t modifier_bit;
     uint8_t layer;
-} UltimodMachine;
+} UltramodMachine;
 
 
-// The global Ultimod state
-typedef struct Ultimod
+// The global Ultramod state
+typedef struct Ultramod
 {
-    UltimodSettings settings;
-    UltimodMachine machine;
-    UltimodEvent event;
-} Ultimod;
+    UltramodSettings settings;
+    UltramodMachine machine;
+    UltramodEvent event;
+} Ultramod;
 
 
-// The Ultimod "singleton" (ie. our only global variable)
-Ultimod ultimod;
+// The Ultramod "singleton" (ie. our only global variable)
+Ultramod ultramod;
 
 
 // Forward declarations of local functions
-void ultimod_reset(void);
-void ultimod_settings_reset(void);
-void ultimod_machine_reset(void);
-void ultimod_event_reset(void);
+void ultramod_reset(void);
+void ultramod_settings_reset(void);
+void ultramod_machine_reset(void);
+void ultramod_event_reset(void);
 uint8_t mod_flag_to_bits(uint8_t flag);
 bool is_same_key(keypos_t first, keypos_t second);
 bool timed_out(uint16_t first, uint16_t second, uint16_t timeout);
@@ -113,77 +113,77 @@ bool character_before_hook(void);
 bool modifier_before_hook(void);
 bool character_after_hook(void);
 bool modifier_after_hook(void);
-void ultimod_escape(keyrecord_t* p_keyrecord);
+void ultramod_escape(keyrecord_t* p_keyrecord);
 void set_normal_state(void);
 
 
 void
-ultimod_configure_timeout
+ultramod_configure_timeout
     (
         const char* p_name,
         uint16_t milliseconds
     )
 {
-    if (strcmp(p_name, ULTIMOD_TIMEOUT_SINGLE_TAP) == 0)
-        ultimod.settings.single_tap_timeout = milliseconds;
-    else if (strcmp(p_name, ULTIMOD_TIMEOUT_DOUBLE_TAP) == 0)
-        ultimod.settings.double_tap_timeout = milliseconds;
-    else if (strcmp(p_name, ULTIMOD_TIMEOUT_ONE_SHOT) == 0)
-        ultimod.settings.one_shot_timeout = milliseconds;
-    else if (strcmp(p_name, ULTIMOD_TIMEOUT_LOCKED) == 0)
-        ultimod.settings.locked_timeout = milliseconds;
+    if (strcmp(p_name, ULTRAMOD_TIMEOUT_SINGLE_TAP) == 0)
+        ultramod.settings.single_tap_timeout = milliseconds;
+    else if (strcmp(p_name, ULTRAMOD_TIMEOUT_DOUBLE_TAP) == 0)
+        ultramod.settings.double_tap_timeout = milliseconds;
+    else if (strcmp(p_name, ULTRAMOD_TIMEOUT_ONE_SHOT) == 0)
+        ultramod.settings.one_shot_timeout = milliseconds;
+    else if (strcmp(p_name, ULTRAMOD_TIMEOUT_LOCKED) == 0)
+        ultramod.settings.locked_timeout = milliseconds;
 }
 
 
 void
-ultimod_reset(void)
+ultramod_reset(void)
 {
     clear_keyboard();
     layer_clear();
 
     ergodox_led_all_off();
 
-    ultimod_settings_reset();
-    ultimod_event_reset();
-    ultimod_machine_reset();
+    ultramod_settings_reset();
+    ultramod_event_reset();
+    ultramod_machine_reset();
 }
 
 
 void
-ultimod_settings_reset(void)
+ultramod_settings_reset(void)
 {
-    ultimod.settings.single_tap_timeout = ULTIMOD_TIMEOUT_SINGLE_TAP_DEFAULT;
-    ultimod.settings.double_tap_timeout = ULTIMOD_TIMEOUT_DOUBLE_TAP_DEFAULT;
-    ultimod.settings.one_shot_timeout = ULTIMOD_TIMEOUT_ONE_SHOT_DEFAULT;
-    ultimod.settings.locked_timeout = ULTIMOD_TIMEOUT_LOCKED_DEFAULT;
+    ultramod.settings.single_tap_timeout = ULTRAMOD_TIMEOUT_SINGLE_TAP_DEFAULT;
+    ultramod.settings.double_tap_timeout = ULTRAMOD_TIMEOUT_DOUBLE_TAP_DEFAULT;
+    ultramod.settings.one_shot_timeout = ULTRAMOD_TIMEOUT_ONE_SHOT_DEFAULT;
+    ultramod.settings.locked_timeout = ULTRAMOD_TIMEOUT_LOCKED_DEFAULT;
 }
 
 
 void
-ultimod_event_reset(void)
+ultramod_event_reset(void)
 {
-    ultimod.event.code = 0;
-    ultimod.event.pressed = false;
-    ultimod.event.released = false;
-    ultimod.event.p_keyrecord  = NULL;
-    ultimod.event.time = 0;
-    ultimod.event.is_modifier = false;
-    ultimod.event.is_standard_modifier = false;
-    ultimod.event.is_layer_modifier = false;
+    ultramod.event.code = 0;
+    ultramod.event.pressed = false;
+    ultramod.event.released = false;
+    ultramod.event.p_keyrecord  = NULL;
+    ultramod.event.time = 0;
+    ultramod.event.is_modifier = false;
+    ultramod.event.is_standard_modifier = false;
+    ultramod.event.is_layer_modifier = false;
 }
 
 
 void
-ultimod_machine_reset(void)
+ultramod_machine_reset(void)
 {
-    ultimod.machine.state = NORMAL_STATE;
-    ultimod.machine.modifier_key.col = 0;
-    ultimod.machine.modifier_key.row = 0;
-    ultimod.machine.modifier_pressed_time = 0;
-    ultimod.machine.modifier_released_time = 0;
-    ultimod.machine.last_action_time = 0;
-    ultimod.machine.modifier_bit = 0;
-    ultimod.machine.layer = 0;
+    ultramod.machine.state = NORMAL_STATE;
+    ultramod.machine.modifier_key.col = 0;
+    ultramod.machine.modifier_key.row = 0;
+    ultramod.machine.modifier_pressed_time = 0;
+    ultramod.machine.modifier_released_time = 0;
+    ultramod.machine.last_action_time = 0;
+    ultramod.machine.modifier_bit = 0;
+    ultramod.machine.layer = 0;
 }
 
 
@@ -196,43 +196,43 @@ plugin_process_action_before_hook
 {
     bool consumed = false;
 
-    ultimod.event.p_keyrecord = p_keyrecord;
+    ultramod.event.p_keyrecord = p_keyrecord;
 
-    ultimod.event.pressed = p_keyrecord->event.pressed;
-    ultimod.event.released = !ultimod.event.pressed;
+    ultramod.event.pressed = p_keyrecord->event.pressed;
+    ultramod.event.released = !ultramod.event.pressed;
 
-    ultimod.event.time = p_keyrecord->event.time;
+    ultramod.event.time = p_keyrecord->event.time;
 
-    if (ultimod.event.pressed)
-        ultimod.machine.modifier_pressed_time = ultimod.event.time;
-    if (ultimod.event.released)
-        ultimod.machine.modifier_released_time = ultimod.event.time;
+    if (ultramod.event.pressed)
+        ultramod.machine.modifier_pressed_time = ultramod.event.time;
+    if (ultramod.event.released)
+        ultramod.machine.modifier_released_time = ultramod.event.time;
 
-    ultimod.event.code = action.code;
+    ultramod.event.code = action.code;
 
-    ultimod.event.is_standard_modifier = (ultimod.event.code == KC_LSHIFT || ultimod.event.code == KC_RSHIFT || ultimod.event.code == KC_LALT || ultimod.event.code == KC_RALT || ultimod.event.code == KC_LGUI || ultimod.event.code == KC_RGUI || ultimod.event.code == KC_LCTRL || ultimod.event.code == KC_RCTRL);
-    if (ultimod.event.is_standard_modifier)
-        ultimod.machine.modifier_bit = MOD_BIT(ultimod.event.code);
+    ultramod.event.is_standard_modifier = (ultramod.event.code == KC_LSHIFT || ultramod.event.code == KC_RSHIFT || ultramod.event.code == KC_LALT || ultramod.event.code == KC_RALT || ultramod.event.code == KC_LGUI || ultramod.event.code == KC_RGUI || ultramod.event.code == KC_LCTRL || ultramod.event.code == KC_RCTRL);
+    if (ultramod.event.is_standard_modifier)
+        ultramod.machine.modifier_bit = MOD_BIT(ultramod.event.code);
 
-    ultimod.event.is_layer_modifier = false;
+    ultramod.event.is_layer_modifier = false;
     switch (action.kind.id)
     {
         case ACT_LAYER:
         case ACT_LAYER_TAP:
         case ACT_LAYER_TAP_EXT:
-            ultimod.event.is_layer_modifier = true;
+            ultramod.event.is_layer_modifier = true;
 
             // Yuck. A necessary evil.
             keypos_t key = p_keyrecord->event.key;
             uint16_t keycode = keymap_key_to_keycode(layer_switch_get_layer(key), key);
-            ultimod.machine.layer = keycode & 0xFF;
+            ultramod.machine.layer = keycode & 0xFF;
 
             break;
     }
 
-    ultimod.event.is_modifier = (ultimod.event.is_standard_modifier || ultimod.event.is_layer_modifier);
+    ultramod.event.is_modifier = (ultramod.event.is_standard_modifier || ultramod.event.is_layer_modifier);
 
-    if (ultimod.event.is_modifier)
+    if (ultramod.event.is_modifier)
         consumed = modifier_before_hook();
     else
         consumed = character_before_hook();
@@ -250,7 +250,7 @@ plugin_process_action_after_hook
 {
     bool consumed = false;
 
-    if (ultimod.event.is_modifier)
+    if (ultramod.event.is_modifier)
         consumed = modifier_after_hook();
     else
         consumed = character_after_hook();
@@ -264,9 +264,9 @@ character_before_hook(void)
 {
     bool consumed = false;
 
-    if (ultimod.event.code == KC_ESCAPE)
+    if (ultramod.event.code == KC_ESCAPE)
     {
-        ultimod_escape(ultimod.event.p_keyrecord);
+        ultramod_escape(ultramod.event.p_keyrecord);
         consumed = true;  // todo: Why not use false here and just piggyback?
     }
 
@@ -279,7 +279,7 @@ character_after_hook(void)
 {
     const bool consumed = false;
 
-    switch (ultimod.machine.state)
+    switch (ultramod.machine.state)
     {
         case NORMAL_STATE:
             break;
@@ -287,8 +287,8 @@ character_after_hook(void)
         case HELD_STATE:
 
             // The user typing any character commits him to the "momentary" state
-            if (ultimod.event.pressed)
-                ultimod.machine.state = MOMENTARY_STATE;
+            if (ultramod.event.pressed)
+                ultramod.machine.state = MOMENTARY_STATE;
             break;
 
         case MOMENTARY_STATE:
@@ -297,7 +297,7 @@ character_after_hook(void)
         case ONE_SHOT_STATE:
 
             // This character is the one-shot character. Return to normal, but don't consume the character.
-            if (ultimod.event.pressed)
+            if (ultramod.event.pressed)
                 set_normal_state();
             break;
 
@@ -325,38 +325,38 @@ modifier_after_hook(void)
     bool consumed = false;
 
     // Make sure modifier chord matches exactly
-    //    if (ultimod.machine.modifier_bit != get_mods())
+    //    if (ultramod.machine.modifier_bit != get_mods())
     //        return;
 
-    switch (ultimod.machine.state)
+    switch (ultramod.machine.state)
     {
         case NORMAL_STATE:
-            if (ultimod.event.pressed)
+            if (ultramod.event.pressed)
             {
-                ultimod.machine.modifier_key = ultimod.event.p_keyrecord->event.key;
-                ultimod.machine.state = HELD_STATE;
+                ultramod.machine.modifier_key = ultramod.event.p_keyrecord->event.key;
+                ultramod.machine.state = HELD_STATE;
                 consumed = true;
             }
             break;
 
         case HELD_STATE:
-            if (ultimod.event.released)
+            if (ultramod.event.released)
             {
-                if (timed_out(ultimod.event.time, ultimod.machine.modifier_pressed_time, ultimod.settings.single_tap_timeout))
+                if (timed_out(ultramod.event.time, ultramod.machine.modifier_pressed_time, ultramod.settings.single_tap_timeout))
                 {
                     set_normal_state();
                 }
                 else
                 {
-                    ultimod.machine.last_action_time = ultimod.event.time;
-                    ultimod.machine.state = ONE_SHOT_STATE;
+                    ultramod.machine.last_action_time = ultramod.event.time;
+                    ultramod.machine.state = ONE_SHOT_STATE;
                 }
                 consumed = true;
             }
             break;
 
         case MOMENTARY_STATE:
-            if (ultimod.event.released)
+            if (ultramod.event.released)
             {
                 set_normal_state();
                 consumed = true;
@@ -364,18 +364,18 @@ modifier_after_hook(void)
             break;
 
         case ONE_SHOT_STATE:
-            if (ultimod.event.pressed)
+            if (ultramod.event.pressed)
             {
-                if (timed_out(ultimod.event.time, ultimod.machine.modifier_released_time, ultimod.settings.double_tap_timeout))
+                if (timed_out(ultramod.event.time, ultramod.machine.modifier_released_time, ultramod.settings.double_tap_timeout))
                     set_normal_state();
                 else
-                    ultimod.machine.state = LOCKED_STATE;
+                    ultramod.machine.state = LOCKED_STATE;
                 consumed = true;
             }
             break;
 
         case LOCKED_STATE:
-            if (ultimod.event.pressed)
+            if (ultramod.event.pressed)
             {
                 set_normal_state();
                 consumed = true;
@@ -384,21 +384,21 @@ modifier_after_hook(void)
     }
 
     // Not clear to me why we have to to do this
-    if (ultimod.machine.state != NORMAL_STATE)
+    if (ultramod.machine.state != NORMAL_STATE)
     {
-        add_mods(ultimod.machine.modifier_bit);
-        layer_on(ultimod.machine.layer);
+        add_mods(ultramod.machine.modifier_bit);
+        layer_on(ultramod.machine.layer);
     }
 
     return consumed;
 }
 
 
-void ultimod_matrix_scan(void)
+void ultramod_matrix_scan(void)
 {
     const uint16_t now = timer_read();
 
-    switch (ultimod.machine.state)
+    switch (ultramod.machine.state)
     {
         case NORMAL_STATE:
             break;
@@ -410,12 +410,12 @@ void ultimod_matrix_scan(void)
             break;
 
         case ONE_SHOT_STATE:
-            if (timed_out(now, ultimod.machine.last_action_time, ultimod.settings.one_shot_timeout))
+            if (timed_out(now, ultramod.machine.last_action_time, ultramod.settings.one_shot_timeout))
                 set_normal_state();
             break;
 
         case LOCKED_STATE:
-            if (timed_out(now, ultimod.machine.last_action_time, ultimod.settings.locked_timeout))
+            if (timed_out(now, ultramod.machine.last_action_time, ultramod.settings.locked_timeout))
                 set_normal_state();
             break;
     }
@@ -426,7 +426,7 @@ void ultimod_matrix_scan(void)
 
 
 void
-ultimod_escape(keyrecord_t* p_keyrecord)
+ultramod_escape(keyrecord_t* p_keyrecord)
 {
     const bool pressed = p_keyrecord->event.pressed;
     if (pressed)
@@ -449,16 +449,16 @@ set_normal_state(void)
 
     ergodox_led_all_off();
 
-    ultimod_event_reset();
-    ultimod_machine_reset();
+    ultramod_event_reset();
+    ultramod_machine_reset();
 }
 
 
-void ultimod_set_leds(void)
+void ultramod_set_leds(void)
 {
     ergodox_led_all_off();
 
-    switch (ultimod.machine.state)
+    switch (ultramod.machine.state)
     {
         case NORMAL_STATE:
             break;

@@ -6,7 +6,7 @@
 #include "action.h"
 
 // ultimate
-#include "ultimod.h"
+#include "ultramod.h"
 
 // planck-o-dox
 #include "keymap.h"
@@ -39,11 +39,11 @@ matrix_init_user(void)
     // The default brightness is blinding. Turn it down, please.
     ergodox_led_all_set(LED_BRIGHTNESS_LO);
 
-    // Set your personal preferences here. See ultimod.h for defaults.
-    ultimod_configure_timeout(ULTIMOD_TIMEOUT_SINGLE_TAP, 250);
-    ultimod_configure_timeout(ULTIMOD_TIMEOUT_DOUBLE_TAP, 250);
-    ultimod_configure_timeout(ULTIMOD_TIMEOUT_ONE_SHOT, 10000);
-    ultimod_configure_timeout(ULTIMOD_TIMEOUT_LOCKED, 10000);
+    // Set your personal preferences here. See ultramod.h for defaults.
+    ultramod_configure_timeout(ULTRAMOD_TIMEOUT_SINGLE_TAP, 250);
+    ultramod_configure_timeout(ULTRAMOD_TIMEOUT_DOUBLE_TAP, 250);
+    ultramod_configure_timeout(ULTRAMOD_TIMEOUT_ONE_SHOT, 10000);
+    ultramod_configure_timeout(ULTRAMOD_TIMEOUT_LOCKED, 10000);
 };
 
 
@@ -52,8 +52,8 @@ matrix_init_user(void)
 void
 matrix_scan_user(void)
 {
-    ultimod_matrix_scan();
-    ultimod_set_leds();
+    ultramod_matrix_scan();
+    ultramod_set_leds();
 };
 
 
@@ -61,4 +61,4 @@ matrix_scan_user(void)
 // to compile separately and then link.
 #include "macros.c"
 #include "actions.c"
-#include "ultimod.c"
+#include "ultramod.c"
