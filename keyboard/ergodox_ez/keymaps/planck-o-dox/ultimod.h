@@ -26,9 +26,9 @@ void ultimod_configure_feature(const char* p_name, bool enabled);  // Call from 
 void ultimod_configure_timeout(const char* p_name, uint16_t milliseconds);  // Call from your matrix_init_user() function.
 
 // TODO: Much better: Add another "plugin" hook for this!!!!
-void ultimod_matrix_scan();  // Call from your matrix_scan_user() function.
+void ultimod_matrix_scan(void);  // Call from your matrix_scan_user() function.
 
-void ultimod_set_leds();  // Optionally call from your matrix_scan_user() function.
+void ultimod_set_leds(void);  // Optionally call from your matrix_scan_user() function.
 
 
 #endif //__ULTIMOD

@@ -37,6 +37,10 @@
 #define LXC_MACRO 28
 #define RXC_MACRO 29
 
+// App macros
+#define APP_MACRO 30
+
+
 // Define a macro that lets us use more abbreviated reference to a named macro.
 // We can't use "M" for our name-expansion macro here because that's already used, and in fact we also want to invoke it.
 // So, we use "E" (think: "expand") and do a double expansion using the built-in "M" macro.

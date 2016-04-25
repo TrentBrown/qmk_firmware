@@ -5,7 +5,7 @@ Base (Alphabet) Keymap
 Ergodox:
 
     ,--------------------------------------------------.           ,--------------------------------------------------.
-    | Escape | Undo | Cut  | Copy |Paste |      |      |           |  <<  | Pause|  >>  |  V-  | Mute |  V+  |   Base |
+    | Escape | Undo | Cut  | Copy |Paste |      |      |           |  V-  |  V+  | Paste| Copy |  Cut | Undo |   Base |
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
     | Tab    |  Q   |  W   |  E   |  R   |  T   |  :-) |           | (-:  |   Y  |   U  |   I  |   O  |   P  |   Swap |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -16,10 +16,10 @@ Ergodox:
       | Ctl  |Option| NAF  | BAN  |Symbol|                                       |Symbol|  BAN |  NAF |Option|  Ctl |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
-                                           |      |      |       |      |      |
+                                           |  ^   |   v  |       |  <   |   >  |
                                     ,------|------|------|       |------+------+------.
-                                    |Back  |      | Home |       | PgUp |      |      |
-                                    |Space |Delete|------|       |------| Hyper| Space|
+                                    |Back  |      | Home |       | PgUp |  Back|      |
+                                    |Space |Space |------|       |------| Space| Space|
                                     |      |      |  End |       | PgDn |      |      |
                                     `--------------------'       `--------------------'
 
@@ -51,24 +51,24 @@ Planck:
         // --------------------------------------------------------------------------------
         KC_LCTRL,   KC_LALT,    MO(A(NAF)), MO(A(BAN)), MO(A(SYM)),
 
-                                                                    KC_NO,      KC_NO,
+                                                                    KC_UP,      KC_DOWN,
                                                                                 KC_HOME,
-                                                        KC_BSPACE,  KC_DELETE,  KC_END,
+                                                        KC_BSPACE,  KC_SPACE,   KC_END,
 
 
         // Right  KC_MPRV,    KC_MPLY,    KC_MNXT
 
         // --------------------------------------------------------------------------------
-        KC_MPRV,    KC_MPLY,    KC_MNXT,    KC_VOLD,    KC_MUTE,    KC_VOLU,    TO(K(BAS), ON_PRESS),
+        KC_VOLD,    KC_VOLU,    LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), KC_NO,
         MO(A(EMO)), KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       LGUI(KC_TAB),
                     KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_ENTER,
         KC_NO,      KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_RSHIFT,
         // --------------------------------------------------------------------------------
-                                MO(A(SYM)), MO(A(BAN)), MO(A(NAF)),    KC_RALT,    KC_RCTRL,
+                                MO(A(SYM)), MO(A(BAN)), MO(A(NAF)), KC_RALT,    KC_RCTRL,
 
-        KC_NO,      KC_NO,
+        KC_LEFT,    KC_RIGHT,
         KC_PGUP,
-        KC_PGDOWN,  MO(K(HYPER)),     KC_SPACE
+        KC_PGDOWN,  KC_BSPACE,  KC_SPACE
     )
 
 

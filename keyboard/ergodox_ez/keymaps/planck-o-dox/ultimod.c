@@ -13,6 +13,8 @@
 
 
 // TODO: Document this. This is a state machine. Use Markdown
+// Ultraman:  (o|o)
+
 
 // todo:
 //      clean up the api for ultimate
@@ -95,7 +97,7 @@ typedef struct Ultimod
 } Ultimod;
 
 
-// The Ultimod "singleton" (AKA "global")
+// The Ultimod "singleton" (ie. our only global variable)
 Ultimod ultimod;
 
 
@@ -112,7 +114,7 @@ bool modifier_before_hook(void);
 bool character_after_hook(void);
 bool modifier_after_hook(void);
 void ultimod_escape(keyrecord_t* p_keyrecord);
-void transition_to_normal_state(void);
+void set_normal_state(void);
 
 
 void
@@ -220,7 +222,7 @@ plugin_process_action_before_hook
         case ACT_LAYER_TAP_EXT:
             ultimod.event.is_layer_modifier = true;
 
-            // Yuck:
+            // Yuck. A necessary evil.
             keypos_t key = p_keyrecord->event.key;
             uint16_t keycode = keymap_key_to_keycode(layer_switch_get_layer(key), key);
             ultimod.machine.layer = keycode & 0xFF;
@@ -251,8 +253,7 @@ plugin_process_action_after_hook
     if (ultimod.event.is_modifier)
         consumed = modifier_after_hook();
     else
-        consumed = character_after_hook(
-        );
+        consumed = character_after_hook();
 
     return consumed;
 }
@@ -266,7 +267,7 @@ character_before_hook(void)
     if (ultimod.event.code == KC_ESCAPE)
     {
         ultimod_escape(ultimod.event.p_keyrecord);
-        consumed = true;
+        consumed = true;  // todo: Why not use false here and just piggyback?
     }
 
     return consumed;
@@ -284,6 +285,8 @@ character_after_hook(void)
             break;
 
         case HELD_STATE:
+
+            // The user typing any character commits him to the "momentary" state
             if (ultimod.event.pressed)
                 ultimod.machine.state = MOMENTARY_STATE;
             break;
@@ -292,8 +295,10 @@ character_after_hook(void)
             break;
 
         case ONE_SHOT_STATE:
+
+            // This character is the one-shot character. Return to normal, but don't consume the character.
             if (ultimod.event.pressed)
-                transition_to_normal_state();
+                set_normal_state();
             break;
 
         case LOCKED_STATE:
@@ -339,7 +344,7 @@ modifier_after_hook(void)
             {
                 if (timed_out(ultimod.event.time, ultimod.machine.modifier_pressed_time, ultimod.settings.single_tap_timeout))
                 {
-                    transition_to_normal_state();
+                    set_normal_state();
                 }
                 else
                 {
@@ -353,7 +358,7 @@ modifier_after_hook(void)
         case MOMENTARY_STATE:
             if (ultimod.event.released)
             {
-                transition_to_normal_state();
+                set_normal_state();
                 consumed = true;
             }
             break;
@@ -362,7 +367,7 @@ modifier_after_hook(void)
             if (ultimod.event.pressed)
             {
                 if (timed_out(ultimod.event.time, ultimod.machine.modifier_released_time, ultimod.settings.double_tap_timeout))
-                    transition_to_normal_state();
+                    set_normal_state();
                 else
                     ultimod.machine.state = LOCKED_STATE;
                 consumed = true;
@@ -372,7 +377,7 @@ modifier_after_hook(void)
         case LOCKED_STATE:
             if (ultimod.event.pressed)
             {
-                transition_to_normal_state();
+                set_normal_state();
                 consumed = true;
             }
             break;
@@ -406,12 +411,12 @@ void ultimod_matrix_scan(void)
 
         case ONE_SHOT_STATE:
             if (timed_out(now, ultimod.machine.last_action_time, ultimod.settings.one_shot_timeout))
-                transition_to_normal_state();
+                set_normal_state();
             break;
 
         case LOCKED_STATE:
             if (timed_out(now, ultimod.machine.last_action_time, ultimod.settings.locked_timeout))
-                transition_to_normal_state();
+                set_normal_state();
             break;
     }
 
@@ -426,7 +431,7 @@ ultimod_escape(keyrecord_t* p_keyrecord)
     const bool pressed = p_keyrecord->event.pressed;
     if (pressed)
     {
-        ultimod_reset();
+        set_normal_state();
 
         add_key(KC_ESCAPE);
         send_keyboard_report();
@@ -437,9 +442,15 @@ ultimod_escape(keyrecord_t* p_keyrecord)
 
 
 void
-transition_to_normal_state(void)
+set_normal_state(void)
 {
-    ultimod_reset();
+    clear_keyboard();
+    layer_clear();
+
+    ergodox_led_all_off();
+
+    ultimod_event_reset();
+    ultimod_machine_reset();
 }
 
 

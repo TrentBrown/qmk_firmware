@@ -43,6 +43,9 @@ action_get_macro_emoticon
 
     switch(id)
     {
+        case APP_MACRO:
+            return MACRO(I(10), D(LGUI), T(TAB), END);
+
         case ANGRY_MACRO:
             //   >:(
             return MACRO(I(10), D(LSHIFT), T(DOT), T(SCOLON), T(9), END);
