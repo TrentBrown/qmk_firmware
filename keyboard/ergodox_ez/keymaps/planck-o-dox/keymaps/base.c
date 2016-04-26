@@ -9,9 +9,9 @@ Ergodox:
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
     | Tab    |  Q   |  W   |  E   |  R   |  T   |  :-) |           | (-:  |   Y  |   U  |   I  |   O  |   P  | Escape |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-    | Command|  A   |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   ;  |  Enter |
+    | Shift  |  A   |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   ;  |  Shift |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-    | Shift  |  Z   |  X   |  C   |  V   |  B   |      |           |      |   N  |   M  |   ,  |   .  |   /  |  Shift |
+    | Command|  Z   |  X   |  C   |  V   |  B   |      |           |      |   N  |   M  |   ,  |   .  |   /  |  Enter |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
       | Ctl  |Option| NaF  | BaN  |Symbol|                                       |Symbol|  BaN |  NaF |Option|  Ctl |
       `----------------------------------'                                       `----------------------------------'
@@ -29,9 +29,9 @@ Planck:
     ,-----------------------------------------------------------------------.
     |Tab  |  Q  |  W  |  E  |  R  |  T  |  Y  |  U  |  I  |  O  |  P  |  Esc|
     |-----------------------------------------------------------------------|
-    |Cmd  |  A  |  S  |  D  |  F  |  G  |  H  |  J  |  K  |  L  |  ;  |Enter|
+    |Shift|  A  |  S  |  D  |  F  |  G  |  H  |  J  |  K  |  L  |  ;  |Shift|
     |-----------------------------------------------------------------------|
-    |Shift|  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,  |  .  |  /  |Shift|
+    |Cmd  |  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,  |  .  |  /  |Enter|
     |-----------------------------------------------------------------------|
     |Ctl  | Opt | NaF | BaN | Sym |BkSpc|Space| Sym | BaN | NaF | Opt |  Ctl|
     `-----------------------------------------------------------------------'
@@ -46,8 +46,8 @@ Planck:
         // --------------------------------------------------------------------------------
         KC_NO,      LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), KC_NO,      KC_NO,
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       MO(A(EMO)),
-        KC_LGUI,    KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
-        KC_LSHIFT,  KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_NO,
+        KC_LSHIFT,  KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
+        KC_LGUI,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_NO,
         // --------------------------------------------------------------------------------
         KC_LCTRL,   KC_LALT,    MO(A(NAF)), MO(A(BAN)), MO(A(SYM)),
 
@@ -61,8 +61,8 @@ Planck:
         // --------------------------------------------------------------------------------
         KC_VOLD,    KC_VOLU,    LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), LGUI(KC_TAB),
         MO(A(EMO)), KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_ESCAPE,
-                    KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_ENTER,
-        KC_NO,      KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_RSHIFT,
+                    KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_RSHIFT,
+        KC_NO,      KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_ENTER,
         // --------------------------------------------------------------------------------
                                 MO(A(SYM)), MO(A(BAN)), MO(A(NAF)), KC_RALT,    KC_RCTRL,
 
