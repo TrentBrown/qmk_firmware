@@ -5,9 +5,9 @@ Base (Alphabet) Keymap
 Ergodox:
 
     ,--------------------------------------------------.           ,--------------------------------------------------.
-    | Escape | Undo | Cut  | Copy |Paste |      |      |           |  V-  |  V+  | Paste| Copy |  Cut | Undo |        |
+    |        | Undo | Cut  | Copy |Paste |      |      |           |  V-  |  V+  | Paste| Copy |  Cut | Undo |   Swap |
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-    | Tab    |  Q   |  W   |  E   |  R   |  T   |  :-) |           | (-:  |   Y  |   U  |   I  |   O  |   P  |   Swap |
+    | Tab    |  Q   |  W   |  E   |  R   |  T   |  :-) |           | (-:  |   Y  |   U  |   I  |   O  |   P  | Escape |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     | Command|  A   |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   ;  |  Enter |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -27,7 +27,7 @@ Ergodox:
 Planck:
 
     ,-----------------------------------------------------------------------.
-    |Tab  |  Q  |  W  |  E  |  R  |  T  |  Y  |  U  |  I  |  O  |  P  | Swap|
+    |Tab  |  Q  |  W  |  E  |  R  |  T  |  Y  |  U  |  I  |  O  |  P  |  Esc|
     |-----------------------------------------------------------------------|
     |Cmd  |  A  |  S  |  D  |  F  |  G  |  H  |  J  |  K  |  L  |  ;  |Enter|
     |-----------------------------------------------------------------------|
@@ -44,7 +44,7 @@ Planck:
         // Left
 
         // --------------------------------------------------------------------------------
-        KC_ESCAPE,  LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), KC_NO,      KC_NO,
+        KC_NO,      LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), KC_NO,      KC_NO,
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       MO(A(EMO)),
         KC_LGUI,    KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
         KC_LSHIFT,  KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_NO,
@@ -59,8 +59,8 @@ Planck:
         // Right  KC_MPRV,    KC_MPLY,    KC_MNXT
 
         // --------------------------------------------------------------------------------
-        KC_VOLD,    KC_VOLU,    LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), KC_NO,
-        MO(A(EMO)), KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       LGUI(KC_TAB),
+        KC_VOLD,    KC_VOLU,    LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), LGUI(KC_TAB),
+        MO(A(EMO)), KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_ESCAPE,
                     KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_ENTER,
         KC_NO,      KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_RSHIFT,
         // --------------------------------------------------------------------------------
