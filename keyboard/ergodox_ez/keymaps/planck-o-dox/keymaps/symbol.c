@@ -13,7 +13,7 @@ Ergodox:
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
     |   Ø    |  ¿   |  ≈   |  =   |  ®   |  ~   |   Ø  |           |  Ø   |   —  |   _  |   |  |   ©  |   %  |    Ø   |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
-    |   Ø    |  @   |  *   |  -   |  !   |  `   |------|           |------|   #  |   "  |   '  |   &  |   +  |    Ø   |
+    |   Ø    |  @   |  *   |  -   |  !   |  `   |------|           |------|   #  |   '  |   "  |   &  |   +  |    Ø   |
     |--------+------+------+------+------+------|   Ø  |           |  Ø   |------+------+------+------+------+--------|
     |   Ø    | "Ø"  |  ¬   |  ^   |  √   |  •   |      |           |      |   ≠  |   $  |   °  |   …  |   \  |    Ø   |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
@@ -33,7 +33,7 @@ Planck:
     ,-----------------------------------------------------------------------.
     | Ø   |  ¿  |  ≈  |  =  |  ®  |  ~  |  —  |  _  |  |  |  ©  |  %  |   Ø |
     |-----------------------------------------------------------------------|
-    | Ø   |  @  |  *  |  -  |  !  |  `  |  #  |  "  |  '  |  &  |  +  |   Ø |
+    | Ø   |  @  |  *  |  -  |  !  |  `  |  #  |  '  |  "  |  &  |  +  |   Ø |
     |-----------------------------------------------------------------------|
     | Ø   | "Ø" |  ¬  |  ^  |  √  |  •  |  ≠  |  $  |  °  |  …  |  \  |   Ø |
     |-----------------------------------------------------------------------|
@@ -61,13 +61,13 @@ Planck:
 
         // Right
 
-        // --------------------------------------------------------------------------------------------------
-        KC_TRNS,    KC_TRNS,            KC_TRNS,        KC_TRNS,      KC_TRNS,        KC_TRNS,     KC_TRNS,
-        KC_TRNS,    LALT(LSFT(KC_MINS)),KC_UNDS,        KC_PIPE,      LALT(KC_G),     KC_PERC,     KC_TRNS,
-                    KC_HASH,            LSFT(KC_QUOT),  KC_QUOTE,     KC_AMPR,        KC_PLUS,     KC_TRNS,
-        KC_TRNS,    LALT(KC_EQL),       KC_DLR,         LALT(KC_0),   LALT(KC_SCLN),  KC_BSLASH,   KC_TRNS,
-        // --------------------------------------------------------------------------------------------------
-                                        KC_TRNS,        KC_TRNS,      KC_TRNS,        KC_TRNS,     KC_TRNS,
+        // ---------------------------------------------------------------------------------------------
+        KC_TRNS,    KC_TRNS,            KC_TRNS,    KC_TRNS,      KC_TRNS,        KC_TRNS,     KC_TRNS,
+        KC_TRNS,    LALT(LSFT(KC_MINS)),KC_UNDS,    KC_PIPE,      LALT(KC_G),     KC_PERC,     KC_TRNS,
+                    KC_HASH,            KC_QUOTE,   LSFT(KC_QUOT),KC_AMPR,        KC_PLUS,     KC_TRNS,
+        KC_TRNS,    LALT(KC_EQL),       KC_DLR,     LALT(KC_0),   LALT(KC_SCLN),  KC_BSLASH,   KC_TRNS,
+        // ---------------------------------------------------------------------------------------------
+                                        KC_TRNS,    KC_TRNS,      KC_TRNS,        KC_TRNS,     KC_TRNS,
 
         KC_TRNS,    KC_TRNS,
         KC_TRNS,
@@ -91,6 +91,9 @@ That would be more familiar and I'd have some hope of being able to use a standa
 
 A mix of uses. Both for programming and for enhancing my natural language while texting.
 
+Single and double quote: Had these two keys reversed for a while and it just felt wrong, though I couldn't put my finger on why (haha). I think it was because I expected the progression of number of marks to go up from left to right. Also that the index finger of the left hand is used to hit the grave accent, even though that is not directly under the finger. But mostly I think it's because the number one and number two of the number layer are just below the two keys, and I was unconsciously thinking of there being one and two marks in the two characters.
+
+
 What I came up with:
 
 | Key | Symbol | Mnemonics                                                                                             |
@@ -104,12 +107,12 @@ What I came up with:
 | G   | `      | "Grave accent mark"                                                                                   |
 | H   | #      | "Hash" Could have used P for "Pound", but there's too much competition (plus, percent, pipe)          |
 | I   | |      | Pipe looks like a sans-serif "I".                                                                     |
-| J   | "      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
-| K   | '      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
-| L   | &#124; | Lame mnemonics: "Lampersand", "Link"                                                                  |
+| J   | '      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
+| K   | "      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
+| L   | &#124; | Lame: "Lampersand", "Link"                                                                            |
 | M   | $      | "Money"                                                                                               |
 | N   | ≠      | "Not equal" (Am torn between this and "eN-dash" or "!=" sequence)                                     |
-| O   | ©      | Looks circular (And "C" is taken by caret, which has nowhere else to go)                              |
+| O   | ©      | Looks circular (And "C" is taken by caret, which has nowhere better to go)                            |
 | P   | %      | "Percent"                                                                                             |
 | ;   | +      | Could have used "P" key just above, but "Percent" is there, and would rather have "Plus" on home row. |
 | Q   | ¿      | "Question mark" (upside down). So I can show off my high school Spanish skilz.                        |
@@ -118,11 +121,11 @@ What I came up with:
 | T   | ~      | "Tilde"                                                                                               |
 | U   | _      | "Underscore"  Would have liked this on the home row, but at least it's no longer a double-pinkie char.|
 | V   | √      | Looks like a checkmark.                                                                               |
-| W   | ≈      | "Water", "Wave". "eqWivalent" Whatever...                                                                          |
+| W   | ≈      | "Water", "Wave". "eqWivalent" Whatever...                                                             |
 | X   | ¬      | Character denotes negation, kinda. "Ex it out."                                                       |
 | Y   | —      | "wYde dash" (em-dash). I'm a typography geek. "Please come to my cocktail party from 6:00—10:00 PM, Saturday"   |
 | Z   | Ø      | "Zip", "Zilch", "Zero".                                                                               |
 | /   | \      | Same position as forward slash on base layer. Makes sense that it is being modified here.             |
-| .   | …      | Ellipis character on the dot key. Replaces Option-. on a Mac.                                         |
+| .   | …      | Ellipis character in same position as the dot key on base layer. Replaces Option-. on a Mac.          |
 
 */
