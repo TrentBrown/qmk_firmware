@@ -150,6 +150,10 @@ action_get_macro_emoticon
             //   -_- Zzzzz
             return MACRO(I(10), T(MINUS), D(LSHIFT), T(MINUS), U(LSHIFT), T(MINUS), D(LSHIFT), T(Z), U(LSHIFT), T(Z), T(Z), T(Z), T(Z), END);
 
+        case HEART_MACRO:
+            //   <3
+            return MACRO(I(10), D(LSHIFT), T(COMMA), U(LSHIFT), T(3), END);
+
         case LCC_MACRO:
             //   /*
             return MACRO(I(10), T(SLASH), D(LSHIFT), T(8), U(LSHIFT), END);

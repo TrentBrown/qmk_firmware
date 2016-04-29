@@ -13,8 +13,11 @@
 
 
 // TODO: Document this. This is a state machine. Use Markdown
-// Ultraman:  (o|o)
+// ultramod_(o|o)
+// ultramod
+// (o|o)
 
+// TODO: Find a way to re-enable one-shot when backspace. Let that feature be an option.
 
 // todo:
 //      clean up the api for ultimate

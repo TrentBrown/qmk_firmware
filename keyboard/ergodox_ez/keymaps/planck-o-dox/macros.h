@@ -30,15 +30,17 @@
 #define X_PARROT_MACRO 23
 #define YAY_MACRO 24
 #define ZZZ_MACRO 25
+#define ZZZ_MACRO 25
+#define HEART_MACRO 26
 
 // Bracket macros
-#define LCC_MACRO 26
-#define RCC_MACRO 27
-#define LXC_MACRO 28
-#define RXC_MACRO 29
+#define LCC_MACRO 27
+#define RCC_MACRO 28
+#define LXC_MACRO 29
+#define RXC_MACRO 30
 
 // App macros
-#define APP_MACRO 30
+#define APP_MACRO 31
 
 
 // Define a macro that lets us use more abbreviated reference to a named macro.
