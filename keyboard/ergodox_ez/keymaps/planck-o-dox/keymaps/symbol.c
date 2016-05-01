@@ -11,11 +11,11 @@ Ergodox:
     ,--------------------------------------------------.           ,--------------------------------------------------.
     |   Ø    |  Ø   |  Ø   |  Ø   |  Ø   |   Ø  |   Ø  |           |  Ø   |   Ø  |   Ø  |   Ø  |   Ø  |   Ø  |    Ø   |
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-    |   Ø    |  ¿   |  ≈   |  =   |  ®   |  ~   |   Ø  |           |  Ø   |   —  |   _  |   |  |   ©  |   %  |    Ø   |
+    |   Ø    |  ¿   |  ≈   |  =   |  ®   |  ~   |   Ø  |           |  Ø   |   —  |   _  |   |  |   °  |   %  |    Ø   |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     |   Ø    |  @   |  *   |  -   |  !   |  `   |------|           |------|   #  |   '  |   "  |   &  |   +  |    Ø   |
     |--------+------+------+------+------+------|   Ø  |           |  Ø   |------+------+------+------+------+--------|
-    |   Ø    | "Ø"  |  ¬   |  ^   |  √   |  •   |      |           |      |   ≠  |   $  |   °  |   …  |   \  |    Ø   |
+    |   Ø    | "Ø"  |  ¬   |  ^   |  ∞   |  •   |      |           |      |   ≠  |   $  |   ©  |   …  |   \  |    Ø   |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
       |  Ø   |  Ø   |  Ø   |  Ø   |  Ø   |                                       |   Ø  |   Ø  |   Ø  |   Ø  |   Ø  |
       `----------------------------------'                                       `----------------------------------'
@@ -31,11 +31,11 @@ Ergodox:
 Planck:
 
     ,-----------------------------------------------------------------------.
-    | Ø   |  ¿  |  ≈  |  =  |  ®  |  ~  |  —  |  _  |  |  |  ©  |  %  |   Ø |
+    | Ø   |  ¿  |  ≈  |  =  |  ®  |  ~  |  —  |  _  |  |  |  °  |  %  |   Ø |
     |-----------------------------------------------------------------------|
     | Ø   |  @  |  *  |  -  |  !  |  `  |  #  |  '  |  "  |  &  |  +  |   Ø |
     |-----------------------------------------------------------------------|
-    | Ø   | "Ø" |  ¬  |  ^  |  √  |  •  |  ≠  |  $  |  °  |  …  |  \  |   Ø |
+    | Ø   | "Ø" |  ¬  |  ^  |  ∞  |  •  |  ≠  |  $  |  ©  |  …  |  \  |   Ø |
     |-----------------------------------------------------------------------|
     | Ø   |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |   Ø |
     `-----------------------------------------------------------------------'
@@ -50,7 +50,7 @@ Planck:
         KC_TRNS,    KC_TRNS,            KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
         KC_TRNS,    LALT(LSFT(KC_SLSH)),LALT(KC_X), KC_EQUAL,   LALT(KC_R), KC_TILD,    KC_TRNS,
         KC_TRNS,    KC_AT,              KC_ASTR,    KC_MINUS,   KC_EXLM,    KC_GRAVE,
-        KC_TRNS,    LALT(KC_O),         LALT(KC_L), KC_CIRC,    LALT(KC_V), LALT(KC_8), KC_TRNS,
+        KC_TRNS,    LALT(KC_O),         LALT(KC_L), KC_CIRC,    LALT(KC_5), LALT(KC_8), KC_TRNS,
         // ---------------------------------------------------------------------------------------
         KC_TRNS,    KC_TRNS,            KC_TRNS,    KC_TRNS,    KC_TRNS,
 
@@ -62,12 +62,12 @@ Planck:
         // Right
 
         // ---------------------------------------------------------------------------------------------
-        KC_TRNS,    KC_TRNS,            KC_TRNS,    KC_TRNS,      KC_TRNS,        KC_TRNS,     KC_TRNS,
-        KC_TRNS,    LALT(LSFT(KC_MINS)),KC_UNDS,    KC_PIPE,      LALT(KC_G),     KC_PERC,     KC_TRNS,
-                    KC_HASH,            KC_QUOTE,   LSFT(KC_QUOT),KC_AMPR,        KC_PLUS,     KC_TRNS,
-        KC_TRNS,    LALT(KC_EQL),       KC_DLR,     LALT(KC_0),   LALT(KC_SCLN),  KC_BSLASH,   KC_TRNS,
+        KC_TRNS,    KC_TRNS,            KC_TRNS,    KC_TRNS,      KC_TRNS,         KC_TRNS,     KC_TRNS,
+        KC_TRNS,    LALT(LSFT(KC_MINS)),KC_UNDS,    KC_PIPE,      LSFT(LALT(KC_8)),KC_PERC,     KC_TRNS,
+                    KC_HASH,            KC_QUOTE,   LSFT(KC_QUOT),KC_AMPR,         KC_PLUS,     KC_TRNS,
+        KC_TRNS,    LALT(KC_EQL),       KC_DLR,     LALT(KC_G),   LALT(KC_SCLN),   KC_BSLASH,   KC_TRNS,
         // ---------------------------------------------------------------------------------------------
-                                        KC_TRNS,    KC_TRNS,      KC_TRNS,        KC_TRNS,     KC_TRNS,
+                                        KC_TRNS,    KC_TRNS,      KC_TRNS,         KC_TRNS,     KC_TRNS,
 
         KC_TRNS,    KC_TRNS,
         KC_TRNS,
@@ -112,20 +112,21 @@ What I came up with:
 | L   | &#124; | Lame: "Lampersand", "Link"                                                                            |
 | M   | $      | "Money"                                                                                               |
 | N   | ≠      | "Not equal" (Am torn between this and "eN-dash" or "!=" sequence)                                     |
-| O   | ©      | Looks circular (And "C" is taken by caret, which has nowhere better to go)                            |
+| O   | °      | Looks circular.                                                                                       |
 | P   | %      | "Percent"                                                                                             |
-| ;   | +      | Could have used "P" key just above, but "Percent" is there, and would rather have "Plus" on home row. |
+| ;   | +      | Same position as on the number layer.                                                                 |
 | Q   | ¿      | "Question mark" (upside down). So I can show off my high school Spanish skilz.                        |
 | R   | ®      | "Registration mark"                                                                                   |
 | S   | *      | "Star", "Splat", "aSteriSk"                                                                           |
 | T   | ~      | "Tilde"                                                                                               |
 | U   | _      | "Underscore"  Would have liked this on the home row, but at least it's no longer a double-pinkie char.|
-| V   | √      | Looks like a checkmark.                                                                               |
+| V   | ∞      | "Very big".                                                                                           |
 | W   | ≈      | "Water", "Wave". "eqWivalent" Whatever...                                                             |
 | X   | ¬      | Character denotes negation, kinda. "Ex it out."                                                       |
 | Y   | —      | "wYde dash" (em-dash). I'm a typography geek. "Please come to my cocktail party from 6:00—10:00 PM, Saturday"   |
 | Z   | Ø      | "Zip", "Zilch", "Zero".                                                                               |
 | /   | \      | Same position as forward slash on base layer. Makes sense that it is being modified here.             |
-| .   | …      | Ellipis character in same position as the dot key on base layer. Replaces Option-. on a Mac.          |
+| ,   | ©      | The word "comma" starts with a "C", just like the word "copyright". (And "C" is taken by caret, which is used more) |
+| .   | …      | Ellipis character in same position as the single dot key on base layer.                               |
 
 */

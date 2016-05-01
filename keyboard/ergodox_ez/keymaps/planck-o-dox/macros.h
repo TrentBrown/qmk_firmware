@@ -42,6 +42,13 @@
 // App macros
 #define APP_MACRO 31
 
+// Selection macros
+#define WORD_MACRO 32
+#define LINE_MACRO 33
+#define PARA_MACRO 34
+#define PAGE_MACRO 35
+#define DOC_MACRO 36
+
 
 // Define a macro that lets us use more abbreviated reference to a named macro.
 // We can't use "M" for our name-expansion macro here because that's already used, and in fact we also want to invoke it.

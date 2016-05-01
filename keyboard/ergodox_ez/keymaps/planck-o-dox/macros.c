@@ -169,7 +169,30 @@ action_get_macro_emoticon
         case RXC_MACRO:
             //   -->
             return MACRO(I(10), T(MINUS), T(MINUS), D(LSHIFT), T(DOT), U(LSHIFT), END);
+
+        case WORD_MACRO:
+            //   Select word
+            return MACRO(I(10), D(LALT), T(LEFT), D(LSHIFT), T(RIGHT), U(LSHIFT), U(LALT), END);
+
+        case LINE_MACRO:
+            //   Select line
+            return MACRO(I(10), D(LGUI), T(LEFT), D(LSHIFT), T(RIGHT), U(LSHIFT), U(LGUI), END);
+
+        case PARA_MACRO:
+            //   Select paragraph
+            return MACRO(I(10), D(LALT), T(UP), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
+
+        case PAGE_MACRO:
+            //   Select page
+            return MACRO(I(10), D(LALT), T(HOME), D(LSHIFT), T(END), U(LSHIFT), U(LALT), END);
+
+        case DOC_MACRO:
+            //   Select document
+            return MACRO(I(10), D(LGUI), T(A), U(LGUI), END);
     }
     return MACRO_NONE;
 };
 
+#define WORD_MACRO 32
+#define LINE_MACRO 33
+#define PARA_MACRO 34

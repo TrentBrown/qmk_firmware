@@ -12,6 +12,7 @@
     All the good stuff in on the home row: Addition, equals, decimal.
 
     TODO: Get AC binding onto center key. also xml comments
+    todo: Consider removing the angle brackets, since they are on the base layer. HTML tag? Double angle chars?
 
 
 Ergodox:
@@ -48,6 +49,8 @@ Planck:
     | Ø   |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |   Ø |
     `-----------------------------------------------------------------------'
 
+todo: Call out in reasoning:
+Plus and division are in the same positions as on the base layer.
 */
 
 
