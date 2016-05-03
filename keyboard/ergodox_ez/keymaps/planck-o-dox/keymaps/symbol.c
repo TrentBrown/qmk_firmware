@@ -17,7 +17,7 @@ Ergodox:
     |--------+------+------+------+------+------|   Ø  |           |  Ø   |------+------+------+------+------+--------|
     |   Ø    | "Ø"  |  ¬   |  ^   |  ∞   |  •   |      |           |      |   ≠  |   $  |   ©  |   …  |   \  |    Ø   |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-      |  Ø   |  Ø   |  Ø   |  Ø   |  Ø   |                                       |   Ø  |   Ø  |   Ø  |   Ø  |   Ø  |
+      |  Ø   |  Ø   |  Ø   |  Ø   | Sym  |                                       |  Sym |   Ø  |   Ø  |   Ø  |   Ø  |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
                                            |   Ø  |   Ø  |       |  Ø   |  Ø   |
@@ -37,7 +37,7 @@ Planck:
     |-----------------------------------------------------------------------|
     | Ø   | "Ø" |  ¬  |  ^  |  ∞  |  •  |  ≠  |  $  |  ©  |  …  |  \  |   Ø |
     |-----------------------------------------------------------------------|
-    | Ø   |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |   Ø |
+    | Ø   |  Ø  |  Ø  |  Ø  | Sym |  Ø  |  Ø  | Sym |  Ø  |  Ø  |  Ø  |   Ø |
     `-----------------------------------------------------------------------'
 
 */
@@ -106,7 +106,7 @@ What I came up with:
 | F   | !      | "F&#42;&#42;k" (Really wanted this on home row and not using "B" for "bang" frees that up for "bullet")      |
 | G   | `      | "Grave accent mark"                                                                                   |
 | H   | #      | "Hash" Could have used P for "Pound", but there's too much competition (plus, percent, pipe)          |
-| I   | |      | Pipe looks like a sans-serif "I".                                                                     |
+| I   | |      | A sans-serif "I" looks like a pipe character.                                                         |
 | J   | '      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
 | K   | "      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
 | L   | &#124; | Lame: "Lampersand", "Link"                                                                            |

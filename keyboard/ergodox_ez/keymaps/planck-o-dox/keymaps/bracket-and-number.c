@@ -17,16 +17,17 @@
 
 Ergodox:
 
+
     ,--------------------------------------------------.           ,--------------------------------------------------.
     |   Ø    |  Ø   |  Ø   |  Ø   |  Ø   |   Ø  |   Ø  |           |  Ø   |   Ø  |   Ø  |   Ø  |   Ø  |   Ø  |    Ø   |
-    |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------| */
-//  |   Ø    |  /*  |  */  |  [   |  ]   |      |   Ø  |           | AC   |   *  |   7  |   8  |   9  |   -  |    Ø   |
-/*  |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+    |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+    |   Ø    | <!-- | -->  |  [   |  ]   |      |   Ø  |           | AC   |   *  |   7  |   8  |   9  |   -  |    Ø   |
+    |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     |   Ø    |  {   |  }   |  (   |  )   |      |------|           |------| Zero |   4  |   5  |   6  |   +  |    Ø   |
-    |--------+------+------+------+------+------|   Ø  |           | +/-  |------+------+------+------+------+--------|
-    |   Ø    | <!-- | -->  |  <   |  >   |      |      |           |      |   .  |   1  |   2  |   3  |   /  |    Ø   |
-    `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-      |  Ø   |  Ø   |  Ø   |  Ø   |  Ø   |                                       |   Ø  |   Ø  |   Ø  |   Ø  |   Ø  |
+    |--------+------+------+------+------+------|   Ø  |           | +/-  |------+------+------+------+------+--------| */
+//  |   Ø    |  /*  |  */  |  <   |  >   |      |      |           |      |   .  |   1  |   2  |   3  |   /  |    Ø   |
+/*  `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+      |  Ø   |  Ø   |  Ø   | Num  |  Ø   |                                       |   Ø  | Brack|   Ø  |   Ø  |   Ø  |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
                                            |   Ø  |   Ø  |       |  Ø   |  Ø   |
@@ -39,14 +40,14 @@ Ergodox:
 
 Planck:
 
-    ,-----------------------------------------------------------------------. */
-//  | Ø   | /*  | */  |  [  |  ]  |     |  *  |  7  |  8  |  9  |  -  |   Ø |
-/*  |-----------------------------------------------------------------------|
+    ,-----------------------------------------------------------------------.
+    | Ø   |<!-- | --> |  [  |  ]  |     |  *  |  7  |  8  |  9  |  -  |   Ø |
+    |-----------------------------------------------------------------------|
     | Ø   |  {  |  }  |  (  |  )  |     | Zero|  4  |  5  |  6  |  +  |   Ø |
-    |-----------------------------------------------------------------------|
-    | Ø   |<!-- | --> |  <  |  >  |     |  .  |  1  |  2  |  3  |  /  |   Ø |
-    |-----------------------------------------------------------------------|
-    | Ø   |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |   Ø |
+    |-----------------------------------------------------------------------| */
+//  | Ø   | /*  | */  |  <  |  >  |     |  .  |  1  |  2  |  3  |  /  |   Ø |
+/*  |-----------------------------------------------------------------------|
+    | Ø   |  Ø  |  Ø  | Num |  Ø  |  Ø  |  Ø  |  Ø  |Brack|  Ø  |  Ø  |   Ø |
     `-----------------------------------------------------------------------'
 
 todo: Call out in reasoning:
@@ -60,9 +61,9 @@ Plus and division are in the same positions as on the base layer.
 
         // -------------------------------------------------------------------------------------------
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,        KC_TRNS,    KC_TRNS,
-        KC_TRNS,    E(LCC),     E(RCC),     KC_LBRACKET,    KC_RBRACKET,    KC_NO,      KC_TRNS,
+        KC_TRNS,    E(LXC),     E(RXC),     KC_LBRACKET,    KC_RBRACKET,    KC_NO,      KC_TRNS,
         KC_TRNS,    KC_LCBR,    KC_RCBR,    KC_LPRN,        KC_RPRN,        KC_NO,
-        KC_TRNS,    E(LXC),     E(RXC),     LSFT(KC_COMMA), LSFT(KC_DOT),   KC_NO,      KC_TRNS,
+        KC_TRNS,    E(LCC),     E(RCC),     LSFT(KC_COMMA), LSFT(KC_DOT),   KC_NO,      KC_TRNS,
         // -------------------------------------------------------------------------------------------
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,        KC_TRNS,
 
@@ -92,6 +93,8 @@ Plus and division are in the same positions as on the base layer.
 Reasoning
 ---------
 
+Terminology: Reflection of pairs, but not reflection of the elements of the pairs, mostly because they have a strong right and left orientation on the screen. In other words, the paren pairs use the mirrored pair of fingers, but we dont reflect within the pair to end up with {} and not }{
+
 A dual-use layer: cursor and scroll navigation on the left and function keys on the right. These are similar in that both sides perform some kind of action instead of typing characters.
 
 ### Brackets
@@ -115,7 +118,7 @@ Soon realized that this was not optimal. When programming, think about how often
 
 Not true with above assigments:
 
-With brackets on different hands, to produce empty lists you'd have to:
+With brackets on different hands and not on dedicated (lowercase) keys, it is even worse. To produce empty lists you'd have to:
 
 Momentary modifer: Hold right, tap left, release right, hold right, tap right, release right.
 Single-shot modifier: Left tap shift, left key, right tap shift, right key
