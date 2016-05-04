@@ -39,7 +39,7 @@ Planck:
 
 */
 
-[FUNCTION_KEYMAP] = KEYMAP
+[FUNCTION_KEY_KEYMAP] = KEYMAP
     (
         // Left
 
