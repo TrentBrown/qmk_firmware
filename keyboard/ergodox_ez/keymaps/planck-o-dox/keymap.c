@@ -25,7 +25,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
 ,
 #include "keymaps/hyper.c"
 ,
-#include "keymaps/navigation-and-function.c"
+#include "keymaps/function.c"
+,
+#include "keymaps/navigation.c"
 ,
 #include "keymaps/symbol.c"
 };

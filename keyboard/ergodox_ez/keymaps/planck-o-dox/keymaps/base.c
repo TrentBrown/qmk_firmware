@@ -49,7 +49,7 @@ Planck:
         KC_LSHIFT,  KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
         KC_LGUI,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_NO,
         // --------------------------------------------------------------------------------
-        KC_LCTRL,   KC_LALT,    MO(A(NAF)), MO(A(BAN)), MO(A(SYM)),
+        KC_LCTRL,   KC_LALT,    MO(A(FUNC)),MO(A(BAN)), MO(A(SYM)),
 
                                                                     KC_NO,      MO(A(EMO)),
                                                                                 KC_HOME,
@@ -64,7 +64,7 @@ Planck:
                     KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_RSHIFT,
         KC_NO,      KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_ENTER,
         // --------------------------------------------------------------------------------
-                                MO(A(SYM)), MO(A(BAN)), MO(A(NAF)), KC_RALT,    KC_RCTRL,
+                                MO(A(SYM)), MO(A(BAN)), MO(A(NAV)), KC_RALT,    KC_RCTRL,
 
         MO(A(EMO)), KC_NO,
         KC_PGUP,

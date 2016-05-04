@@ -10,19 +10,23 @@
 #define BRACKET_AND_NUMBER_KEYMAP 2
 #define BAN_KEYMAP BRACKET_AND_NUMBER_KEYMAP
 
-// Cursor and Function
-#define NAVIGATION_AND_FUNCTION_KEYMAP 3
-#define NAF_KEYMAP NAVIGATION_AND_FUNCTION_KEYMAP
+// Function
+#define FUNCTION_KEYMAP 3
+#define FUNC_KEYMAP FUNCTION_KEYMAP
+
+// Navigation
+#define NAVIGATION_KEYMAP 4
+#define NAV_KEYMAP NAVIGATION_KEYMAP
 
 // Hyper
-#define HYPER_KEYMAP 4
+#define HYPER_KEYMAP 5
 #define HYP_KEYMAP HYPER_KEYMAP
 
 // Emoticon
-#define EMOTICON_KEYMAP 5
+#define EMOTICON_KEYMAP 6
 #define EMO_KEYMAP EMOTICON_KEYMAP
 
 
 // Define a macro that lets us use more abbreviated reference to a named keymap.
-// For example: K(EMO) --> EMO_KEYMAP --> EMOTICON_KEYMAP --> 5
+// For example: K(EMO) --> EMO_KEYMAP --> EMOTICON_KEYMAP --> 6
 #define K(name) name##_KEYMAP
