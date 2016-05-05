@@ -2,8 +2,11 @@
 
     Symbol Keymap
 
-    Consider infinity on N key "Never ends"
-    Consider using multuply char for x
+    todo: Consider infinity on N key "Never ends"
+    todo: Consider using multuply char for x
+
+    todo: Consider doing mnemonic layers optimized for Dvorak, Colemak, and Workman, too
+
 
 
 Ergodox:
@@ -17,7 +20,7 @@ Ergodox:
     |--------+------+------+------+------+------|   Ø  |           |  Ø   |------+------+------+------+------+--------|
     |   Ø    | "Ø"  |  ¬   |  ^   |  ∞   |  •   |      |           |      |   ≠  |   $  |   ©  |   …  |   \  |    Ø   |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-      |  Ø   |  Ø   |  Ø   |  Ø   | Sym  |                                       |  Sym |   Ø  |   Ø  |   Ø  |   Ø  |
+      |  Ø   |  Ø   |  Ø   |  Ø   |(Sym) |                                       | (Sym)|   Ø  |   Ø  |   Ø  |   Ø  |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
                                            |   Ø  |   Ø  |       |  Ø   |  Ø   |
@@ -37,7 +40,7 @@ Planck:
     |-----------------------------------------------------------------------|
     | Ø   | "Ø" |  ¬  |  ^  |  ∞  |  •  |  ≠  |  $  |  ©  |  …  |  \  |   Ø |
     |-----------------------------------------------------------------------|
-    | Ø   |  Ø  |  Ø  |  Ø  | Sym |  Ø  |  Ø  | Sym |  Ø  |  Ø  |  Ø  |   Ø |
+    | Ø   |  Ø  |  Ø  |  Ø  |(Sym)|  Ø  |  Ø  |(Sym)|  Ø  |  Ø  |  Ø  |   Ø |
     `-----------------------------------------------------------------------'
 
 */
@@ -75,6 +78,8 @@ Planck:
     )
 
 /*
+
+Let me just say, this key is prime real estate. It is a thumb key. It's where my thumb naturally rests. It is a better-positioned thumb key than even the closest key on the actual thumb cluster! As such, it is ideal for the symbol layer because that is the most-used layer after the base layer.
 
 Reasoning
 ---------

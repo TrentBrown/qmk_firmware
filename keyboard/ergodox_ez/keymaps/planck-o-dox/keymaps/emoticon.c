@@ -6,6 +6,7 @@
     Unicode: https://gist.github.com/endolith/157796
 
     todo: Consider moving winking to semicolon...
+    todo: Consider doing mnemonic layers optimized for Dvorak, Colemak, and Workman, too
 
 Ergodox:
 S
