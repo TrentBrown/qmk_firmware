@@ -38,17 +38,17 @@ typedef enum UltramodMachineState
 
 // Modifier type
 // todo: use these:
-typedef enum UltramodModifierType
+typedef enum UltramodModifier
 {
     NO_MODIFIER,
     LAYER_MODIFIER,
     CHARACTER_MODIFIER
-} UltramodModifierType;
+} UltramodModifier;
 
 
 typedef struct UltramodSettings
 {
-    // Unit for timeouts are milliseconds and a zero value means "never time out"
+    // Unit for timeouts are milliseconds. A zero value means "never time out".
 
     // Entering one-shot state
     uint16_t single_tap_timeout;
@@ -268,9 +268,13 @@ character_before_hook(void)
     bool consumed = false;
 
     if (ultramod.event.code == KC_ESCAPE)
-    {
         ultramod_escape(ultramod.event.p_keyrecord);
-        consumed = true;  // todo: Why not use false here and just piggyback?
+
+    // todo: Why does this state not stick?
+    if (ultramod.machine.state != NORMAL_STATE)
+    {
+        add_mods(ultramod.machine.modifier_bit);
+        layer_on(ultramod.machine.layer);
     }
 
     return consumed;
@@ -299,7 +303,7 @@ character_after_hook(void)
 
         case ONE_SHOT_STATE:
 
-            // This character is the one-shot character. Return to normal, but don't consume the character.
+            // This character was the one-shot character. Return to normal.
             if (ultramod.event.pressed)
                 set_normal_state();
             break;
@@ -314,16 +318,6 @@ character_after_hook(void)
 
 bool
 modifier_before_hook(void)
-{
-    return false;
-}
-
-
-// TODO: Move some of the following to the "before" so that we can consume the chars. Avoids problem with IntelliJ.
-// for example, where double-tap of shift does something.
-
-bool
-modifier_after_hook(void)
 {
     bool consumed = false;
 
@@ -345,7 +339,10 @@ modifier_after_hook(void)
         case HELD_STATE:
             if (ultramod.event.released)
             {
-                if (timed_out(ultramod.event.time, ultramod.machine.modifier_pressed_time, ultramod.settings.single_tap_timeout))
+                const bool too_late_for_single_tap = timed_out(ultramod.event.time,
+                                                               ultramod.machine.modifier_pressed_time,
+                                                               ultramod.settings.single_tap_timeout);
+                if (too_late_for_single_tap)
                 {
                     set_normal_state();
                 }
@@ -369,7 +366,10 @@ modifier_after_hook(void)
         case ONE_SHOT_STATE:
             if (ultramod.event.pressed)
             {
-                if (timed_out(ultramod.event.time, ultramod.machine.modifier_released_time, ultramod.settings.double_tap_timeout))
+                const bool one_shot_timed_out = timed_out(ultramod.event.time,
+                                                          ultramod.machine.modifier_released_time,
+                                                          ultramod.settings.double_tap_timeout);
+                if (one_shot_timed_out)
                     set_normal_state();
                 else
                     ultramod.machine.state = LOCKED_STATE;
@@ -386,7 +386,44 @@ modifier_after_hook(void)
             break;
     }
 
-    // Not clear to me why we have to to do this
+    // todo: Why does this state not stick?
+    if (ultramod.machine.state != NORMAL_STATE)
+    {
+        add_mods(ultramod.machine.modifier_bit);
+        layer_on(ultramod.machine.layer);
+    }
+
+    return consumed;
+}
+
+
+// TODO: Move some of the following to the "before" so that we can consume the chars. Avoids problem with IntelliJ.
+// for example, where double-tap of shift does something.
+
+bool
+modifier_after_hook(void)
+{
+    bool consumed = false;
+
+    switch (ultramod.machine.state)
+    {
+        case NORMAL_STATE:
+            break;
+
+        case HELD_STATE:
+            break;
+
+        case MOMENTARY_STATE:
+            break;
+
+        case ONE_SHOT_STATE:
+            break;
+
+        case LOCKED_STATE:
+            break;
+    }
+
+    // todo: Why does this state not stick?
     if (ultramod.machine.state != NORMAL_STATE)
     {
         add_mods(ultramod.machine.modifier_bit);
@@ -413,13 +450,19 @@ void ultramod_matrix_scan(void)
             break;
 
         case ONE_SHOT_STATE:
-            if (timed_out(now, ultramod.machine.last_action_time, ultramod.settings.one_shot_timeout))
-                set_normal_state();
+            {
+                const bool one_shot_timed_out = timed_out(now, ultramod.machine.last_action_time, ultramod.settings.one_shot_timeout);
+                if (one_shot_timed_out)
+                    set_normal_state();
+            }
             break;
 
         case LOCKED_STATE:
-            if (timed_out(now, ultramod.machine.last_action_time, ultramod.settings.locked_timeout))
-                set_normal_state();
+            {
+                const bool lock_timed_out = timed_out(now, ultramod.machine.last_action_time, ultramod.settings.locked_timeout);
+                if (lock_timed_out)
+                    set_normal_state();
+            }
             break;
     }
 
@@ -431,16 +474,8 @@ void ultramod_matrix_scan(void)
 void
 ultramod_escape(keyrecord_t* p_keyrecord)
 {
-    const bool pressed = p_keyrecord->event.pressed;
-    if (pressed)
-    {
+    if (p_keyrecord->event.pressed)
         set_normal_state();
-
-        add_key(KC_ESCAPE);
-        send_keyboard_report();
-        del_key(KC_ESCAPE);
-        send_keyboard_report();
-    }
 }
 
 
@@ -461,6 +496,8 @@ void ultramod_set_leds(void)
 {
     ergodox_led_all_off();
 
+    // todo: Consider changing these so that they progress from left to right, or maybe right to left
+
     switch (ultramod.machine.state)
     {
         case NORMAL_STATE:
@@ -468,11 +505,11 @@ void ultramod_set_leds(void)
 
         case HELD_STATE:
         case MOMENTARY_STATE:
-            ergodox_right_led_2_on();  // Green
+            ergodox_right_led_3_on();  // Blue
             break;
 
         case ONE_SHOT_STATE:
-            ergodox_right_led_3_on();  // Blue
+            ergodox_right_led_2_on();  // Green
             break;
 
         case LOCKED_STATE:
