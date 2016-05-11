@@ -5,7 +5,10 @@
 #include "sleep_led.h"
 #include "action.h"
 
-// ultimate
+// plugin
+#include "plugin.h"
+
+// ultramod
 #include "ultramod.h"
 
 // planck-o-dox
@@ -46,6 +49,9 @@ matrix_init_user(void)
     ultramod_configure_timeout(ULTRAMOD_TIMEOUT_DOUBLE_TAP, 250);
     ultramod_configure_timeout(ULTRAMOD_TIMEOUT_ONE_SHOT, 10000);
     ultramod_configure_timeout(ULTRAMOD_TIMEOUT_LOCKED, 10000);
+
+    Plugin* p_ultramod_plugin = ultramod_create_plugin();
+    add_plugin(p_ultramod_plugin);
 };
 
 
@@ -54,8 +60,7 @@ matrix_init_user(void)
 void
 matrix_scan_user(void)
 {
-    ultramod_matrix_scan();
-    ultramod_set_leds();
+    plugin_matrix_scan();
 };
 
 
@@ -64,3 +69,4 @@ matrix_scan_user(void)
 #include "macros.c"
 #include "actions.c"
 #include "ultramod.c"
+#include "plugin.c"

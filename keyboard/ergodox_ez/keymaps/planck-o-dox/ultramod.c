@@ -1,5 +1,6 @@
 // system
 #include <string.h>
+#include <stdlib.h>
 
 // tmk
 #include "action_util.h"
@@ -7,6 +8,9 @@
 #include "action.h"
 #include "timer.h"
 #include "keycode.h"
+
+// plugin
+#include "plugin.h"
 
 // ultramod
 #include "ultramod.h"
@@ -112,12 +116,14 @@ void ultramod_event_reset(void);
 uint8_t mod_flag_to_bits(uint8_t flag);
 bool is_same_key(keypos_t first, keypos_t second);
 bool timed_out(uint16_t first, uint16_t second, uint16_t timeout);
-bool character_before_hook(void);
-bool modifier_before_hook(void);
-bool character_after_hook(void);
-bool modifier_after_hook(void);
+bool character_before(void);
+bool modifier_before(void);
+bool character_after(void);
+bool modifier_after(void);
 void ultramod_escape(keyrecord_t* p_keyrecord);
 void set_normal_state(void);
+void ultramod_matrix_scan(void);
+void ultramod_set_leds(void);
 
 
 void
@@ -191,7 +197,7 @@ ultramod_machine_reset(void)
 
 
 bool
-plugin_process_action_before_hook
+ultramod_before
     (
         keyrecord_t* p_keyrecord,
         action_t action
@@ -236,16 +242,16 @@ plugin_process_action_before_hook
     ultramod.event.is_modifier = (ultramod.event.is_standard_modifier || ultramod.event.is_layer_modifier);
 
     if (ultramod.event.is_modifier)
-        consumed = modifier_before_hook();
+        consumed = modifier_before();
     else
-        consumed = character_before_hook();
+        consumed = character_before();
 
     return consumed;
 }
 
 
 bool
-plugin_process_action_after_hook
+ultramod_after
     (
         keyrecord_t* p_keyrecord,
         action_t action
@@ -254,16 +260,16 @@ plugin_process_action_after_hook
     bool consumed = false;
 
     if (ultramod.event.is_modifier)
-        consumed = modifier_after_hook();
+        consumed = modifier_after();
     else
-        consumed = character_after_hook();
+        consumed = character_after();
 
     return consumed;
 }
 
 
 bool
-character_before_hook(void)
+character_before(void)
 {
     bool consumed = false;
 
@@ -282,7 +288,7 @@ character_before_hook(void)
 
 
 bool
-character_after_hook(void)
+character_after(void)
 {
     const bool consumed = false;
 
@@ -317,7 +323,7 @@ character_after_hook(void)
 
 
 bool
-modifier_before_hook(void)
+modifier_before(void)
 {
     bool consumed = false;
 
@@ -401,7 +407,7 @@ modifier_before_hook(void)
 // for example, where double-tap of shift does something.
 
 bool
-modifier_after_hook(void)
+modifier_after(void)
 {
     bool consumed = false;
 
@@ -465,9 +471,6 @@ void ultramod_matrix_scan(void)
             }
             break;
     }
-
-    // Something seems to keep resetting the brightness
-    ergodox_led_all_set(LED_BRIGHTNESS_LO);
 }
 
 
@@ -516,6 +519,10 @@ void ultramod_set_leds(void)
             ergodox_right_led_1_on();  // Red
             break;
     }
+
+    // Something seems to keep resetting the brightness
+    ergodox_led_all_set(LED_BRIGHTNESS_LO);
+    ultramod_set_leds();
 }
 
 
@@ -581,4 +588,15 @@ is_same_key
     return true;
 }
 
+
+Plugin*
+ultramod_create_plugin(void)
+{
+    Plugin* p_plugin = (Plugin*)malloc(sizeof(Plugin));
+    p_plugin->p_name = "ultramod";
+    p_plugin->matrix_scan = &ultramod_matrix_scan;
+    p_plugin->before = &ultramod_before;
+    p_plugin->after = &ultramod_after;
+    return p_plugin;
+}
 
