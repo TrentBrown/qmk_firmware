@@ -36,17 +36,17 @@ find_plugin_named(const char* p_name)
 void
 plugin_matrix_scan(void)
 {
-//    Plugin* p_plugin;
-//    for (p_plugin = p_first_plugin;
-//         p_plugin != NULL;
-//         p_plugin = p_plugin->p_next_plugin)
-//    {
-//        plugin_matrix_scan_function matrix_scan = p_plugin->matrix_scan;
-//        if (matrix_scan == NULL)
-//            continue;
-//
-//        matrix_scan();
-//    }
+    Plugin* p_plugin;
+    for (p_plugin = p_first_plugin;
+         p_plugin != NULL;
+         p_plugin = p_plugin->p_next_plugin)
+    {
+        plugin_matrix_scan_function plugin_matrix_scan = p_plugin->matrix_scan;
+        if (plugin_matrix_scan == NULL)
+            continue;
+
+        plugin_matrix_scan();
+    }
 }
 
 
@@ -62,11 +62,11 @@ plugin_process_action_before_hook
          p_plugin != NULL;
          p_plugin = p_plugin->p_next_plugin)
     {
-        plugin_before_function before = p_plugin->before;
-        if (before == NULL)
+        plugin_before_function plugin_before = p_plugin->before;
+        if (plugin_before == NULL)
             continue;
 
-        const bool consumed = before(p_keyrecord, action);
+        const bool consumed = plugin_before(p_keyrecord, action);
         if (consumed)
             return true;
     }
@@ -82,21 +82,16 @@ plugin_process_action_after_hook
         action_t action
     )
 {
-    if (p_keyrecord->event.pressed)
-        ergodox_right_led_2_on();  // Green
-    else
-        ergodox_led_all_off();
-
     Plugin* p_plugin;
     for (p_plugin = p_first_plugin;
          p_plugin != NULL;
          p_plugin = p_plugin->p_next_plugin)
     {
-        plugin_after_function after = p_plugin->after;
-        if (after == NULL)
+        plugin_after_function plugin_after = p_plugin->after;
+        if (plugin_after == NULL)
             continue;
 
-        const bool consumed = after(p_keyrecord, action);
+        const bool consumed = plugin_after(p_keyrecord, action);
         if (consumed)
             return true;
     }

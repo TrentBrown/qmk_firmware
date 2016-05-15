@@ -471,6 +471,8 @@ void ultramod_matrix_scan(void)
             }
             break;
     }
+
+    ultramod_set_leds();
 }
 
 
@@ -522,7 +524,6 @@ void ultramod_set_leds(void)
 
     // Something seems to keep resetting the brightness
     ergodox_led_all_set(LED_BRIGHTNESS_LO);
-    ultramod_set_leds();
 }
 
 
