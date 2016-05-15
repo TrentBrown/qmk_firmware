@@ -1,69 +1,62 @@
 // plugin
 #include "plugin.h"
 
-Plugin* p_head_plugin = NULL;
+Plugin* gpHeadPlugin = NULL;
 
 void
-push_plugin(Plugin* p_plugin)
+AddPlugin(Plugin* pPlugin)
 {
-    const bool listIsEmpty = (p_head_plugin == NULL);
+    const bool listIsEmpty = (gpHeadPlugin == NULL);
     if (listIsEmpty)
     {
-        p_plugin->p_prev_plugin = NULL;
-        p_plugin->p_next_plugin = NULL;
+        pPlugin->pPrevPlugin = NULL;
+        pPlugin->pNextPlugin = NULL;
     }
     else
     {
-        p_plugin->p_prev_plugin = NULL;
-        p_plugin->p_next_plugin = p_head_plugin;
+        pPlugin->pPrevPlugin = NULL;
+        pPlugin->pNextPlugin = gpHeadPlugin;
 
-        p_head_plugin->p_prev_plugin = p_plugin;
+        gpHeadPlugin->pPrevPlugin = pPlugin;
     }
 
-    p_head_plugin = p_plugin;
+    gpHeadPlugin = pPlugin;
 }
 
 
 void
-add_plugin_before(Plugin* p_plugin, Plugin* p_other_plugin)
+AddPluginBefore(Plugin* pPlugin, Plugin* pOtherPlugin)
 {
-    p_plugin->p_prev_plugin = p_other_plugin->p_prev_plugin;
-    p_plugin->p_next_plugin = p_other_plugin;
+    pPlugin->pPrevPlugin = pOtherPlugin->pPrevPlugin;
+    pPlugin->pNextPlugin = pOtherPlugin;
 
-    p_other_plugin->p_prev_plugin = p_plugin;
+    pOtherPlugin->pPrevPlugin = pPlugin;
 
-    if (p_head_plugin == p_other_plugin)
-        p_head_plugin = p_plugin;
+    if (gpHeadPlugin == pOtherPlugin)
+        gpHeadPlugin = pPlugin;
 }
 
 
 void
-add_plugin_after(Plugin* p_plugin, Plugin* p_other_plugin)
+AddPluginAfter(Plugin* pPlugin, Plugin* pOtherPlugin)
 {
-    p_plugin->p_prev_plugin = p_other_plugin;
-    p_plugin->p_next_plugin = p_other_plugin->p_next_plugin;
+    pPlugin->pPrevPlugin = pOtherPlugin;
+    pPlugin->pNextPlugin = pOtherPlugin->pNextPlugin;
 
-    p_other_plugin->p_next_plugin = p_plugin;
-}
-
-
-bool
-has_plugin(const char* p_name)
-{
-    return (find_plugin_named(p_name) != NULL);
+    pOtherPlugin->pNextPlugin = pPlugin;
 }
 
 
 Plugin*
-find_plugin_named(const char* p_name)
+FindPluginNamed(const char* pName)
 {
-    Plugin* p_plugin;
-    for (p_plugin = p_head_plugin;
-         p_plugin != NULL;
-         p_plugin = p_plugin->p_next_plugin)
+    Plugin* pPlugin;
+    for (pPlugin = gpHeadPlugin;
+         pPlugin != NULL;
+         pPlugin = pPlugin->pNextPlugin)
     {
-        if (strcmp(p_plugin->p_name, p_name) == 0)
-            return p_plugin;
+        if (strcmp(pPlugin->pName, pName) == 0)
+            return pPlugin;
     }
     return NULL;
 }
@@ -72,12 +65,12 @@ find_plugin_named(const char* p_name)
 void
 plugin_matrix_scan(void)
 {
-    Plugin* p_plugin;
-    for (p_plugin = p_head_plugin;
-         p_plugin != NULL;
-         p_plugin = p_plugin->p_next_plugin)
+    Plugin* pPlugin;
+    for (pPlugin = gpHeadPlugin;
+         pPlugin != NULL;
+         pPlugin = pPlugin->pNextPlugin)
     {
-        plugin_matrix_scan_function plugin_matrix_scan = p_plugin->matrix_scan;
+        PluginMatrixScanFunction plugin_matrix_scan = pPlugin->matrixScan;
         if (plugin_matrix_scan == NULL)
             continue;
 
@@ -89,20 +82,20 @@ plugin_matrix_scan(void)
 bool
 plugin_process_action_before_hook
     (
-        keyrecord_t* p_keyrecord,
+        keyrecord_t* pKeyRecord,
         action_t action
     )
 {
-    Plugin* p_plugin;
-    for (p_plugin = p_head_plugin;
-         p_plugin != NULL;
-         p_plugin = p_plugin->p_next_plugin)
+    Plugin* pPlugin;
+    for (pPlugin = gpHeadPlugin;
+         pPlugin != NULL;
+         pPlugin = pPlugin->pNextPlugin)
     {
-        plugin_before_function plugin_before = p_plugin->before;
-        if (plugin_before == NULL)
+        PluginBeforeFunction pluginBefore = pPlugin->before;
+        if (pluginBefore == NULL)
             continue;
 
-        const bool consumed = plugin_before(p_keyrecord, action);
+        const bool consumed = pluginBefore(pKeyRecord, action);
         if (consumed)
             return true;
     }
@@ -114,20 +107,20 @@ plugin_process_action_before_hook
 bool
 plugin_process_action_after_hook
     (
-        keyrecord_t* p_keyrecord,
+        keyrecord_t* pKeyRecord,
         action_t action
     )
 {
-    Plugin* p_plugin;
-    for (p_plugin = p_head_plugin;
-         p_plugin != NULL;
-         p_plugin = p_plugin->p_next_plugin)
+    Plugin* pPlugin;
+    for (pPlugin = gpHeadPlugin;
+         pPlugin != NULL;
+         pPlugin = pPlugin->pNextPlugin)
     {
-        plugin_after_function plugin_after = p_plugin->after;
-        if (plugin_after == NULL)
+        PluginAfterFunction pluginAfter = pPlugin->after;
+        if (pluginAfter == NULL)
             continue;
 
-        const bool consumed = plugin_after(p_keyrecord, action);
+        const bool consumed = pluginAfter(pKeyRecord, action);
         if (consumed)
             return true;
     }

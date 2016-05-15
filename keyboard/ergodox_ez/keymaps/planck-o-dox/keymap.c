@@ -45,13 +45,13 @@ matrix_init_user(void)
     ergodox_led_all_set(LED_BRIGHTNESS_LO);
 
     // Set your personal preferences here. See ultramod.h for defaults.
-    ultramod_configure_timeout(ULTRAMOD_TIMEOUT_SINGLE_TAP, 250);
-    ultramod_configure_timeout(ULTRAMOD_TIMEOUT_DOUBLE_TAP, 250);
-    ultramod_configure_timeout(ULTRAMOD_TIMEOUT_ONE_SHOT, 10000);
-    ultramod_configure_timeout(ULTRAMOD_TIMEOUT_LOCKED, 10000);
+    UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_SINGLE_TAP, 250);
+    UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_DOUBLE_TAP, 250);
+    UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_ONE_SHOT, 10000);
+    UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_LOCKED, 10000);
 
-    Plugin* p_ultramod_plugin = ultramod_create_plugin();
-    push_plugin(p_ultramod_plugin);
+    Plugin* pUltramodPlugin = UltramodCreatePlugin();
+    AddPlugin(pUltramodPlugin);
 };
 
 

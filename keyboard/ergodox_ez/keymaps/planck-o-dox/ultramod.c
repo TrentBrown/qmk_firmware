@@ -55,16 +55,16 @@ typedef struct UltramodSettings
     // Unit for timeouts are milliseconds. A zero value means "never time out".
 
     // Entering one-shot state
-    uint16_t single_tap_timeout;
+    uint16_t singleTapTimeout;
 
     // Entering locked state
-    uint16_t double_tap_timeout;
+    uint16_t doubleTapTimeout;
 
     // Leaving one-shot state if the user hasn't typed any characters
-    uint16_t one_shot_timeout;
+    uint16_t oneShotTimeout;
 
     // Leaving locked state if the user hasn't typed any characters
-    uint16_t locked_timeout;
+    uint16_t lockedTimeout;
 } UltramodSettings;
 
 
@@ -74,11 +74,11 @@ typedef struct UltramodEvent
     uint16_t code;
     bool pressed;
     bool released;
-    keyrecord_t* p_keyrecord;
+    keyrecord_t* pKeyRecord;
     uint16_t time;
-    bool is_modifier;
-    bool is_standard_modifier;
-    bool is_layer_modifier;
+    bool isModifier;
+    bool isStandardModifier;
+    bool isLayerModifier;
 } UltramodEvent;
 
 
@@ -86,11 +86,11 @@ typedef struct UltramodEvent
 typedef struct UltramodMachine
 {
     UltramodMachineState state;
-    keypos_t modifier_key;
-    uint16_t modifier_pressed_time;
-    uint16_t modifier_released_time;
-    uint16_t last_action_time;
-    uint8_t modifier_bit;
+    keypos_t modifierKey;
+    uint16_t modifierPressedTime;
+    uint16_t modifierReleasedTime;
+    uint16_t lastActionTime;
+    uint8_t modifierBit;
     uint8_t layer;
 } UltramodMachine;
 
@@ -109,177 +109,177 @@ Ultramod ultramod;
 
 
 // Forward declarations of local functions
-void ultramod_reset(void);
-void ultramod_settings_reset(void);
-void ultramod_machine_reset(void);
-void ultramod_event_reset(void);
-uint8_t mod_flag_to_bits(uint8_t flag);
-bool is_same_key(keypos_t first, keypos_t second);
-bool timed_out(uint16_t first, uint16_t second, uint16_t timeout);
-bool character_before(void);
-bool modifier_before(void);
-bool character_after(void);
-bool modifier_after(void);
-void ultramod_escape(keyrecord_t* p_keyrecord);
-void set_normal_state(void);
-void ultramod_matrix_scan(void);
-void ultramod_set_leds(void);
+void UltramodReset(void);
+void UltramodSettingsReset(void);
+void UltramodMachineReset(void);
+void UltramodEventReset(void);
+uint8_t ModFlagToBits(uint8_t flag);
+bool IsSameKey(keypos_t first, keypos_t second);
+bool TimedOut(uint16_t first, uint16_t second, uint16_t timeout);
+bool CharacterBefore(void);
+bool ModifierBefore(void);
+bool CharacterAfter(void);
+bool ModifierAfter(void);
+void UltramodEscape(keyrecord_t* pKeyRecord);
+void SetNormalState(void);
+void UltramodMatrixScan(void);
+void UltramodSetLeds(void);
 
 
 void
-ultramod_configure_timeout
+UltramodConfigureTimeout
     (
-        const char* p_name,
+        const char* pName,
         uint16_t milliseconds
     )
 {
-    if (strcmp(p_name, ULTRAMOD_TIMEOUT_SINGLE_TAP) == 0)
-        ultramod.settings.single_tap_timeout = milliseconds;
-    else if (strcmp(p_name, ULTRAMOD_TIMEOUT_DOUBLE_TAP) == 0)
-        ultramod.settings.double_tap_timeout = milliseconds;
-    else if (strcmp(p_name, ULTRAMOD_TIMEOUT_ONE_SHOT) == 0)
-        ultramod.settings.one_shot_timeout = milliseconds;
-    else if (strcmp(p_name, ULTRAMOD_TIMEOUT_LOCKED) == 0)
-        ultramod.settings.locked_timeout = milliseconds;
+    if (strcmp(pName, ULTRAMOD_TIMEOUT_SINGLE_TAP) == 0)
+        ultramod.settings.singleTapTimeout = milliseconds;
+    else if (strcmp(pName, ULTRAMOD_TIMEOUT_DOUBLE_TAP) == 0)
+        ultramod.settings.doubleTapTimeout = milliseconds;
+    else if (strcmp(pName, ULTRAMOD_TIMEOUT_ONE_SHOT) == 0)
+        ultramod.settings.oneShotTimeout = milliseconds;
+    else if (strcmp(pName, ULTRAMOD_TIMEOUT_LOCKED) == 0)
+        ultramod.settings.lockedTimeout = milliseconds;
 }
 
 
 void
-ultramod_reset(void)
+UltramodReset(void)
 {
     clear_keyboard();
     layer_clear();
 
     ergodox_led_all_off();
 
-    ultramod_settings_reset();
-    ultramod_event_reset();
-    ultramod_machine_reset();
+    UltramodSettingsReset();
+    UltramodEventReset();
+    UltramodMachineReset();
 }
 
 
 void
-ultramod_settings_reset(void)
+UltramodSettingsReset(void)
 {
-    ultramod.settings.single_tap_timeout = ULTRAMOD_TIMEOUT_SINGLE_TAP_DEFAULT;
-    ultramod.settings.double_tap_timeout = ULTRAMOD_TIMEOUT_DOUBLE_TAP_DEFAULT;
-    ultramod.settings.one_shot_timeout = ULTRAMOD_TIMEOUT_ONE_SHOT_DEFAULT;
-    ultramod.settings.locked_timeout = ULTRAMOD_TIMEOUT_LOCKED_DEFAULT;
+    ultramod.settings.singleTapTimeout = ULTRAMOD_TIMEOUT_SINGLE_TAP_DEFAULT;
+    ultramod.settings.doubleTapTimeout = ULTRAMOD_TIMEOUT_DOUBLE_TAP_DEFAULT;
+    ultramod.settings.oneShotTimeout = ULTRAMOD_TIMEOUT_ONE_SHOT_DEFAULT;
+    ultramod.settings.lockedTimeout = ULTRAMOD_TIMEOUT_LOCKED_DEFAULT;
 }
 
 
 void
-ultramod_event_reset(void)
+UltramodEventReset(void)
 {
     ultramod.event.code = 0;
     ultramod.event.pressed = false;
     ultramod.event.released = false;
-    ultramod.event.p_keyrecord  = NULL;
+    ultramod.event.pKeyRecord  = NULL;
     ultramod.event.time = 0;
-    ultramod.event.is_modifier = false;
-    ultramod.event.is_standard_modifier = false;
-    ultramod.event.is_layer_modifier = false;
+    ultramod.event.isModifier = false;
+    ultramod.event.isStandardModifier = false;
+    ultramod.event.isLayerModifier = false;
 }
 
 
 void
-ultramod_machine_reset(void)
+UltramodMachineReset(void)
 {
     ultramod.machine.state = NORMAL_STATE;
-    ultramod.machine.modifier_key.col = 0;
-    ultramod.machine.modifier_key.row = 0;
-    ultramod.machine.modifier_pressed_time = 0;
-    ultramod.machine.modifier_released_time = 0;
-    ultramod.machine.last_action_time = 0;
-    ultramod.machine.modifier_bit = 0;
+    ultramod.machine.modifierKey.col = 0;
+    ultramod.machine.modifierKey.row = 0;
+    ultramod.machine.modifierPressedTime = 0;
+    ultramod.machine.modifierReleasedTime = 0;
+    ultramod.machine.lastActionTime = 0;
+    ultramod.machine.modifierBit = 0;
     ultramod.machine.layer = 0;
 }
 
 
 bool
-ultramod_before
+UltramodBefore
     (
-        keyrecord_t* p_keyrecord,
+        keyrecord_t* pKeyRecord,
         action_t action
     )
 {
     bool consumed = false;
 
-    ultramod.event.p_keyrecord = p_keyrecord;
+    ultramod.event.pKeyRecord = pKeyRecord;
 
-    ultramod.event.pressed = p_keyrecord->event.pressed;
+    ultramod.event.pressed = pKeyRecord->event.pressed;
     ultramod.event.released = !ultramod.event.pressed;
 
-    ultramod.event.time = p_keyrecord->event.time;
+    ultramod.event.time = pKeyRecord->event.time;
 
     if (ultramod.event.pressed)
-        ultramod.machine.modifier_pressed_time = ultramod.event.time;
+        ultramod.machine.modifierPressedTime = ultramod.event.time;
     if (ultramod.event.released)
-        ultramod.machine.modifier_released_time = ultramod.event.time;
+        ultramod.machine.modifierReleasedTime = ultramod.event.time;
 
     ultramod.event.code = action.code;
 
-    ultramod.event.is_standard_modifier = (ultramod.event.code == KC_LSHIFT || ultramod.event.code == KC_RSHIFT || ultramod.event.code == KC_LALT || ultramod.event.code == KC_RALT || ultramod.event.code == KC_LGUI || ultramod.event.code == KC_RGUI || ultramod.event.code == KC_LCTRL || ultramod.event.code == KC_RCTRL);
-    if (ultramod.event.is_standard_modifier)
-        ultramod.machine.modifier_bit = MOD_BIT(ultramod.event.code);
+    ultramod.event.isStandardModifier = (ultramod.event.code == KC_LSHIFT || ultramod.event.code == KC_RSHIFT || ultramod.event.code == KC_LALT || ultramod.event.code == KC_RALT || ultramod.event.code == KC_LGUI || ultramod.event.code == KC_RGUI || ultramod.event.code == KC_LCTRL || ultramod.event.code == KC_RCTRL);
+    if (ultramod.event.isStandardModifier)
+        ultramod.machine.modifierBit = MOD_BIT(ultramod.event.code);
 
-    ultramod.event.is_layer_modifier = false;
+    ultramod.event.isLayerModifier = false;
     switch (action.kind.id)
     {
         case ACT_LAYER:
         case ACT_LAYER_TAP:
         case ACT_LAYER_TAP_EXT:
-            ultramod.event.is_layer_modifier = true;
+            ultramod.event.isLayerModifier = true;
 
             // Yuck. A necessary evil.
-            keypos_t key = p_keyrecord->event.key;
+            keypos_t key = pKeyRecord->event.key;
             uint16_t keycode = keymap_key_to_keycode(layer_switch_get_layer(key), key);
             ultramod.machine.layer = keycode & 0xFF;
 
             break;
     }
 
-    ultramod.event.is_modifier = (ultramod.event.is_standard_modifier || ultramod.event.is_layer_modifier);
+    ultramod.event.isModifier = (ultramod.event.isStandardModifier || ultramod.event.isLayerModifier);
 
-    if (ultramod.event.is_modifier)
-        consumed = modifier_before();
+    if (ultramod.event.isModifier)
+        consumed = ModifierBefore();
     else
-        consumed = character_before();
+        consumed = CharacterBefore();
 
     return consumed;
 }
 
 
 bool
-ultramod_after
+UltramodAfter
     (
-        keyrecord_t* p_keyrecord,
+        keyrecord_t* pKeyRecord,
         action_t action
     )
 {
     bool consumed = false;
 
-    if (ultramod.event.is_modifier)
-        consumed = modifier_after();
+    if (ultramod.event.isModifier)
+        consumed = ModifierAfter();
     else
-        consumed = character_after();
+        consumed = CharacterAfter();
 
     return consumed;
 }
 
 
 bool
-character_before(void)
+CharacterBefore(void)
 {
     bool consumed = false;
 
     if (ultramod.event.code == KC_ESCAPE)
-        ultramod_escape(ultramod.event.p_keyrecord);
+        UltramodEscape(ultramod.event.pKeyRecord);
 
     // todo: Why does this state not stick?
     if (ultramod.machine.state != NORMAL_STATE)
     {
-        add_mods(ultramod.machine.modifier_bit);
+        add_mods(ultramod.machine.modifierBit);
         layer_on(ultramod.machine.layer);
     }
 
@@ -288,7 +288,7 @@ character_before(void)
 
 
 bool
-character_after(void)
+CharacterAfter(void)
 {
     const bool consumed = false;
 
@@ -311,7 +311,7 @@ character_after(void)
 
             // This character was the one-shot character. Return to normal.
             if (ultramod.event.pressed)
-                set_normal_state();
+                SetNormalState();
             break;
 
         case LOCKED_STATE:
@@ -323,12 +323,12 @@ character_after(void)
 
 
 bool
-modifier_before(void)
+ModifierBefore(void)
 {
     bool consumed = false;
 
     // Make sure modifier chord matches exactly
-    //    if (ultramod.machine.modifier_bit != get_mods())
+    //    if (ultramod.machine.modifierBit != get_mods())
     //        return;
 
     switch (ultramod.machine.state)
@@ -336,7 +336,7 @@ modifier_before(void)
         case NORMAL_STATE:
             if (ultramod.event.pressed)
             {
-                ultramod.machine.modifier_key = ultramod.event.p_keyrecord->event.key;
+                ultramod.machine.modifierKey = ultramod.event.pKeyRecord->event.key;
                 ultramod.machine.state = HELD_STATE;
                 consumed = true;
             }
@@ -345,16 +345,16 @@ modifier_before(void)
         case HELD_STATE:
             if (ultramod.event.released)
             {
-                const bool too_late_for_single_tap = timed_out(ultramod.event.time,
-                                                               ultramod.machine.modifier_pressed_time,
-                                                               ultramod.settings.single_tap_timeout);
-                if (too_late_for_single_tap)
+                const bool tooLateForSingleTap = TimedOut(ultramod.event.time,
+                                                          ultramod.machine.modifierPressedTime,
+                                                          ultramod.settings.singleTapTimeout);
+                if (tooLateForSingleTap)
                 {
-                    set_normal_state();
+                    SetNormalState();
                 }
                 else
                 {
-                    ultramod.machine.last_action_time = ultramod.event.time;
+                    ultramod.machine.lastActionTime = ultramod.event.time;
                     ultramod.machine.state = ONE_SHOT_STATE;
                 }
                 consumed = true;
@@ -364,7 +364,7 @@ modifier_before(void)
         case MOMENTARY_STATE:
             if (ultramod.event.released)
             {
-                set_normal_state();
+                SetNormalState();
                 consumed = true;
             }
             break;
@@ -372,11 +372,11 @@ modifier_before(void)
         case ONE_SHOT_STATE:
             if (ultramod.event.pressed)
             {
-                const bool one_shot_timed_out = timed_out(ultramod.event.time,
-                                                          ultramod.machine.modifier_released_time,
-                                                          ultramod.settings.double_tap_timeout);
-                if (one_shot_timed_out)
-                    set_normal_state();
+                const bool oneShotTimedOut = TimedOut(ultramod.event.time,
+                                                      ultramod.machine.modifierReleasedTime,
+                                                      ultramod.settings.doubleTapTimeout);
+                if (oneShotTimedOut)
+                    SetNormalState();
                 else
                     ultramod.machine.state = LOCKED_STATE;
                 consumed = true;
@@ -386,7 +386,7 @@ modifier_before(void)
         case LOCKED_STATE:
             if (ultramod.event.pressed)
             {
-                set_normal_state();
+                SetNormalState();
                 consumed = true;
             }
             break;
@@ -395,7 +395,7 @@ modifier_before(void)
     // todo: Why does this state not stick?
     if (ultramod.machine.state != NORMAL_STATE)
     {
-        add_mods(ultramod.machine.modifier_bit);
+        add_mods(ultramod.machine.modifierBit);
         layer_on(ultramod.machine.layer);
     }
 
@@ -407,7 +407,7 @@ modifier_before(void)
 // for example, where double-tap of shift does something.
 
 bool
-modifier_after(void)
+ModifierAfter(void)
 {
     bool consumed = false;
 
@@ -432,7 +432,7 @@ modifier_after(void)
     // todo: Why does this state not stick?
     if (ultramod.machine.state != NORMAL_STATE)
     {
-        add_mods(ultramod.machine.modifier_bit);
+        add_mods(ultramod.machine.modifierBit);
         layer_on(ultramod.machine.layer);
     }
 
@@ -440,7 +440,7 @@ modifier_after(void)
 }
 
 
-void ultramod_matrix_scan(void)
+void UltramodMatrixScan(void)
 {
     const uint16_t now = timer_read();
 
@@ -457,47 +457,51 @@ void ultramod_matrix_scan(void)
 
         case ONE_SHOT_STATE:
             {
-                const bool one_shot_timed_out = timed_out(now, ultramod.machine.last_action_time, ultramod.settings.one_shot_timeout);
-                if (one_shot_timed_out)
-                    set_normal_state();
+                const bool oneShotTimedOut = TimedOut(now,
+                                                      ultramod.machine.lastActionTime,
+                                                      ultramod.settings.oneShotTimeout);
+                if (oneShotTimedOut)
+                    SetNormalState();
             }
             break;
 
         case LOCKED_STATE:
             {
-                const bool lock_timed_out = timed_out(now, ultramod.machine.last_action_time, ultramod.settings.locked_timeout);
-                if (lock_timed_out)
-                    set_normal_state();
+                const bool lockTimedOut = TimedOut(now,
+                                                   ultramod.machine.lastActionTime,
+                                                   ultramod.settings.lockedTimeout);
+                if (lockTimedOut)
+                    SetNormalState();
             }
             break;
     }
 
-    ultramod_set_leds();
+    UltramodSetLeds();
 }
 
 
 void
-ultramod_escape(keyrecord_t* p_keyrecord)
+UltramodEscape(keyrecord_t* pKeyRecord)
 {
-    if (p_keyrecord->event.pressed)
-        set_normal_state();
+    if (pKeyRecord->event.pressed)
+        SetNormalState();
 }
 
 
 void
-set_normal_state(void)
+SetNormalState(void)
 {
     clear_keyboard();
     layer_clear();
 
     ergodox_led_all_off();
 
-    ultramod_event_reset();
-    ultramod_machine_reset();
+    UltramodEventReset();
+    UltramodMachineReset();
 }
 
 
-void ultramod_set_leds(void)
+void UltramodSetLeds(void)
 {
     ergodox_led_all_off();
 
@@ -528,7 +532,7 @@ void ultramod_set_leds(void)
 
 
 uint8_t
-mod_flag_to_bits(uint8_t flag)
+ModFlagToBits(uint8_t flag)
 {
     switch (flag)
     {
@@ -555,7 +559,7 @@ mod_flag_to_bits(uint8_t flag)
 
 
 bool
-timed_out
+TimedOut
     (
         uint16_t first,
         uint16_t second,
@@ -576,7 +580,7 @@ timed_out
 
 
 bool
-is_same_key
+IsSameKey
     (
         keypos_t first,
         keypos_t second
@@ -591,15 +595,15 @@ is_same_key
 
 
 Plugin*
-ultramod_create_plugin(void)
+UltramodCreatePlugin(void)
 {
-    Plugin* p_plugin = (Plugin*)malloc(sizeof(Plugin));
-    p_plugin->p_name = "ultramod";
-    p_plugin->matrix_scan = &ultramod_matrix_scan;
-    p_plugin->before = &ultramod_before;
-    p_plugin->after = &ultramod_after;
-    p_plugin->p_prev_plugin = NULL;
-    p_plugin->p_next_plugin = NULL;
-    return p_plugin;
+    Plugin* pPlugin = (Plugin*)malloc(sizeof(Plugin));
+    pPlugin->pName = "ultramod";
+    pPlugin->matrixScan = &UltramodMatrixScan;
+    pPlugin->before = &UltramodBefore;
+    pPlugin->after = &UltramodAfter;
+    pPlugin->pPrevPlugin = NULL;
+    pPlugin->pNextPlugin = NULL;
+    return pPlugin;
 }
 
