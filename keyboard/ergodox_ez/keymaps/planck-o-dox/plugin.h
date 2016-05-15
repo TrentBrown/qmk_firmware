@@ -11,12 +11,17 @@ typedef struct Plugin
     plugin_matrix_scan_function matrix_scan;
     plugin_before_function before;
     plugin_after_function after;
+    struct Plugin* p_prev_plugin;
     struct Plugin* p_next_plugin;
 } Plugin;
 
 
-void add_plugin(Plugin* p_plugin);
+void push_plugin(Plugin* p_plugin);
+void add_plugin_before(Plugin* p_plugin, Plugin* p_other_plugin);
+void add_plugin_after(Plugin* p_plugin, Plugin* p_other_plugin);
+
 bool has_plugin(const char* p_name);
+
 Plugin* find_plugin_named(const char* p_name);
 
 

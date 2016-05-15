@@ -1,13 +1,49 @@
 // plugin
 #include "plugin.h"
 
-Plugin* p_first_plugin = NULL;
+Plugin* p_head_plugin = NULL;
 
 void
-add_plugin(Plugin* p_plugin)
+push_plugin(Plugin* p_plugin)
 {
-    p_plugin->p_next_plugin = p_first_plugin;
-    p_first_plugin = p_plugin;
+    const bool listIsEmpty = (p_head_plugin == NULL);
+    if (listIsEmpty)
+    {
+        p_plugin->p_prev_plugin = NULL;
+        p_plugin->p_next_plugin = NULL;
+    }
+    else
+    {
+        p_plugin->p_prev_plugin = NULL;
+        p_plugin->p_next_plugin = p_head_plugin;
+
+        p_head_plugin->p_prev_plugin = p_plugin;
+    }
+
+    p_head_plugin = p_plugin;
+}
+
+
+void
+add_plugin_before(Plugin* p_plugin, Plugin* p_other_plugin)
+{
+    p_plugin->p_prev_plugin = p_other_plugin->p_prev_plugin;
+    p_plugin->p_next_plugin = p_other_plugin;
+
+    p_other_plugin->p_prev_plugin = p_plugin;
+
+    if (p_head_plugin == p_other_plugin)
+        p_head_plugin = p_plugin;
+}
+
+
+void
+add_plugin_after(Plugin* p_plugin, Plugin* p_other_plugin)
+{
+    p_plugin->p_prev_plugin = p_other_plugin;
+    p_plugin->p_next_plugin = p_other_plugin->p_next_plugin;
+
+    p_other_plugin->p_next_plugin = p_plugin;
 }
 
 
@@ -22,7 +58,7 @@ Plugin*
 find_plugin_named(const char* p_name)
 {
     Plugin* p_plugin;
-    for (p_plugin = p_first_plugin;
+    for (p_plugin = p_head_plugin;
          p_plugin != NULL;
          p_plugin = p_plugin->p_next_plugin)
     {
@@ -37,7 +73,7 @@ void
 plugin_matrix_scan(void)
 {
     Plugin* p_plugin;
-    for (p_plugin = p_first_plugin;
+    for (p_plugin = p_head_plugin;
          p_plugin != NULL;
          p_plugin = p_plugin->p_next_plugin)
     {
@@ -58,7 +94,7 @@ plugin_process_action_before_hook
     )
 {
     Plugin* p_plugin;
-    for (p_plugin = p_first_plugin;
+    for (p_plugin = p_head_plugin;
          p_plugin != NULL;
          p_plugin = p_plugin->p_next_plugin)
     {
@@ -83,7 +119,7 @@ plugin_process_action_after_hook
     )
 {
     Plugin* p_plugin;
-    for (p_plugin = p_first_plugin;
+    for (p_plugin = p_head_plugin;
          p_plugin != NULL;
          p_plugin = p_plugin->p_next_plugin)
     {

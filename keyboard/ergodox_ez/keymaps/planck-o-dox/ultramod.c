@@ -598,6 +598,8 @@ ultramod_create_plugin(void)
     p_plugin->matrix_scan = &ultramod_matrix_scan;
     p_plugin->before = &ultramod_before;
     p_plugin->after = &ultramod_after;
+    p_plugin->p_prev_plugin = NULL;
+    p_plugin->p_next_plugin = NULL;
     return p_plugin;
 }
 

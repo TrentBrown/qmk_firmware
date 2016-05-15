@@ -51,7 +51,7 @@ matrix_init_user(void)
     ultramod_configure_timeout(ULTRAMOD_TIMEOUT_LOCKED, 10000);
 
     Plugin* p_ultramod_plugin = ultramod_create_plugin();
-    add_plugin(p_ultramod_plugin);
+    push_plugin(p_ultramod_plugin);
 };
 
 
