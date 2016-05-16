@@ -10,7 +10,7 @@
 #include "keycode.h"
 
 // plugin
-#include "plugin.h"
+#include "../../plugin.h"
 
 // ultramod
 #include "ultramod.h"
@@ -71,10 +71,10 @@ typedef struct UltramodSettings
 // State valid during processing of a single event
 typedef struct UltramodEvent
 {
+    keyrecord_t* pKeyRecord;
     uint16_t code;
     bool pressed;
     bool released;
-    keyrecord_t* pKeyRecord;
     uint16_t time;
     bool isModifier;
     bool isStandardModifier;
@@ -174,7 +174,7 @@ UltramodEventReset(void)
     ultramod.event.code = 0;
     ultramod.event.pressed = false;
     ultramod.event.released = false;
-    ultramod.event.pKeyRecord  = NULL;
+    ultramod.event.pKeyRecord = NULL;
     ultramod.event.time = 0;
     ultramod.event.isModifier = false;
     ultramod.event.isStandardModifier = false;

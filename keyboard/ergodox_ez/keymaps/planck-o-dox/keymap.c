@@ -9,7 +9,8 @@
 #include "plugin.h"
 
 // ultramod
-#include "ultramod.h"
+#include "plugins/ultramod/ultramod.h"
+#include "plugins/navigation/navigation.h"
 
 // planck-o-dox
 #include "keymap.h"
@@ -51,7 +52,10 @@ matrix_init_user(void)
     UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_LOCKED, 10000);
 
     Plugin* pUltramodPlugin = UltramodCreatePlugin();
-    AddPlugin(pUltramodPlugin);
+    PluginAdd(pUltramodPlugin);
+
+    Plugin* pNavigationPlugin = NavigationCreatePlugin(NAVIGATION_KEYMAP);
+    PluginAdd(pNavigationPlugin);
 };
 
 
@@ -68,5 +72,6 @@ matrix_scan_user(void)
 // to compile separately and then link.
 #include "macros.c"
 #include "actions.c"
-#include "ultramod.c"
 #include "plugin.c"
+#include "plugins/ultramod/ultramod.c"
+#include "plugins/navigation/navigation.c"

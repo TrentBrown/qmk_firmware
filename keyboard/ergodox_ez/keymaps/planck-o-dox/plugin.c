@@ -4,7 +4,7 @@
 Plugin* gpHeadPlugin = NULL;
 
 void
-AddPlugin(Plugin* pPlugin)
+PluginAdd(Plugin* pPlugin)
 {
     const bool listIsEmpty = (gpHeadPlugin == NULL);
     if (listIsEmpty)
@@ -25,7 +25,7 @@ AddPlugin(Plugin* pPlugin)
 
 
 void
-AddPluginBefore(Plugin* pPlugin, Plugin* pOtherPlugin)
+PluginAddBefore(Plugin* pPlugin, Plugin* pOtherPlugin)
 {
     pPlugin->pPrevPlugin = pOtherPlugin->pPrevPlugin;
     pPlugin->pNextPlugin = pOtherPlugin;
@@ -38,7 +38,7 @@ AddPluginBefore(Plugin* pPlugin, Plugin* pOtherPlugin)
 
 
 void
-AddPluginAfter(Plugin* pPlugin, Plugin* pOtherPlugin)
+PluginAddAfter(Plugin* pPlugin, Plugin* pOtherPlugin)
 {
     pPlugin->pPrevPlugin = pOtherPlugin;
     pPlugin->pNextPlugin = pOtherPlugin->pNextPlugin;
@@ -48,7 +48,7 @@ AddPluginAfter(Plugin* pPlugin, Plugin* pOtherPlugin)
 
 
 Plugin*
-FindPluginNamed(const char* pName)
+PluginFindNamed(const char* pName)
 {
     Plugin* pPlugin;
     for (pPlugin = gpHeadPlugin;

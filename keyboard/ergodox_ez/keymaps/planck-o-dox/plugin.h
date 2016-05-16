@@ -16,11 +16,11 @@ typedef struct Plugin
 } Plugin;
 
 
-void AddPlugin(Plugin* pPlugin);
-void AddPluginBefore(Plugin* pPlugin, Plugin* pOtherPlugin);
-void AddPluginAfter(Plugin* pPlugin, Plugin* pOtherPlugin);
+void PluginAdd(Plugin* pPlugin);
+void PluginAddBefore(Plugin* pPlugin, Plugin* pOtherPlugin);
+void PluginAddAfter(Plugin* pPlugin, Plugin* pOtherPlugin);
 
-Plugin* FindPluginNamed(const char* pName);
+Plugin* PluginFindNamed(const char* pName);
 
 
 void plugin_matrix_scan(void);  // Call from your matrix_scan_user() function.
