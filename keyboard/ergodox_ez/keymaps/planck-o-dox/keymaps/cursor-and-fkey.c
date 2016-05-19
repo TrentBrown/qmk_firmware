@@ -1,7 +1,8 @@
 /*
     Cursor and Function Key Keymap
 
-    Todo: Putting the fkeys on the left just doesn't work. You can't type them...
+    todo: Add to readme: The left side FKeys are mostly just for show. You can't easily type them on the same hand.
+    Well, maybe you can.
 
 Ergodox:
 

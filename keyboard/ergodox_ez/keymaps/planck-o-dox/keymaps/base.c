@@ -5,15 +5,20 @@ Base (Alphabet) Keymap
 Note: "BaN" stands for "Bracket and Number"
 Note: "CaF" stands for "Cursor and FKey"
 
+Todo: Consider moving volume up and down and mute to the inner keys on right side. Do something similar for tracks
+control on the left side?
+
+todo: If change, use "NaF"  I like symmetry of "CaF" and "NaF"
+
 Ergodox:
 
     ,--------------------------------------------------.           ,--------------------------------------------------.
-    |        | Undo | Cut  | Copy |Paste |      |      |           |      |      | Paste| Copy |  Cut | Undo |   Swap |
+    |        | Undo | Cut  | Copy |Paste |      |      |           | Mute |      | Paste| Copy |  Cut | Undo |SwapApps|
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-    | Tab    |  Q   |  W   |  E   |  R   |  T   |      |           |      |   Y  |   U  |   I  |   O  |   P  | Escape |
+    | Tab    |  Q   |  W   |  E   |  R   |  T   |      |           | Vol+ |   Y  |   U  |   I  |   O  |   P  | Escape |
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     | Shift  |  A   |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   ;  |  Shift |
-    |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+    |--------+------+------+------+------+------|      |           | Vol- |------+------+------+------+------+--------|
     | Command|  Z   |  X   |  C   |  V   |  B   |      |           |      |   N  |   M  |   ,  |   .  |   /  |  Enter |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
       | Ctl  |Option| CaF  | BaN  |Symbol|                                       |Symbol|  BaN |  Nav |Option|  Ctl |
@@ -62,10 +67,10 @@ Planck:
         // Right  KC_MPRV,    KC_MPLY,    KC_MNXT
 
         // --------------------------------------------------------------------------------
-        KC_VOLD,    KC_VOLU,    LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), LGUI(KC_TAB),
-        KC_NO,      KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_ESCAPE,
+        KC_MUTE,    KC_NO,      LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), LGUI(KC_TAB),
+        KC_VOLU,    KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_ESCAPE,
                     KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_RSHIFT,
-        KC_NO,      KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_ENTER,
+        KC_VOLD,    KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_ENTER,
         // --------------------------------------------------------------------------------
                                 MO(A(SYM)), MO(A(BAN)), MO(A(NAV)), KC_RALT,    KC_RCTRL,
 
