@@ -110,7 +110,7 @@ What I came up with:
 | E   | =      | "Equals" The visually similar "-" is just below it.                                                   |
 | F   | !      | "F&#42;&#42;k" (Really wanted this on home row and not using "B" for "bang" frees that up for "bullet")      |
 | G   | `      | "Grave accent mark"                                                                                   |
-| H   | #      | "Hash" Could have used P for "Pound", but there's too much competition (plus, percent, pipe)          |
+| H   | #      | "Hash" Could have used P for "Pound", but there's too much competition: plus, percent, pipe           |
 | I   | |      | A sans-serif "I" looks like a pipe character.                                                         |
 | J   | '      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
 | K   | "      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
@@ -125,8 +125,8 @@ What I came up with:
 | S   | *      | "Star", "Splat", "aSteriSk"                                                                           |
 | T   | ~      | "Tilde"                                                                                               |
 | U   | _      | "Underscore"  Would have liked this on the home row, but at least it's no longer a double-pinkie char.|
-| V   | ∞      | "Very big".                                                                                           |
-| W   | ≈      | "Water", "Wave". "eqWivalent" Whatever...                                                             |
+| V   | ∞      | "Very big". Not a useful char, but fun to drop into a text conversation. "I <3 u ∞"                   |
+| W   | ≈      | "Water", "Wave", "eqWivalent" Whatever...                                                             |
 | X   | ¬      | Character denotes negation, kinda. "Ex it out."                                                       |
 | Y   | —      | "wYde dash" (em-dash). I'm a typography geek. "Please come to my cocktail party from 6:00—10:00 PM, Saturday"   |
 | Z   | Ø      | "Zip", "Zilch", "Zero".                                                                               |

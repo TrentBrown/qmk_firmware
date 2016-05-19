@@ -12,13 +12,13 @@ control on the left side?
 Ergodox:
 
     ,--------------------------------------------------.           ,--------------------------------------------------.
-    |        | Undo | Cut  | Copy |Paste |      |      |           | Mute |      | Paste| Copy |  Cut | Undo |SwapApps|
+    |        | Undo | Cut  | Copy |Paste |      | P/P  |           | Mute |      | Paste| Copy |  Cut | Undo |SwapApps|
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-    | Tab    |  Q   |  W   |  E   |  R   |  T   |      |           | Vol+ |   Y  |   U  |   I  |   O  |   P  | Escape |
-    |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+    | Tab    |  Q   |  W   |  E   |  R   |  T   |Prev  |           | Vol+ |   Y  |   U  |   I  |   O  |   P  | Escape |
+    |--------+------+------+------+------+------|Track |           |      |------+------+------+------+------+--------|
     | Shift  |  A   |  S   |  D   |  F   |  G   |------|           |------|   H  |   J  |   K  |   L  |   ;  |  Shift |
-    |--------+------+------+------+------+------|      |           | Vol- |------+------+------+------+------+--------|
-    | Command|  Z   |  X   |  C   |  V   |  B   |      |           |      |   N  |   M  |   ,  |   .  |   /  |  Enter |
+    |--------+------+------+------+------+------|Next  |           | Vol- |------+------+------+------+------+--------|
+    | Command|  Z   |  X   |  C   |  V   |  B   |Track |           |      |   N  |   M  |   ,  |   .  |   /  |  Enter |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
       | Ctl  |Option| CaF  | BaN  |Symbol|                                       |Symbol|  BaN |  NaF |Option|  Ctl |
       `----------------------------------'                                       `----------------------------------'
@@ -51,10 +51,10 @@ Planck:
         // Left
 
         // --------------------------------------------------------------------------------
-        KC_NO,      LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), KC_NO,      KC_NO,
-        KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_NO,
+        KC_NO,      LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), KC_NO,      KC_MPLY,
+        KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_MPRV,
         KC_LSHIFT,  KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
-        KC_LGUI,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_NO,
+        KC_LGUI,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_MNXT,
         // --------------------------------------------------------------------------------
         KC_LCTRL,   KC_LALT,    MO(A(FKEY)),MO(A(BAN)), MO(A(SYM)),
 
@@ -131,13 +131,13 @@ What I've realized is that even though my xxx key is at the furthest extreme on 
 
 ### Keyswitches
 
-This isn't a layout thing, but I want to talk about it anyway, because it's relevant, and my choice of keyswitches is such a big reason that I love my keybaord. I spent ages thinking about what kind (ie. "color") of mechanical keyswitch to put in my board. I bought keyswitch testers to really get the feel of each, since reading about other people's impressions of their switches is like watching a dance about architecture, so to speak. I highly recommend buying these kits. Even well after you've made your decision, you'll have a great little fiddly-toy for your desk to play with neurotically to reduce stress.
+This isn't a layout thing, but I want to talk about it anyway, because it's relevant, and my choice of keyswitches is such a big reason that I love my keybaord. I spent ages thinking about what kind (ie. "color") of mechanical keyswitch to put in my board. I bought keyswitch testers to really get the feel of each, since reading about other people's impressions of their switches is like dancing about architecture, so to speak. I highly recommend buying these kits. Even well after you've made your decision, you'll have a great little fiddly-toy for your desk to play with neurotically to reduce stress.
 
-After trying them all for many days (keeping my key testers in my hoodie pockets to covertly diddle in idle moments) I decided that I love two switches almost equally: MX Blues (light, tactile, clicky) and Purple Zealios (many weights, tactile, quiet).
+After trying them all for many days (keeping my key testers in my pocket to covertly diddle in idle moments) I decided that I love two switches almost equally: MX Blues (light, tactile, clicky) and Purple Zealios (many weights, tactile, quiet).
 
 O, Little Switches, how do I love thee? Let me count the ways:
 
-Pressing an MX Blue key is like popping a tiny little plastic bubble-wrap balloon, with the same satisfying, addictive quality. I hear and feel the sharp click, and a character appears on my screen. A little hit of pleasure, repeated thousands of times each day.
+Pressing an MX Blue key is like popping a tiny little plastic bubble-wrap balloon, with the same satisfying, addictive quality. I hear and feel the sharp click, and a character appears on my screen. A little hit of pleasure, repeated a thousand times each day.
 
 Pressing a purple Zealio is like pressing your finger against the skin of a ripe peach until it suddenly breaks through into the ripe juicy insides. I can't take credit for this last image. Someone more creative than me came up with it, but I've since lost track of who. And, for the keyboard cognoscenti I will assert: A 62 gram Zealio is what a Cherry MX Brown *should* feel like. A 67 gram Zealio is what a Cherry MX Clear *should* feel like.
 

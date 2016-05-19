@@ -121,7 +121,4 @@ Again used mnemonic of first letter of name...
 | Z   | -_- Zzzzz | "Zzzzz"                  |
 
 
-
-    :-V   :-v   yell, blah blah, talking
-
 */
