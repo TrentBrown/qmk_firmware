@@ -3,6 +3,7 @@
 Base (Alphabet) Keymap
 
 Note: "BaN" stands for "Bracket and Number"
+Note: "CaF" stands for "Cursor and FKey"
 
 Ergodox:
 
@@ -15,7 +16,7 @@ Ergodox:
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     | Command|  Z   |  X   |  C   |  V   |  B   |      |           |      |   N  |   M  |   ,  |   .  |   /  |  Enter |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-      | Ctl  |Option| FKey | BaN  |Symbol|                                       |Symbol|  BaN |  Nav |Option|  Ctl |
+      | Ctl  |Option| CaF  | BaN  |Symbol|                                       |Symbol|  BaN |  Nav |Option|  Ctl |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
                                            |      |  :-) |       | (-:  |      |
@@ -35,7 +36,7 @@ Planck:
     |-----------------------------------------------------------------------|
     |Cmd  |  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,  |  .  |  /  |Enter|
     |-----------------------------------------------------------------------|
-    |Ctl  | Opt |FKey | BaN | Sym |BkSpc|Space| Sym | BaN | Nav | Opt |  Ctl|
+    |Ctl  | Opt | CaF | BaN | Sym |BkSpc|Space| Sym | BaN | Nav | Opt |  Ctl|
     `-----------------------------------------------------------------------'
 
 */
