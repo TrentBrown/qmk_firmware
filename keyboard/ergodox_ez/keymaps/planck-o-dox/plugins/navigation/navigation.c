@@ -43,29 +43,29 @@ typedef enum NavigationMachineState
 
 typedef enum NavigationDirection
 {
-    UP,
-    DOWN,
-    RIGHT,
-    LEFT
+    UP_DIRECTION,
+    DOWN_DIRECTION,
+    RIGHT_DIRECTION,
+    LEFT_DIRECTION
  } NavigationDirection;
 
 
 typedef enum NavigationUnit
 {
-    CHAR,
-    PAGE,
-    PARA,
-    LINE,
-    WORD,
-    DOC,
+    CHAR_UNIT,
+    PAGE_UNIT,
+    PARA_UNIT,
+    LINE_UNIT,
+    WORD_UNIT,
+    DOC_UNIT,
  } NavigationUnit;
 
 
 typedef enum NavigationSelection
 {
-    SELECT_NOTHING,
-    SELECT_TO_BOUNDARY,
-    SELECT_WHOLE,
+    NO_SELECTION,
+    BOUNDARY_SELECTION,
+    WHOLE_UNIT_SELECTION,
  } NavigationSelection;
 
 
@@ -155,71 +155,71 @@ NavigationBefore
         {
             // Select whole modifiers
             case KC_Q:
-                NavigationSetOrClearUnitAndSelection(PAGE, SELECT_WHOLE);
+                NavigationSetOrClearUnitAndSelection(PAGE_UNIT, WHOLE_UNIT_SELECTION);
                 break;
             case KC_W:
-                NavigationSetOrClearUnitAndSelection(PARA, SELECT_WHOLE);
+                NavigationSetOrClearUnitAndSelection(PARA_UNIT, WHOLE_UNIT_SELECTION);
                 break;
             case KC_E:
-                NavigationSetOrClearUnitAndSelection(LINE, SELECT_WHOLE);
+                NavigationSetOrClearUnitAndSelection(LINE_UNIT, WHOLE_UNIT_SELECTION);
                 break;
             case KC_R:
-                NavigationSetOrClearUnitAndSelection(WORD, SELECT_WHOLE);
+                NavigationSetOrClearUnitAndSelection(WORD_UNIT, WHOLE_UNIT_SELECTION);
                 break;
             case KC_T:
-                NavigationSetOrClearUnitAndSelection(DOC, SELECT_WHOLE);
+                NavigationSetOrClearUnitAndSelection(DOC_UNIT, WHOLE_UNIT_SELECTION);
                 break;
 
             // Select rest modifiers
             case KC_A:
-                NavigationSetOrClearUnitAndSelection(PAGE, SELECT_TO_BOUNDARY);
+                NavigationSetOrClearUnitAndSelection(PAGE_UNIT, BOUNDARY_SELECTION);
                 break;
             case KC_S:
-                NavigationSetOrClearUnitAndSelection(PARA, SELECT_TO_BOUNDARY);
+                NavigationSetOrClearUnitAndSelection(PARA_UNIT, BOUNDARY_SELECTION);
                 break;
             case KC_D:
-                NavigationSetOrClearUnitAndSelection(LINE, SELECT_TO_BOUNDARY);
+                NavigationSetOrClearUnitAndSelection(LINE_UNIT, BOUNDARY_SELECTION);
                 break;
             case KC_F:
-                NavigationSetOrClearUnitAndSelection(WORD, SELECT_TO_BOUNDARY);
+                NavigationSetOrClearUnitAndSelection(WORD_UNIT, BOUNDARY_SELECTION);
                 break;
             case KC_G:
-                NavigationSetOrClearUnitAndSelection(DOC, SELECT_TO_BOUNDARY);
+                NavigationSetOrClearUnitAndSelection(DOC_UNIT, BOUNDARY_SELECTION);
                 break;
 
             // Move modifiers
             case KC_Z:
-                NavigationSetOrClearUnitAndSelection(PAGE, SELECT_NOTHING);
+                NavigationSetOrClearUnitAndSelection(PAGE_UNIT, NO_SELECTION);
                 break;
             case KC_X:
-                NavigationSetOrClearUnitAndSelection(PARA, SELECT_NOTHING);
+                NavigationSetOrClearUnitAndSelection(PARA_UNIT, NO_SELECTION);
                 break;
             case KC_C:
-                NavigationSetOrClearUnitAndSelection(LINE, SELECT_NOTHING);
+                NavigationSetOrClearUnitAndSelection(LINE_UNIT, NO_SELECTION);
                 break;
             case KC_V:
-                NavigationSetOrClearUnitAndSelection(WORD, SELECT_NOTHING);
+                NavigationSetOrClearUnitAndSelection(WORD_UNIT, NO_SELECTION);
                 break;
             case KC_B:
-                NavigationSetOrClearUnitAndSelection(DOC, SELECT_NOTHING);
+                NavigationSetOrClearUnitAndSelection(DOC_UNIT, NO_SELECTION);
                 break;
 
             // Navigation actions
             case KC_LEFT:
                 if (navigation.event.pressed)
-                    NavigationAction(LEFT);
+                    NavigationAction(LEFT_DIRECTION);
                 break;
             case KC_DOWN:
                 if (navigation.event.pressed)
-                    NavigationAction(DOWN);
+                    NavigationAction(DOWN_DIRECTION);
                 break;
             case KC_RIGHT:
                 if (navigation.event.pressed)
-                    NavigationAction(RIGHT);
+                    NavigationAction(RIGHT_DIRECTION);
                 break;
             case KC_UP:
                 if (navigation.event.pressed)
-                    NavigationAction(UP);
+                    NavigationAction(UP_DIRECTION);
                 break;
 
             default:
@@ -235,52 +235,52 @@ NavigationBefore
 void
 NavigationAction(NavigationDirection direction)
 {
-    switch (navigation.machineselection)
+    switch (navigation.machine.selection)
     {
-        case SELECT_NOTHING:
+        case NO_SELECTION:
             break;
 
-        case SELECT_TO_BOUNDARY:
+        case BOUNDARY_SELECTION:
             register_code(KC_LSHIFT);
             break;
 
-        case SELECT_WHOLE:
+        case WHOLE_UNIT_SELECTION:
             break;
     }
 
     switch (navigation.machine.unit)
     {
-        case CHAR:
+        case CHAR_UNIT:
             break;
-        case PAGE:
+        case PAGE_UNIT:
             break;
-        case PARA:
+        case PARA_UNIT:
             break;
-        case LINE:
+        case LINE_UNIT:
             break;
-        case WORD:
+        case WORD_UNIT:
             register_code(KC_LALT); // Option key on Mac. TODO: Windows?
             break;
-        case DOC:
+        case DOC_UNIT:
             break;
     }
 
     uint16_t code;
-    switch (navigation.machinedirection)
+    switch (navigation.machine.direction)
     {
-        case UP:
+        case UP_DIRECTION:
             code = KC_UP;
             break;
 
-        case DOWN:
+        case DOWN_DIRECTION:
             code = KC_DOWN;
             break;
 
-        case RIGHT:
+        case RIGHT_DIRECTION:
             code = KC_RIGHT;
             break;
 
-        case LEFT:
+        case LEFT_DIRECTION:
             code = KC_LEFT;
             break;
     }
@@ -331,6 +331,6 @@ void
 NavigationClear(void)
 {
     navigation.machine.state = NORMAL_NAV_STATE;
-    navigation.machine.unit = CHAR;
+    navigation.machine.unit = CHAR_UNIT;
 }
 
