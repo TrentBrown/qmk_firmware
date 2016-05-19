@@ -8,6 +8,8 @@
 #include "navigation.h"
 
 
+// http://www.howtogeek.com/115664/42-text-editing-keyboard-shortcuts-that-work-almost-everywhere/
+
 typedef struct NavigationSettings
 {
     uint8_t layer;
@@ -36,13 +38,43 @@ typedef enum NavigationMachineState
     MOVE_LINE_NAV_STATE,
     MOVE_WORD_NAV_STATE,
     MOVE_DOC_NAV_STATE
- } NavigationMachineState;
+} NavigationMachineState;
+
+
+typedef enum NavigationDirection
+{
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT
+ } NavigationDirection;
+
+
+typedef enum NavigationUnit
+{
+    CHAR,
+    PAGE,
+    PARA,
+    LINE,
+    WORD,
+    DOC,
+ } NavigationUnit;
+
+
+typedef enum NavigationSelection
+{
+    SELECT_NOTHING,
+    SELECT_TO_BOUNDARY,
+    SELECT_WHOLE,
+ } NavigationSelection;
 
 
 // State valid across multiple events
 typedef struct NavigationMachine
 {
     NavigationMachineState state;
+    NavigationUnit unit;
+    NavigationSelection selection;
 } NavigationMachine;
 
 
@@ -121,85 +153,73 @@ NavigationBefore
 
         switch (navigation.event.code)
         {
-            // Select whole
+            // Select whole modifiers
             case KC_Q:
-                NavigationSetOrClear(WHOLE_PAGE_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(PAGE, SELECT_WHOLE);
                 break;
             case KC_W:
-                NavigationSetOrClear(WHOLE_PARA_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(PARA, SELECT_WHOLE);
                 break;
             case KC_E:
-                NavigationSetOrClear(WHOLE_LINE_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(LINE, SELECT_WHOLE);
                 break;
             case KC_R:
-                NavigationSetOrClear(WHOLE_WORD_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(WORD, SELECT_WHOLE);
                 break;
             case KC_T:
-                NavigationSetOrClear(WHOLE_DOC_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(DOC, SELECT_WHOLE);
                 break;
 
-            // Select rest
+            // Select rest modifiers
             case KC_A:
-                NavigationSetOrClear(SELECT_PAGE_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(PAGE, SELECT_TO_BOUNDARY);
                 break;
             case KC_S:
-                NavigationSetOrClear(SELECT_PARA_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(PARA, SELECT_TO_BOUNDARY);
                 break;
             case KC_D:
-                NavigationSetOrClear(SELECT_LINE_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(LINE, SELECT_TO_BOUNDARY);
                 break;
             case KC_F:
-                NavigationSetOrClear(SELECT_WORD_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(WORD, SELECT_TO_BOUNDARY);
                 break;
             case KC_G:
-                NavigationSetOrClear(SELECT_DOC_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(DOC, SELECT_TO_BOUNDARY);
                 break;
 
-            // Move
+            // Move modifiers
             case KC_Z:
-                NavigationSetOrClear(MOVE_PAGE_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(PAGE, SELECT_NOTHING);
                 break;
             case KC_X:
-                NavigationSetOrClear(MOVE_PARA_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(PARA, SELECT_NOTHING);
                 break;
             case KC_C:
-                NavigationSetOrClear(MOVE_LINE_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(LINE, SELECT_NOTHING);
                 break;
             case KC_V:
-                NavigationSetOrClear(MOVE_WORD_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(WORD, SELECT_NOTHING);
                 break;
             case KC_B:
-                NavigationSetOrClear(MOVE_DOC_NAV_STATE);
+                NavigationSetOrClearUnitAndSelection(DOC, SELECT_NOTHING);
                 break;
 
-            // Navigation
+            // Navigation actions
             case KC_LEFT:
                 if (navigation.event.pressed)
-                {
-                    register_code(KC_LEFT);
-                    unregister_code(KC_LEFT);
-                }
+                    NavigationAction(LEFT);
                 break;
             case KC_DOWN:
                 if (navigation.event.pressed)
-                {
-                    register_code(KC_DOWN);
-                    unregister_code(KC_DOWN);
-                }
+                    NavigationAction(DOWN);
                 break;
             case KC_RIGHT:
                 if (navigation.event.pressed)
-                {
-                    register_code(KC_RIGHT);
-                    unregister_code(KC_RIGHT);
-                }
+                    NavigationAction(RIGHT);
                 break;
             case KC_UP:
                 if (navigation.event.pressed)
-                {
-                    register_code(KC_UP);
-                    unregister_code(KC_UP);
-                }
+                    NavigationAction(UP);
                 break;
 
             default:
@@ -213,19 +233,83 @@ NavigationBefore
 
 
 void
-NavigationSetOrClear(NavigationMachineState state)
+NavigationAction(NavigationDirection direction)
+{
+    switch (navigation.machineselection)
+    {
+        case SELECT_NOTHING:
+            break;
+
+        case SELECT_TO_BOUNDARY:
+            register_code(KC_LSHIFT);
+            break;
+
+        case SELECT_WHOLE:
+            break;
+    }
+
+    switch (navigation.machine.unit)
+    {
+        case CHAR:
+            break;
+        case PAGE:
+            break;
+        case PARA:
+            break;
+        case LINE:
+            break;
+        case WORD:
+            register_code(KC_LALT); // Option key on Mac. TODO: Windows?
+            break;
+        case DOC:
+            break;
+    }
+
+    uint16_t code;
+    switch (navigation.machinedirection)
+    {
+        case UP:
+            code = KC_UP;
+            break;
+
+        case DOWN:
+            code = KC_DOWN;
+            break;
+
+        case RIGHT:
+            code = KC_RIGHT;
+            break;
+
+        case LEFT:
+            code = KC_LEFT;
+            break;
+    }
+    register_code(code);
+    unregister_code(code);
+}
+
+
+void
+NavigationSetOrClearUnitAndSelection
+    {
+        NavigationUnit unit,
+        NavigationSelection selection
+    }
 {
     if (navigation.event.pressed)
     {
-        navigation.machine.state = state;
+        navigation.machine.unit = unit;
+        navigation.machine.selection = selection;
     }
-    else // was released
+    else if (navigation.event.released)
     {
         const bool someOtherNavKeyAlreadyPressed = (navigation.machine.state != state);
         if (someOtherNavKeyAlreadyPressed)
             return
 
-        navigation.machine.state = NORMAL_NAV_STATE;
+        // todo: do full clear here?
+        navigation.machine.unit = NORMAL_NAV_STATE;
+        navigation.machine.selection = NORMAL_NAV_STATE;
     }
 }
 
@@ -241,3 +325,12 @@ NavigationAfter
 
     return consumed;
 }
+
+
+void
+NavigationClear(void)
+{
+    navigation.machine.state = NORMAL_NAV_STATE;
+    navigation.machine.unit = CHAR;
+}
+
