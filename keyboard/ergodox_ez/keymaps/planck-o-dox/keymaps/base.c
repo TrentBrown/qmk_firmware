@@ -2,8 +2,11 @@
 
 Base (Alphabet) Keymap
 
+Note: "PAMS" stands for "Paste and Match Style"
+Note: "P/P" stands for "Play/Pause"
 Note: "BaN" stands for "Bracket and Number"
 Note: "CaF" stands for "Cursor and FKey"
+Note: "NaF" stands for "Navigation and FKey"
 
 Todo: Consider moving volume up and down and mute to the inner keys on right side. Do something similar for tracks
 control on the left side?
@@ -12,7 +15,7 @@ control on the left side?
 Ergodox:
 
     ,--------------------------------------------------.           ,--------------------------------------------------.
-    |        | Undo | Cut  | Copy |Paste |      | P/P  |           | Mute |      | Paste| Copy |  Cut | Undo |SwapApps|
+    |        | Undo | Cut  | Copy |Paste | PAMS | P/P  |           | Mute | PAMS | Paste| Copy |  Cut | Undo |SwapApps|
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
     | Tab    |  Q   |  W   |  E   |  R   |  T   |Prev  |           | Vol+ |   Y  |   U  |   I  |   O  |   P  | Escape |
     |--------+------+------+------+------+------|Track |           |      |------+------+------+------+------+--------|
@@ -23,7 +26,7 @@ Ergodox:
       | Ctl  |Option| CaF  | BaN  |Symbol|                                       |Symbol|  BaN |  NaF |Option|  Ctl |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
-                                           |      |  :-) |       | (-:  |      |
+                                           |Hyper |  :-) |       | (-:  | Hyper|
                                     ,------|------|------|       |------+------+------.
                                     |Back  |      | Home |       | PgUp |  Back|      |
                                     |Space |Space |------|       |------| Space| Space|
