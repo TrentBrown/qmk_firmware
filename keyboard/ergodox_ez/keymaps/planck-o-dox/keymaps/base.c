@@ -8,7 +8,6 @@ Note: "CaF" stands for "Cursor and FKey"
 Todo: Consider moving volume up and down and mute to the inner keys on right side. Do something similar for tracks
 control on the left side?
 
-todo: If change, use "NaF"  I like symmetry of "CaF" and "NaF"
 
 Ergodox:
 
@@ -21,7 +20,7 @@ Ergodox:
     |--------+------+------+------+------+------|      |           | Vol- |------+------+------+------+------+--------|
     | Command|  Z   |  X   |  C   |  V   |  B   |      |           |      |   N  |   M  |   ,  |   .  |   /  |  Enter |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-      | Ctl  |Option| CaF  | BaN  |Symbol|                                       |Symbol|  BaN |  Nav |Option|  Ctl |
+      | Ctl  |Option| CaF  | BaN  |Symbol|                                       |Symbol|  BaN |  NaF |Option|  Ctl |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
                                            |      |  :-) |       | (-:  |      |
@@ -41,7 +40,7 @@ Planck:
     |-----------------------------------------------------------------------|
     |Cmd  |  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,  |  .  |  /  |Enter|
     |-----------------------------------------------------------------------|
-    |Ctl  | Opt | CaF | BaN | Sym |BkSpc|Space| Sym | BaN | Nav | Opt |  Ctl|
+    |Ctl  | Opt | CaF | BaN | Sym |BkSpc|Space| Sym | BaN | NaF | Opt |  Ctl|
     `-----------------------------------------------------------------------'
 
 */
