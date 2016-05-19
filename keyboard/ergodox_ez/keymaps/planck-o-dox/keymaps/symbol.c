@@ -2,8 +2,7 @@
 
     Symbol Keymap
 
-    todo: Consider infinity on N key "Never ends"
-    todo: Consider using multuply char for x
+    todo: Consider using ✕ char for X and back to ✓ for V as complementary symbols and then put ∞ on ("Never ends")
 
     todo: Consider doing mnemonic layers optimized for Dvorak, Colemak, and Workman, too
 

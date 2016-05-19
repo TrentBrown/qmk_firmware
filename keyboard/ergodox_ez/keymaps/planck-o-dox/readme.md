@@ -1,6 +1,8 @@
 What?
 =====
 
+Just go with Ultramanager?  (o|o)     (o⊺o)     ‹(o|o)›    <(o|o)>    〔(o|o)    ❲(o|o)❳    ₍(o|o)₎
+
 What's a Planck-o-Dox, you ask?  I'm appropriating the term here, though others have used it before, because it succinctly expresses what I want to build. Not some kind of hybrid physical keyboard, mind you, but a pair of fraternal twins. Two similar keyboards that can be used interchageably with great ease. In short: Their layouts that are nearly identical. Strictly speaking, the smaller subset of Planck keys maps exactly over the larger subset of Ergodox keys. Hence: The Plank-o-Dox layout.
 
 When I'm away from my desk, I can't lug my Ergodox along. It's big, bulky, has two cables, two boards (duh). And I can't use my laptap keyboard. If I'm going to retrain my brain to use this Ergodox thing, what will I do when I need to leave my desk? Tear down, transport and set up when I go to the cafe down the street? No way. Need a small, portable keyboard to keep in my laptop bag. Solution? A lovely Planck keyboard to take along.

@@ -6,7 +6,12 @@
     todo: Add to readme: The right side FKeys are mostly just for show. You can't easily type them on the same hand.
     Well, maybe you can.
 
+    Todo: Consider reversing the order of all but doc, so that doc ends up being inline:
 
+        | Word | Line | Para | Page | Doc  |
+
+
+    Consider defining mappings for text editors that are reprogrammable, like Emacs, Vim, IntelliJ, XCode, etc
 
 Ergodox:
 

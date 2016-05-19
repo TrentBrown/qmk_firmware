@@ -61,22 +61,22 @@ Planck:
         // --------------------------------------------------------------------------------
         KC_LCTRL,   KC_LALT,    MO(A(FKEY)),MO(A(BAN)), MO(A(SYM)),
 
-                                                                    KC_NO,      MO(A(EMO)),
+                                                                    MO(A(HYP)), MO(A(EMO)),
                                                                                 KC_HOME,
                                                         KC_BSPACE,  KC_SPACE,   KC_END,
 
 
         // Right  KC_MPRV,    KC_MPLY,    KC_MNXT
 
-        // --------------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------------
         KC_MUTE,    KC_NO,      LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), LGUI(KC_TAB),
         KC_VOLU,    KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_ESCAPE,
                     KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_RSHIFT,
         KC_VOLD,    KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_ENTER,
-        // --------------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------------
                                 MO(A(SYM)), MO(A(BAN)), MO(A(NAV)), KC_RALT,    KC_RCTRL,
 
-        MO(A(EMO)), KC_NO,
+        MO(A(EMO)), MO(A(HYP)),
         KC_PGUP,
         KC_PGDOWN,  KC_BSPACE,  KC_SPACE
     )
