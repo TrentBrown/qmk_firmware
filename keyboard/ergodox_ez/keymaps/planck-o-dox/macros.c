@@ -189,6 +189,10 @@ action_get_macro_emoticon
         case DOC_MACRO:
             //   Select document
             return MACRO(I(10), D(LGUI), T(A), U(LGUI), END);
+
+        case PAMS_MACRO:
+            //   Paste and match style (Command-Shift-Option-V)
+            return MACRO(I(10), D(LGUI), D(LSHIFT), D(LALT), T(V), U(LALT), U(LSHIFT), U(LGUI), END);
     }
     return MACRO_NONE;
 };

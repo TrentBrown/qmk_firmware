@@ -6,6 +6,8 @@
     todo: Add to readme: The right side FKeys are mostly just for show. You can't easily type them on the same hand.
     Well, maybe you can.
 
+
+
 Ergodox:
 
 

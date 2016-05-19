@@ -49,6 +49,9 @@
 #define PAGE_MACRO 35
 #define DOC_MACRO 36
 
+// Other macros
+#define PAMS_MACRO 37
+
 
 // Define a macro that lets us use more abbreviated reference to a named macro.
 // We can't use "M" for our name-expansion macro here because that's already used, and in fact we also want to invoke it.

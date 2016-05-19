@@ -8,7 +8,9 @@
 #include "navigation.h"
 
 
+// https://support.apple.com/en-us/HT201236
 // http://www.howtogeek.com/115664/42-text-editing-keyboard-shortcuts-that-work-almost-everywhere/
+
 
 typedef struct NavigationSettings
 {
