@@ -6,7 +6,6 @@ Note: "PAMS" stands for "Paste and Match Style"
 Note: "P/P" stands for "Play/Pause"
 Note: "BaN" stands for "Bracket and Number"
 Note: "CaF" stands for "Cursor and FKey"
-Note: "NaF" stands for "Navigation and FKey"
 
 Todo: Consider moving volume up and down and mute to the inner keys on right side. Do something similar for tracks
 control on the left side?
@@ -23,7 +22,7 @@ Ergodox:
     |--------+------+------+------+------+------|Next  |           | Vol- |------+------+------+------+------+--------|
     | Command|  Z   |  X   |  C   |  V   |  B   |Track |           |      |   N  |   M  |   ,  |   .  |   /  |  Enter |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-      | Ctl  |Option| CaF  | BaN  |Symbol|                                       |Symbol|  BaN |  NaF |Option|  Ctl |
+      | Ctl  |Option| CaF  | BaN  |Symbol|                                       |Symbol|  BaN |  CaF |Option|  Ctl |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
                                            |Hyper |  :-) |       | (-:  | Hyper|
@@ -43,7 +42,7 @@ Planck:
     |-----------------------------------------------------------------------|
     |Cmd  |  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,  |  .  |  /  |Enter|
     |-----------------------------------------------------------------------|
-    |Ctl  | Opt | CaF | BaN | Sym |BkSpc|Space| Sym | BaN | NaF | Opt |  Ctl|
+    |Ctl  | Opt | CaF | BaN | Sym |BkSpc|Space| Sym | BaN | CaF | Opt |  Ctl|
     `-----------------------------------------------------------------------'
 
 */
