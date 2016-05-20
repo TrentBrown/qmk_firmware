@@ -54,7 +54,7 @@ matrix_init_user(void)
     Plugin* pUltramodPlugin = UltramodCreatePlugin();
     PluginAdd(pUltramodPlugin);
 
-    Plugin* pNavigationPlugin = NavigationCreatePlugin(NAVIGATION_KEYMAP);
+    Plugin* pNavigationPlugin = NavigationCreatePlugin(CURSOR_AND_FKEY_RIGHT_KEYMAP);
     PluginAdd(pNavigationPlugin);
 };
 

@@ -83,12 +83,12 @@ Right layer key pressed
     |-----------------------------------------------------------------------|
     | Ø   |sPage|sPara|sLine|sWord|sDoc |  <  |  v  |  >  |     | F12 |   Ø |
     |-----------------------------------------------------------------------|
-    | Ø   |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |(NaF)|  Ø  |   Ø |
+    | Ø   |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |  Ø  |(CaF)|  Ø  |   Ø |
     `-----------------------------------------------------------------------'
 
 */
 
-[FUNCTION_KEY_KEYMAP] = KEYMAP
+[CURSOR_AND_FKEY_LEFT_KEYMAP] = KEYMAP
     (
         // Left
 
@@ -120,7 +120,7 @@ Right layer key pressed
     )
 
 
-[NAVIGATION_KEYMAP] = KEYMAP
+[CURSOR_AND_FKEY_RIGHT_KEYMAP] = KEYMAP
     (
         // Left
 
