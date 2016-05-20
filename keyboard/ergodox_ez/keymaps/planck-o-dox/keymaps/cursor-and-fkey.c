@@ -16,6 +16,8 @@
 
     Consider defining mappings for text editors that are reprogrammable, like Emacs, Vim, IntelliJ, XCode, etc
 
+    Todo: Start calling the units "accelerators"?
+
 
 Ergodox:
 
@@ -117,7 +119,7 @@ Right layer key pressed
         KC_TRNS,    KC_TRNS,
         KC_TRNS,
         KC_TRNS,    KC_TRNS,    KC_TRNS
-    )
+    ),
 
 
 [CURSOR_AND_FKEY_RIGHT_KEYMAP] = KEYMAP

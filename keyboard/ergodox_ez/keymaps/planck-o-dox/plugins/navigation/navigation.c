@@ -116,6 +116,16 @@ NavigationAfter
         action_t action
     );
 
+void
+NavigationSetOrClearUnitAndSelection
+    (
+        NavigationUnit unit,
+        NavigationSelection selection
+    );
+
+void
+NavigationAction(NavigationDirection direction);
+
 
 Plugin*
 NavigationCreatePlugin(uint8_t layer)
@@ -268,7 +278,7 @@ NavigationAction(NavigationDirection direction)
     }
 
     uint16_t code;
-    switch (navigation.machine.direction)
+    switch (direction)
     {
         case UP_DIRECTION:
             code = KC_UP;
@@ -293,10 +303,10 @@ NavigationAction(NavigationDirection direction)
 
 void
 NavigationSetOrClearUnitAndSelection
-    {
+    (
         NavigationUnit unit,
         NavigationSelection selection
-    }
+    )
 {
     if (navigation.event.pressed)
     {
@@ -305,9 +315,9 @@ NavigationSetOrClearUnitAndSelection
     }
     else if (navigation.event.released)
     {
-        const bool someOtherNavKeyAlreadyPressed = (navigation.machine.state != state);
-        if (someOtherNavKeyAlreadyPressed)
-            return
+//        const bool someOtherNavKeyAlreadyPressed = (navigation.machine.state != state);
+//        if (someOtherNavKeyAlreadyPressed)
+//            return;
 
         // todo: do full clear here?
         navigation.machine.unit = NORMAL_NAV_STATE;
