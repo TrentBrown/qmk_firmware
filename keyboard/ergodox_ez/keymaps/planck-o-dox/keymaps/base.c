@@ -10,6 +10,10 @@ Note: "CaF" stands for "Cursor and FKey"
 Todo: Consider moving volume up and down and mute to the inner keys on right side. Do something similar for tracks
 control on the left side?
 
+Consider letting the enter key be dual use: Enter/Command.  This can work, even with command-click, if Enter only
+is used for a tap! TODO: Test what the built-in macro does. This means it wont be an Ultimod key, which, for command,
+is probably fine, I guess. I would miss single-shot though, at least on the left side.
+
 
 Ergodox:
 
@@ -53,7 +57,7 @@ Planck:
         // Left
 
         // --------------------------------------------------------------------------------
-        KC_NO,      LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), KC_NO,      KC_MPLY,
+        KC_NO,      LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), E(PAMS),    KC_MPLY,
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_MPRV,
         KC_LSHIFT,  KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
         KC_LGUI,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_MNXT,
@@ -68,7 +72,7 @@ Planck:
         // Right  KC_MPRV,    KC_MPLY,    KC_MNXT
 
         // -----------------------------------------------------------------------------------
-        KC_MUTE,    KC_NO,      LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), LGUI(KC_TAB),
+        KC_MUTE,    E(PAMS),    LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), LGUI(KC_TAB),
         KC_VOLU,    KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_ESCAPE,
                     KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_RSHIFT,
         KC_VOLD,    KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_ENTER,

@@ -19,28 +19,28 @@ typedef struct NavigationSettings
 
 
 // State machine states
-typedef enum NavigationMachineState
-{
-    NORMAL_NAV_STATE,
-
-    WHOLE_PAGE_NAV_STATE,
-    WHOLE_PARA_NAV_STATE,
-    WHOLE_LINE_NAV_STATE,
-    WHOLE_WORD_NAV_STATE,
-    WHOLE_DOC_NAV_STATE,
-
-    SELECT_PAGE_NAV_STATE,
-    SELECT_PARA_NAV_STATE,
-    SELECT_LINE_NAV_STATE,
-    SELECT_WORD_NAV_STATE,
-    SELECT_DOC_NAV_STATE,
-
-    MOVE_PAGE_NAV_STATE,
-    MOVE_PARA_NAV_STATE,
-    MOVE_LINE_NAV_STATE,
-    MOVE_WORD_NAV_STATE,
-    MOVE_DOC_NAV_STATE
-} NavigationMachineState;
+//typedef enum NavigationMachineState
+//{
+//    NORMAL_NAV_STATE,
+//
+//    WHOLE_PAGE_NAV_STATE,
+//    WHOLE_PARA_NAV_STATE,
+//    WHOLE_LINE_NAV_STATE,
+//    WHOLE_WORD_NAV_STATE,
+//    WHOLE_DOC_NAV_STATE,
+//
+//    SELECT_PAGE_NAV_STATE,
+//    SELECT_PARA_NAV_STATE,
+//    SELECT_LINE_NAV_STATE,
+//    SELECT_WORD_NAV_STATE,
+//    SELECT_DOC_NAV_STATE,
+//
+//    MOVE_PAGE_NAV_STATE,
+//    MOVE_PARA_NAV_STATE,
+//    MOVE_LINE_NAV_STATE,
+//    MOVE_WORD_NAV_STATE,
+//    MOVE_DOC_NAV_STATE
+//} NavigationMachineState;
 
 
 typedef enum NavigationDirection
@@ -54,6 +54,7 @@ typedef enum NavigationDirection
 
 typedef enum NavigationUnit
 {
+    NO_UNIT,
     CHAR_UNIT,
     PAGE_UNIT,
     PARA_UNIT,
@@ -74,7 +75,8 @@ typedef enum NavigationSelection
 // State valid across multiple events
 typedef struct NavigationMachine
 {
-    NavigationMachineState state;
+    //NavigationMachineState state;
+    uint16_t accleratorCode;
     NavigationUnit unit;
     NavigationSelection selection;
 } NavigationMachine;
@@ -109,6 +111,9 @@ NavigationBefore
         keyrecord_t* pKeyRecord,
         action_t action
     );
+bool NavigationBeforeAction();
+bool NavigationBeforeAccelerator();
+
 bool
 NavigationAfter
     (
@@ -149,7 +154,10 @@ NavigationBefore
         action_t action
     )
 {
-    bool consumed = false;
+    uint8_t currentLayer = biton32(layer_state);
+    const bool notOurLayer = (currentLayer != navigation.settings.layer);
+    if (notOurLayer)
+        return false;
 
     navigation.event.pKeyRecord = pKeyRecord;
 
@@ -157,147 +165,217 @@ NavigationBefore
     navigation.event.released = !navigation.event.pressed;
     navigation.event.code = action.code;
 
-    uint8_t currentLayer = biton32(layer_state);
+    if (NavigationBeforeAction())
+        return true;
+    if (NavigationBeforeAccelerator())
+        return true;
 
-    if (currentLayer == navigation.settings.layer)
+    return false;
+}
+
+
+bool
+NavigationBeforeAction()
+{
+    switch (navigation.event.code)
     {
-        consumed = true;
+        case KC_LEFT:
+            if (navigation.event.pressed)
+                NavigationAction(LEFT_DIRECTION);
+            return true;
 
-        switch (navigation.event.code)
-        {
+        case KC_DOWN:
+            if (navigation.event.pressed)
+                NavigationAction(DOWN_DIRECTION);
+            return true;
+
+        case KC_RIGHT:
+            if (navigation.event.pressed)
+                NavigationAction(RIGHT_DIRECTION);
+            return true;
+
+        case KC_UP:
+            if (navigation.event.pressed)
+                NavigationAction(UP_DIRECTION);
+            return true;
+    }
+    return false;
+}
+
+bool
+NavigationBeforeAccelerator()
+{
+    switch (navigation.event.code)
+    {
             // Select whole modifiers
             case KC_Q:
                 NavigationSetOrClearUnitAndSelection(PAGE_UNIT, WHOLE_UNIT_SELECTION);
-                break;
+                return true;
             case KC_W:
                 NavigationSetOrClearUnitAndSelection(PARA_UNIT, WHOLE_UNIT_SELECTION);
-                break;
+                return true;
             case KC_E:
                 NavigationSetOrClearUnitAndSelection(LINE_UNIT, WHOLE_UNIT_SELECTION);
-                break;
+                return true;
             case KC_R:
                 NavigationSetOrClearUnitAndSelection(WORD_UNIT, WHOLE_UNIT_SELECTION);
-                break;
+                return true;
             case KC_T:
                 NavigationSetOrClearUnitAndSelection(DOC_UNIT, WHOLE_UNIT_SELECTION);
-                break;
+                return true;
 
             // Select rest modifiers
             case KC_A:
                 NavigationSetOrClearUnitAndSelection(PAGE_UNIT, BOUNDARY_SELECTION);
-                break;
+                return true;
             case KC_S:
                 NavigationSetOrClearUnitAndSelection(PARA_UNIT, BOUNDARY_SELECTION);
-                break;
+                return true;
             case KC_D:
                 NavigationSetOrClearUnitAndSelection(LINE_UNIT, BOUNDARY_SELECTION);
-                break;
+                return true;
             case KC_F:
                 NavigationSetOrClearUnitAndSelection(WORD_UNIT, BOUNDARY_SELECTION);
-                break;
+                return true;
             case KC_G:
                 NavigationSetOrClearUnitAndSelection(DOC_UNIT, BOUNDARY_SELECTION);
-                break;
+                return true;
 
             // Move modifiers
             case KC_Z:
                 NavigationSetOrClearUnitAndSelection(PAGE_UNIT, NO_SELECTION);
-                break;
+                return true;
             case KC_X:
                 NavigationSetOrClearUnitAndSelection(PARA_UNIT, NO_SELECTION);
-                break;
+                return true;
             case KC_C:
                 NavigationSetOrClearUnitAndSelection(LINE_UNIT, NO_SELECTION);
-                break;
+                return true;
             case KC_V:
                 NavigationSetOrClearUnitAndSelection(WORD_UNIT, NO_SELECTION);
-                break;
+                return true;
             case KC_B:
                 NavigationSetOrClearUnitAndSelection(DOC_UNIT, NO_SELECTION);
-                break;
-
-            // Navigation actions
-            case KC_LEFT:
-                if (navigation.event.pressed)
-                    NavigationAction(LEFT_DIRECTION);
-                break;
-            case KC_DOWN:
-                if (navigation.event.pressed)
-                    NavigationAction(DOWN_DIRECTION);
-                break;
-            case KC_RIGHT:
-                if (navigation.event.pressed)
-                    NavigationAction(RIGHT_DIRECTION);
-                break;
-            case KC_UP:
-                if (navigation.event.pressed)
-                    NavigationAction(UP_DIRECTION);
-                break;
-
-            default:
-                consumed = false;
-                break;
-        }
+                return true;
     }
-
-    return consumed;
+    return false;
 }
-
 
 void
 NavigationAction(NavigationDirection direction)
 {
+    bool shiftIsDown = false;
+    bool optionIsDown = false;
+    bool commandIsDown = false;
+
     switch (navigation.machine.selection)
     {
         case NO_SELECTION:
             break;
 
         case BOUNDARY_SELECTION:
-            register_code(KC_LSHIFT);
+            shiftIsDown = true;
             break;
 
         case WHOLE_UNIT_SELECTION:
             break;
     }
 
+    uint16_t code;
     switch (navigation.machine.unit)
     {
         case CHAR_UNIT:
+            switch (direction)
+            {
+                case UP_DIRECTION:
+                    code = KC_UP;
+                    break;
+                case DOWN_DIRECTION:
+                    code = KC_DOWN;
+                    break;
+                case RIGHT_DIRECTION:
+                    code = KC_RIGHT;
+                    break;
+                case LEFT_DIRECTION:
+                    code = KC_LEFT;
+                    break;
+            }
             break;
+
         case PAGE_UNIT:
             break;
+
         case PARA_UNIT:
             break;
+
         case LINE_UNIT:
+            shiftIsDown = true;
+            switch (direction)
+            {
+                case UP_DIRECTION:
+                    code = KC_UP;
+                    break;
+                case DOWN_DIRECTION:
+                    code = KC_DOWN;
+                    break;
+                case RIGHT_DIRECTION:
+                    code = KC_RIGHT;
+                    break;
+                case LEFT_DIRECTION:
+                    code = KC_LEFT;
+                    break;
+            }
             break;
+
         case WORD_UNIT:
-            register_code(KC_LALT); // Option key on Mac. TODO: Windows?
+            commandIsDown = true;
+            switch (direction)
+            {
+                case UP_DIRECTION:
+                    break;
+                case DOWN_DIRECTION:
+                    break;
+                case RIGHT_DIRECTION:
+                    code = KC_RIGHT;
+                    break;
+                case LEFT_DIRECTION:
+                    code = KC_LEFT;
+                    break;
+            }
             break;
+
         case DOC_UNIT:
+            commandIsDown = true;
+            switch (direction)
+            {
+                case UP_DIRECTION:
+                    break;
+                case DOWN_DIRECTION:
+                    break;
+                case RIGHT_DIRECTION:
+                    break;
+                case LEFT_DIRECTION:
+                    break;
+            }
             break;
     }
 
-    uint16_t code;
-    switch (direction)
-    {
-        case UP_DIRECTION:
-            code = KC_UP;
-            break;
+    if (shiftIsDown)
+        register_code(KC_LSHIFT);
+    if (optionIsDown)
+        register_code(KC_LALT);
+    if (commandIsDown)
+        register_code(KC_LGUI);
 
-        case DOWN_DIRECTION:
-            code = KC_DOWN;
-            break;
-
-        case RIGHT_DIRECTION:
-            code = KC_RIGHT;
-            break;
-
-        case LEFT_DIRECTION:
-            code = KC_LEFT;
-            break;
-    }
     register_code(code);
     unregister_code(code);
+
+    if (commandIsDown)
+        unregister_code(KC_LGUI);
+    if (optionIsDown)
+        unregister_code(KC_LALT);
+    if (shiftIsDown)
+        unregister_code(KC_LSHIFT);
 }
 
 
@@ -310,18 +388,21 @@ NavigationSetOrClearUnitAndSelection
 {
     if (navigation.event.pressed)
     {
+        navigation.machine.accleratorCode = navigation.event.code;
         navigation.machine.unit = unit;
         navigation.machine.selection = selection;
     }
     else if (navigation.event.released)
     {
-//        const bool someOtherNavKeyAlreadyPressed = (navigation.machine.state != state);
-//        if (someOtherNavKeyAlreadyPressed)
-//            return;
+        const bool someOtherAcceleratorKeyAlreadyPressed =
+            (navigation.machine.accleratorCode != navigation.event.code);
+        if (someOtherAcceleratorKeyAlreadyPressed)
+            return;
 
         // todo: do full clear here?
-        navigation.machine.unit = NORMAL_NAV_STATE;
-        navigation.machine.selection = NORMAL_NAV_STATE;
+        navigation.machine.accleratorCode = 0;
+        navigation.machine.unit = NO_UNIT;
+        navigation.machine.selection = NO_SELECTION;
     }
 }
 
@@ -333,6 +414,13 @@ NavigationAfter
         action_t action
     )
 {
+    // TODO: Remove this hook, if it isn't needed
+
+    uint8_t currentLayer = biton32(layer_state);
+    const bool notOurLayer = (currentLayer != navigation.settings.layer);
+    if (notOurLayer)
+        return false;
+
     bool consumed = false;
 
     return consumed;
@@ -342,7 +430,8 @@ NavigationAfter
 void
 NavigationClear(void)
 {
-    navigation.machine.state = NORMAL_NAV_STATE;
-    navigation.machine.unit = CHAR_UNIT;
+    navigation.machine.accleratorCode = 0;
+    navigation.machine.unit = NO_UNIT;
+    navigation.machine.selection = NO_SELECTION;
 }
 
