@@ -308,6 +308,7 @@ NavigationPerform(NavigationDirection direction)
                             pMacro = MACRO(I(10), D(LSHIFT), T(LEFT), U(LSHIFT), END);
                             break;
                         case DELETE_TO_BOUNDARY:
+                            pMacro = MACRO(I(10), T(BSPACE), END);
                             break;
                     }
                     break;
@@ -322,6 +323,7 @@ NavigationPerform(NavigationDirection direction)
                             pMacro = MACRO(I(10), D(LSHIFT), T(RIGHT), U(LSHIFT), END);
                             break;
                         case DELETE_TO_BOUNDARY:
+                            pMacro = MACRO(I(10), T(DELETE), END);
                             break;
                     }
                     break;
@@ -368,11 +370,8 @@ NavigationPerform(NavigationDirection direction)
                         case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT), END);
                             break;
-//                        case DELETE_TO_BOUNDARY:
-//                            pMacro = MACRO(I(10),   D(LALT), T(RIGHT), U(LALT),   D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   END);
-//                            break;
-                        case DELETE_TO_BOUNDARY:  //  one by one
-                            pMacro = MACRO(I(10),   T(RIGHT),   D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   END);
+                        case DELETE_TO_BOUNDARY:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
                     break;
@@ -386,11 +385,8 @@ NavigationPerform(NavigationDirection direction)
                         case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT), END);
                             break;
-//                        case DELETE_TO_BOUNDARY:
-//                            pMacro = MACRO(I(10),   D(LALT), T(LEFT), U(LALT),   D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   END);
-//                            break;
-                        case DELETE_TO_BOUNDARY:  //  one by one
-                            pMacro = MACRO(I(10),   T(LEFT),   D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   END);
+                        case DELETE_TO_BOUNDARY:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
                     break;
@@ -416,7 +412,7 @@ NavigationPerform(NavigationDirection direction)
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT), END);
                             break;
                         case DELETE_TO_BOUNDARY:
-                            pMacro = MACRO(I(10),   D(LGUI), T(RIGHT), U(LGUI),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
                     break;
@@ -431,7 +427,7 @@ NavigationPerform(NavigationDirection direction)
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT), END);
                             break;
                         case DELETE_TO_BOUNDARY:
-                            pMacro = MACRO(I(10),   D(LGUI), T(LEFT), U(LGUI),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
                     break;
@@ -440,10 +436,10 @@ NavigationPerform(NavigationDirection direction)
                     switch (action)
                     {
                         case MOVE_CURSOR:
-                            pMacro = MACRO(I(10),   T(UP),   D(LGUI), T(LEFT), U(LGUI),   END);
+                            pMacro = MACRO(I(10), T(UP),   D(LGUI), T(LEFT), U(LGUI),   END);
                             break;
                         case SELECT_TO_BOUNDARY:
-                            pMacro = MACRO(I(10),   D(LSHIFT), T(UP), U(LSHIFT),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
+                            pMacro = MACRO(I(10), D(LSHIFT), T(UP), U(LSHIFT),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
                             break;
                         case DELETE_TO_BOUNDARY:
                             break;
@@ -454,10 +450,10 @@ NavigationPerform(NavigationDirection direction)
                     switch (action)
                     {
                         case MOVE_CURSOR:
-                            pMacro = MACRO(I(10),   T(DOWN),   D(LGUI), T(RIGHT), U(LGUI),   END);
+                            pMacro = MACRO(I(10), T(DOWN),   D(LGUI), T(RIGHT), U(LGUI),   END);
                             break;
                         case SELECT_TO_BOUNDARY:
-                            pMacro = MACRO(I(10),   D(LSHIFT), T(DOWN), U(LSHIFT),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
+                            pMacro = MACRO(I(10), D(LSHIFT), T(DOWN), U(LSHIFT),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
                             break;
                         case DELETE_TO_BOUNDARY:
                             break;
@@ -480,7 +476,7 @@ NavigationPerform(NavigationDirection direction)
                             pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT), END);
                             break;
                         case DELETE_TO_BOUNDARY:
-                            pMacro = MACRO(I(10),   D(LCTRL), T(E), U(LCTRL),   D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT),   END);
+                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT),   T(BSPACE),   END);;
                             break;
                     }
                     break;
@@ -496,7 +492,7 @@ NavigationPerform(NavigationDirection direction)
                             pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
                             break;
                         case DELETE_TO_BOUNDARY:
-                            pMacro = MACRO(I(10),   D(LCTRL), T(A), U(LCTRL),   D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   END);
+                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   T(BSPACE),   END);
                             break;
                     }
                     break;
@@ -517,6 +513,7 @@ NavigationPerform(NavigationDirection direction)
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT), END);
                             break;
                         case DELETE_TO_BOUNDARY:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
                     break;
@@ -532,6 +529,7 @@ NavigationPerform(NavigationDirection direction)
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT), END);
                             break;
                         case DELETE_TO_BOUNDARY:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
                     break;
