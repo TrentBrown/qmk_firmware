@@ -16,11 +16,7 @@ build/
 .vagrant/
 .DS_STORE
 
-# Eclipse Settings
 .cproject
 .project
 .settings/
-
-# IntelliJ Idea project files
-.idea/
-*.iml
+.idea
