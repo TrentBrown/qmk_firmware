@@ -54,7 +54,6 @@ typedef enum NavigationDirection
 
 typedef enum NavigationUnit
 {
-    NO_UNIT,
     CHAR_UNIT,
     PAGE_UNIT,
     PARA_UNIT,
@@ -105,14 +104,18 @@ Navigation navigation;
 
 
 // Forward declarations of local functions
+
+void NavigationClear(void);
+
+
 bool
 NavigationBefore
     (
         keyrecord_t* pKeyRecord,
         action_t action
     );
-bool NavigationBeforeAction();
-bool NavigationBeforeAccelerator();
+bool NavigationBeforeAction(void);
+bool NavigationBeforeAccelerator(void);
 
 bool
 NavigationAfter
@@ -135,6 +138,8 @@ NavigationAction(NavigationDirection direction);
 Plugin*
 NavigationCreatePlugin(uint8_t layer)
 {
+    NavigationClear();
+
     navigation.settings.layer = layer;
 
     Plugin* pPlugin = (Plugin*)malloc(sizeof(Plugin));
@@ -175,7 +180,7 @@ NavigationBefore
 
 
 bool
-NavigationBeforeAction()
+NavigationBeforeAction(void)
 {
     switch (navigation.event.code)
     {
@@ -203,60 +208,60 @@ NavigationBeforeAction()
 }
 
 bool
-NavigationBeforeAccelerator()
+NavigationBeforeAccelerator(void)
 {
     switch (navigation.event.code)
     {
-            // Select whole modifiers
-            case KC_Q:
-                NavigationSetOrClearUnitAndSelection(PAGE_UNIT, WHOLE_UNIT_SELECTION);
-                return true;
-            case KC_W:
-                NavigationSetOrClearUnitAndSelection(PARA_UNIT, WHOLE_UNIT_SELECTION);
-                return true;
-            case KC_E:
-                NavigationSetOrClearUnitAndSelection(LINE_UNIT, WHOLE_UNIT_SELECTION);
-                return true;
-            case KC_R:
-                NavigationSetOrClearUnitAndSelection(WORD_UNIT, WHOLE_UNIT_SELECTION);
-                return true;
-            case KC_T:
-                NavigationSetOrClearUnitAndSelection(DOC_UNIT, WHOLE_UNIT_SELECTION);
-                return true;
+        // Select whole modifiers
+//        case KC_Q:
+//            NavigationSetOrClearUnitAndSelection(PAGE_UNIT, WHOLE_UNIT_SELECTION);
+//            return true;
+//        case KC_W:
+//            NavigationSetOrClearUnitAndSelection(PARA_UNIT, WHOLE_UNIT_SELECTION);
+//            return true;
+//        case KC_E:
+//            NavigationSetOrClearUnitAndSelection(LINE_UNIT, WHOLE_UNIT_SELECTION);
+//            return true;
+//        case KC_R:
+//            NavigationSetOrClearUnitAndSelection(WORD_UNIT, WHOLE_UNIT_SELECTION);
+//            return true;
+//        case KC_T:
+//            NavigationSetOrClearUnitAndSelection(DOC_UNIT, WHOLE_UNIT_SELECTION);
+//            return true;
 
-            // Select rest modifiers
-            case KC_A:
-                NavigationSetOrClearUnitAndSelection(PAGE_UNIT, BOUNDARY_SELECTION);
-                return true;
-            case KC_S:
-                NavigationSetOrClearUnitAndSelection(PARA_UNIT, BOUNDARY_SELECTION);
-                return true;
-            case KC_D:
-                NavigationSetOrClearUnitAndSelection(LINE_UNIT, BOUNDARY_SELECTION);
-                return true;
-            case KC_F:
-                NavigationSetOrClearUnitAndSelection(WORD_UNIT, BOUNDARY_SELECTION);
-                return true;
-            case KC_G:
-                NavigationSetOrClearUnitAndSelection(DOC_UNIT, BOUNDARY_SELECTION);
-                return true;
+        // Select rest modifiers
+        case KC_A:
+            NavigationSetOrClearUnitAndSelection(PAGE_UNIT, NO_SELECTION);
+            return true;
+        case KC_S:
+            NavigationSetOrClearUnitAndSelection(PARA_UNIT, NO_SELECTION);
+            return true;
+        case KC_D:
+            NavigationSetOrClearUnitAndSelection(LINE_UNIT, NO_SELECTION);
+            return true;
+        case KC_F:
+            NavigationSetOrClearUnitAndSelection(WORD_UNIT, NO_SELECTION);
+            return true;
+        case KC_G:
+            NavigationSetOrClearUnitAndSelection(DOC_UNIT, NO_SELECTION);
+            return true;
 
-            // Move modifiers
-            case KC_Z:
-                NavigationSetOrClearUnitAndSelection(PAGE_UNIT, NO_SELECTION);
-                return true;
-            case KC_X:
-                NavigationSetOrClearUnitAndSelection(PARA_UNIT, NO_SELECTION);
-                return true;
-            case KC_C:
-                NavigationSetOrClearUnitAndSelection(LINE_UNIT, NO_SELECTION);
-                return true;
-            case KC_V:
-                NavigationSetOrClearUnitAndSelection(WORD_UNIT, NO_SELECTION);
-                return true;
-            case KC_B:
-                NavigationSetOrClearUnitAndSelection(DOC_UNIT, NO_SELECTION);
-                return true;
+        // Move modifiers
+        case KC_Z:
+            NavigationSetOrClearUnitAndSelection(PAGE_UNIT, BOUNDARY_SELECTION);
+            return true;
+        case KC_X:
+            NavigationSetOrClearUnitAndSelection(PARA_UNIT, BOUNDARY_SELECTION);
+            return true;
+        case KC_C:
+            NavigationSetOrClearUnitAndSelection(LINE_UNIT, BOUNDARY_SELECTION);
+            return true;
+        case KC_V:
+            NavigationSetOrClearUnitAndSelection(WORD_UNIT, BOUNDARY_SELECTION);
+            return true;
+        case KC_B:
+            NavigationSetOrClearUnitAndSelection(DOC_UNIT, BOUNDARY_SELECTION);
+            return true;
     }
     return false;
 }
@@ -264,9 +269,9 @@ NavigationBeforeAccelerator()
 void
 NavigationAction(NavigationDirection direction)
 {
-    bool shiftIsDown = false;
-    bool optionIsDown = false;
-    bool commandIsDown = false;
+    bool shiftDown = false;
+    bool optionDown = false;
+    bool commandDown = false;
 
     switch (navigation.machine.selection)
     {
@@ -274,7 +279,7 @@ NavigationAction(NavigationDirection direction)
             break;
 
         case BOUNDARY_SELECTION:
-            shiftIsDown = true;
+            shiftDown = true;
             break;
 
         case WHOLE_UNIT_SELECTION:
@@ -309,7 +314,7 @@ NavigationAction(NavigationDirection direction)
             break;
 
         case LINE_UNIT:
-            shiftIsDown = true;
+            shiftDown = true;
             switch (direction)
             {
                 case UP_DIRECTION:
@@ -328,7 +333,7 @@ NavigationAction(NavigationDirection direction)
             break;
 
         case WORD_UNIT:
-            commandIsDown = true;
+            commandDown = true;
             switch (direction)
             {
                 case UP_DIRECTION:
@@ -345,7 +350,7 @@ NavigationAction(NavigationDirection direction)
             break;
 
         case DOC_UNIT:
-            commandIsDown = true;
+            commandDown = true;
             switch (direction)
             {
                 case UP_DIRECTION:
@@ -360,23 +365,141 @@ NavigationAction(NavigationDirection direction)
             break;
     }
 
-    if (shiftIsDown)
+    if (shiftDown)
         register_code(KC_LSHIFT);
-    if (optionIsDown)
+    if (optionDown)
         register_code(KC_LALT);
-    if (commandIsDown)
+    if (commandDown)
         register_code(KC_LGUI);
 
     register_code(code);
     unregister_code(code);
 
-    if (commandIsDown)
+    if (commandDown)
         unregister_code(KC_LGUI);
-    if (optionIsDown)
+    if (optionDown)
         unregister_code(KC_LALT);
-    if (shiftIsDown)
+    if (shiftDown)
         unregister_code(KC_LSHIFT);
 }
+
+
+//void
+//NavigationAction(NavigationDirection direction)
+//{
+//    bool shiftDown = false;
+//    bool optionDown = false;
+//    bool commandDown = false;
+//
+//    switch (navigation.machine.selection)
+//    {
+//        case NO_SELECTION:
+//            break;
+//
+//        case BOUNDARY_SELECTION:
+//            shiftDown = true;
+//            break;
+//
+//        case WHOLE_UNIT_SELECTION:
+//            break;
+//    }
+//
+//    uint16_t code;
+//    switch (navigation.machine.unit)
+//    {
+//        case CHAR_UNIT:
+//            switch (direction)
+//            {
+//                case UP_DIRECTION:
+//                    code = KC_UP;
+//                    break;
+//                case DOWN_DIRECTION:
+//                    code = KC_DOWN;
+//                    break;
+//                case RIGHT_DIRECTION:
+//                    code = KC_RIGHT;
+//                    break;
+//                case LEFT_DIRECTION:
+//                    code = KC_LEFT;
+//                    break;
+//            }
+//            break;
+//
+//        case PAGE_UNIT:
+//            break;
+//
+//        case PARA_UNIT:
+//            break;
+//
+//        case LINE_UNIT:
+//            shiftDown = true;
+//            switch (direction)
+//            {
+//                case UP_DIRECTION:
+//                    code = KC_UP;
+//                    break;
+//                case DOWN_DIRECTION:
+//                    code = KC_DOWN;
+//                    break;
+//                case RIGHT_DIRECTION:
+//                    code = KC_RIGHT;
+//                    break;
+//                case LEFT_DIRECTION:
+//                    code = KC_LEFT;
+//                    break;
+//            }
+//            break;
+//
+//        case WORD_UNIT:
+//            commandDown = true;
+//            switch (direction)
+//            {
+//                case UP_DIRECTION:
+//                    break;
+//                case DOWN_DIRECTION:
+//                    break;
+//                case RIGHT_DIRECTION:
+//                    code = KC_RIGHT;
+//                    break;
+//                case LEFT_DIRECTION:
+//                    code = KC_LEFT;
+//                    break;
+//            }
+//            break;
+//
+//        case DOC_UNIT:
+//            commandDown = true;
+//            switch (direction)
+//            {
+//                case UP_DIRECTION:
+//                    break;
+//                case DOWN_DIRECTION:
+//                    break;
+//                case RIGHT_DIRECTION:
+//                    break;
+//                case LEFT_DIRECTION:
+//                    break;
+//            }
+//            break;
+//    }
+//
+//    if (shiftDown)
+//        register_code(KC_LSHIFT);
+//    if (optionDown)
+//        register_code(KC_LALT);
+//    if (commandDown)
+//        register_code(KC_LGUI);
+//
+//    register_code(code);
+//    unregister_code(code);
+//
+//    if (commandDown)
+//        unregister_code(KC_LGUI);
+//    if (optionDown)
+//        unregister_code(KC_LALT);
+//    if (shiftDown)
+//        unregister_code(KC_LSHIFT);
+//}
 
 
 void
@@ -401,7 +524,7 @@ NavigationSetOrClearUnitAndSelection
 
         // todo: do full clear here?
         navigation.machine.accleratorCode = 0;
-        navigation.machine.unit = NO_UNIT;
+        navigation.machine.unit = CHAR_UNIT;
         navigation.machine.selection = NO_SELECTION;
     }
 }
@@ -431,7 +554,12 @@ void
 NavigationClear(void)
 {
     navigation.machine.accleratorCode = 0;
-    navigation.machine.unit = NO_UNIT;
+    navigation.machine.unit = CHAR_UNIT;
     navigation.machine.selection = NO_SELECTION;
+
+    navigation.event.pKeyRecord = NULL;
+    navigation.event.code = 0;
+    navigation.event.pressed = false;
+    navigation.event.released = false;
 }
 
