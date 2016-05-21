@@ -3,6 +3,7 @@
 
 // tmk
 #include "action_layer.h"
+#include "action_macro.h"
 
 // navigation
 #include "navigation.h"
@@ -209,20 +210,23 @@ NavigationBeforeAccelerator(void)
     switch (navigation.event.code)
     {
         // Select whole modifiers
-//        case KC_W:
-//            NavigationSetOrClearUnitAndSelection(PARA_UNIT, WHOLE_UNIT_SELECTION);
-//            return true;
-//        case KC_E:
-//            NavigationSetOrClearUnitAndSelection(LINE_UNIT, WHOLE_UNIT_SELECTION);
-//            return true;
-//        case KC_R:
-//            NavigationSetOrClearUnitAndSelection(WORD_UNIT, WHOLE_UNIT_SELECTION);
-//            return true;
-//        case KC_T:
-//            NavigationSetOrClearUnitAndSelection(DOC_UNIT, WHOLE_UNIT_SELECTION);
-//            return true;
+        case KC_Q:
+            NavigationSetOrClearUnitAndSelection(DOC_UNIT, WHOLE_UNIT_SELECTION);
+            return true;
+        case KC_W:
+            NavigationSetOrClearUnitAndSelection(PARA_UNIT, WHOLE_UNIT_SELECTION);
+            return true;
+        case KC_E:
+            NavigationSetOrClearUnitAndSelection(LINE_UNIT, WHOLE_UNIT_SELECTION);
+            return true;
+        case KC_R:
+            NavigationSetOrClearUnitAndSelection(WORD_UNIT, WHOLE_UNIT_SELECTION);
+            return true;
 
         // Select rest modifiers
+        case KC_A:
+            NavigationSetOrClearUnitAndSelection(DOC_UNIT, NO_SELECTION);
+            return true;
         case KC_S:
             NavigationSetOrClearUnitAndSelection(PARA_UNIT, NO_SELECTION);
             return true;
@@ -232,11 +236,11 @@ NavigationBeforeAccelerator(void)
         case KC_F:
             NavigationSetOrClearUnitAndSelection(WORD_UNIT, NO_SELECTION);
             return true;
-        case KC_G:
-            NavigationSetOrClearUnitAndSelection(DOC_UNIT, NO_SELECTION);
-            return true;
 
         // Move modifiers
+        case KC_Z:
+            NavigationSetOrClearUnitAndSelection(DOC_UNIT, BOUNDARY_SELECTION);
+            return true;
         case KC_X:
             NavigationSetOrClearUnitAndSelection(PARA_UNIT, BOUNDARY_SELECTION);
             return true;
@@ -246,112 +250,78 @@ NavigationBeforeAccelerator(void)
         case KC_V:
             NavigationSetOrClearUnitAndSelection(WORD_UNIT, BOUNDARY_SELECTION);
             return true;
-        case KC_B:
-            NavigationSetOrClearUnitAndSelection(DOC_UNIT, BOUNDARY_SELECTION);
-            return true;
     }
     return false;
 }
 
+
 void
 NavigationAction(NavigationDirection direction)
 {
-    bool shift = false;
-    bool option = false;
-    bool command = false;
-    bool control = false;
-    
     NavigationSelection selection = navigation.machine.selection;
 
-    uint16_t code = 0;
+    const macro_t* pMacro = NULL;
+
     switch (navigation.machine.unit)
     {
         case CHAR_UNIT:
-            if (selection == BOUNDARY_SELECTION)
-                shift = true;
+
             switch (direction)
             {
-                case UP_DIRECTION:
-                    code = KC_UP;
-                    break;
-
-                case DOWN_DIRECTION:
-                    code = KC_DOWN;
+                case LEFT_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), T(LEFT), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), T(LEFT), U(LSHIFT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            break;
+                    }
                     break;
 
                 case RIGHT_DIRECTION:
-                    code = KC_RIGHT;
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), T(RIGHT), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), T(RIGHT), U(LSHIFT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            break;
+                    }
                     break;
 
-                case LEFT_DIRECTION:
-                    code = KC_LEFT;
-                    break;
-            }
-            break;
-
-        case PARA_UNIT:
-            if (selection == BOUNDARY_SELECTION)
-            {
-                shift = true;
-                option = true;
-                switch (direction)
-                {
-                    case UP_DIRECTION:
-                    case LEFT_DIRECTION:
-                        code = KC_UP;
-                        break;
-
-                    case DOWN_DIRECTION:
-                    case RIGHT_DIRECTION:
-                        code = KC_DOWN;
-                        break;
-                }
-            }
-            else // No selection
-            {
-                control = true;
-                switch (direction)
-                {
-                    case UP_DIRECTION:
-                    case LEFT_DIRECTION:
-                        code = KC_A;
-                        break;
-
-                    case DOWN_DIRECTION:
-                    case RIGHT_DIRECTION:
-                        code = KC_E;
-                        break;
-                }
-            }
-            break;
-
-        case LINE_UNIT:
-            switch (direction)
-            {
                 case UP_DIRECTION:
-                    if (selection == BOUNDARY_SELECTION)
-                        shift = true;
-                    code = KC_UP;
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), T(UP), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), T(UP), U(LSHIFT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            break;
+                    }
                     break;
 
                 case DOWN_DIRECTION:
-                    if (selection == BOUNDARY_SELECTION)
-                        shift = true;
-                    code = KC_DOWN;
-                    break;
-
-                case RIGHT_DIRECTION:
-                    command = true;
-                    if (selection == BOUNDARY_SELECTION)
-                        shift = true;
-                    code = KC_RIGHT;
-                    break;
-
-                case LEFT_DIRECTION:
-                    command = true;
-                    if (selection == BOUNDARY_SELECTION)
-                        shift = true;
-                    code = KC_LEFT;
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), T(DOWN), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), T(DOWN), U(LSHIFT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            break;
+                    }
                     break;
             }
             break;
@@ -359,70 +329,191 @@ NavigationAction(NavigationDirection direction)
         case WORD_UNIT:
             switch (direction)
             {
+                case LEFT_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), D(LALT), T(LEFT), U(LALT), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT), END);
+                            break;
+//                        case WHOLE_UNIT_SELECTION:
+//                            pMacro = MACRO(I(10),   D(LALT), T(RIGHT), U(LALT),   D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   END);
+//                            break;
+                        case WHOLE_UNIT_SELECTION:  //  one by one
+                            pMacro = MACRO(I(10),   T(RIGHT),   D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   END);
+                            break;
+                    }
+                    break;
+
+                case RIGHT_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT), END);
+                            break;
+//                        case WHOLE_UNIT_SELECTION:
+//                            pMacro = MACRO(I(10),   D(LALT), T(LEFT), U(LALT),   D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   END);
+//                            break;
+                        case WHOLE_UNIT_SELECTION:  //  one by one
+                            pMacro = MACRO(I(10),   T(LEFT),   D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   END);
+                            break;
+                    }
+                    break;
+
                 case UP_DIRECTION:
                     break;
 
                 case DOWN_DIRECTION:
                     break;
+            }
+            break;
 
-                case RIGHT_DIRECTION:
-                    option = true;
-                    if (selection == BOUNDARY_SELECTION)
-                        shift = true;
-                    code = KC_RIGHT;
+        case LINE_UNIT:
+            switch (direction)
+            {
+                case LEFT_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), D(LGUI), T(LEFT), U(LGUI), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            pMacro = MACRO(I(10),   T(RIGHT),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
+                            break;
+                    }
                     break;
 
+                case RIGHT_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), D(LGUI), T(RIGHT), U(LGUI), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            pMacro = MACRO(I(10),   T(LEFT),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
+                            break;
+                    }
+                    break;
+
+                case UP_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10),   T(UP),   D(LGUI), T(LEFT), U(LGUI),   END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10),   D(LSHIFT), T(UP), U(LSHIFT),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            break;
+                    }
+                    break;
+
+                case DOWN_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10),   T(DOWN),   D(LGUI), T(RIGHT), U(LGUI),   END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10),   D(LSHIFT), T(DOWN), U(LSHIFT),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            break;
+                    }
+                    break;
+            }
+            break;
+
+        case PARA_UNIT:
+            switch (direction)
+            {
                 case LEFT_DIRECTION:
-                    option = true;
-                    if (selection == BOUNDARY_SELECTION)
-                        shift = true;
-                    code = KC_LEFT;
+                case UP_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            pMacro = MACRO(I(10),   D(LCTRL), T(E), U(LCTRL),   D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT),   END);
+                            break;
+                    }
+                    break;
+
+                case RIGHT_DIRECTION:
+                case DOWN_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            pMacro = MACRO(I(10),   D(LCTRL), T(A), U(LCTRL),   D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   END);
+                            break;
+                    }
                     break;
             }
             break;
 
         case DOC_UNIT:
-            command = true;
-            if (selection == BOUNDARY_SELECTION)
-                shift = true;
             switch (direction)
             {
-                case UP_DIRECTION:
                 case LEFT_DIRECTION:
-                    code = KC_UP;
+                case UP_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), D(LGUI), T(UP), U(LGUI), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            break;
+                    }
                     break;
 
-                case DOWN_DIRECTION:
                 case RIGHT_DIRECTION:
-                    code = KC_DOWN;
+                case DOWN_DIRECTION:
+                    switch (selection)
+                    {
+                        case NO_SELECTION:
+                            pMacro = MACRO(I(10), D(LGUI), T(DOWN), U(LGUI), END);
+                            break;
+                        case BOUNDARY_SELECTION:
+                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT), END);
+                            break;
+                        case WHOLE_UNIT_SELECTION:
+                            break;
+                    }
                     break;
             }
             break;
     }
 
-    if (code == 0)
+    const bool noChars = (pMacro == NULL);
+    if (noChars)
         return;
 
-    if (shift)
-        register_code(KC_LSHIFT);
-    if (option)
-        register_code(KC_LALT);
-    if (command)
-        register_code(KC_LGUI);
-    if (control)
-        register_code(KC_LCTL);
-
-    register_code(code);
-    unregister_code(code);
-
-    if (control)
-        unregister_code(KC_LCTL);
-    if (command)
-        unregister_code(KC_LGUI);
-    if (option)
-        unregister_code(KC_LALT);
-    if (shift)
-        unregister_code(KC_LSHIFT);
+    action_macro_play(pMacro);
 }
 
 
