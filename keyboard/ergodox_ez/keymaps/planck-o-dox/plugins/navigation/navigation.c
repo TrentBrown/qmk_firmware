@@ -60,21 +60,22 @@ typedef enum NavigationUnit
  } NavigationUnit;
 
 
-typedef enum NavigationSelection
+typedef enum NavigationAction
 {
-    NO_SELECTION,
-    BOUNDARY_SELECTION,
-    WHOLE_UNIT_SELECTION,
- } NavigationSelection;
+    MOVE_CURSOR,
+    SELECT_TO_BOUNDARY,
+    DELETE_TO_BOUNDARY,
+ } NavigationAction;
 
 
 // State valid across multiple events
 typedef struct NavigationMachine
 {
     //NavigationMachineState state;
-    uint16_t accleratorCode;
+    uint16_t unitCode;
+    uint16_t actionCode;
     NavigationUnit unit;
-    NavigationSelection selection;
+    NavigationAction action;
 } NavigationMachine;
 
 
@@ -104,15 +105,16 @@ Navigation navigation;
 
 void NavigationClear(void);
 
-
 bool
 NavigationBefore
     (
         keyrecord_t* pKeyRecord,
         action_t action
     );
+bool NavigationBeforePerform(void);
+bool NavigationBeforeUnit(void);
 bool NavigationBeforeAction(void);
-bool NavigationBeforeAccelerator(void);
+
 
 bool
 NavigationAfter
@@ -121,15 +123,10 @@ NavigationAfter
         action_t action
     );
 
-void
-NavigationSetOrClearUnitAndSelection
-    (
-        NavigationUnit unit,
-        NavigationSelection selection
-    );
+void NavigationSetOrClearUnit(NavigationUnit unit);
+void NavigationSetOrClearAction(NavigationAction action);
 
-void
-NavigationAction(NavigationDirection direction);
+void NavigationPerform(NavigationDirection direction);
 
 
 Plugin*
@@ -167,11 +164,64 @@ NavigationBefore
     navigation.event.released = !navigation.event.pressed;
     navigation.event.code = action.code;
 
+    if (NavigationBeforePerform())
+        return true;
+    if (NavigationBeforeUnit())
+        return true;
     if (NavigationBeforeAction())
         return true;
-    if (NavigationBeforeAccelerator())
-        return true;
 
+    return false;
+}
+
+
+bool
+NavigationBeforePerform(void)
+{
+    switch (navigation.event.code)
+    {
+        case KC_LEFT:
+            if (navigation.event.pressed)
+                NavigationPerform(LEFT_DIRECTION);
+            return true;
+
+        case KC_DOWN:
+            if (navigation.event.pressed)
+                NavigationPerform(DOWN_DIRECTION);
+            return true;
+
+        case KC_RIGHT:
+            if (navigation.event.pressed)
+                NavigationPerform(RIGHT_DIRECTION);
+            return true;
+
+        case KC_UP:
+            if (navigation.event.pressed)
+                NavigationPerform(UP_DIRECTION);
+            return true;
+    }
+    return false;
+}
+
+
+bool
+NavigationBeforeUnit(void)
+{
+    switch (navigation.event.code)
+    {
+        case KC_A:
+            NavigationSetOrClearUnit(DOC_UNIT);
+            return true;
+        case KC_S:
+            NavigationSetOrClearUnit(PARA_UNIT);
+            return true;
+        case KC_D:
+            NavigationSetOrClearUnit(LINE_UNIT);
+            return true;
+        case KC_F:
+            NavigationSetOrClearUnit(WORD_UNIT);
+            return true;
+    }
     return false;
 }
 
@@ -181,74 +231,12 @@ NavigationBeforeAction(void)
 {
     switch (navigation.event.code)
     {
-        case KC_LEFT:
-            if (navigation.event.pressed)
-                NavigationAction(LEFT_DIRECTION);
+        case KC_LSHIFT:
+            NavigationSetOrClearAction(SELECT_TO_BOUNDARY);
             return true;
 
-        case KC_DOWN:
-            if (navigation.event.pressed)
-                NavigationAction(DOWN_DIRECTION);
-            return true;
-
-        case KC_RIGHT:
-            if (navigation.event.pressed)
-                NavigationAction(RIGHT_DIRECTION);
-            return true;
-
-        case KC_UP:
-            if (navigation.event.pressed)
-                NavigationAction(UP_DIRECTION);
-            return true;
-    }
-    return false;
-}
-
-bool
-NavigationBeforeAccelerator(void)
-{
-    switch (navigation.event.code)
-    {
-        // Select whole modifiers
-        case KC_Q:
-            NavigationSetOrClearUnitAndSelection(DOC_UNIT, WHOLE_UNIT_SELECTION);
-            return true;
-        case KC_W:
-            NavigationSetOrClearUnitAndSelection(PARA_UNIT, WHOLE_UNIT_SELECTION);
-            return true;
-        case KC_E:
-            NavigationSetOrClearUnitAndSelection(LINE_UNIT, WHOLE_UNIT_SELECTION);
-            return true;
-        case KC_R:
-            NavigationSetOrClearUnitAndSelection(WORD_UNIT, WHOLE_UNIT_SELECTION);
-            return true;
-
-        // Select rest modifiers
-        case KC_A:
-            NavigationSetOrClearUnitAndSelection(DOC_UNIT, NO_SELECTION);
-            return true;
-        case KC_S:
-            NavigationSetOrClearUnitAndSelection(PARA_UNIT, NO_SELECTION);
-            return true;
-        case KC_D:
-            NavigationSetOrClearUnitAndSelection(LINE_UNIT, NO_SELECTION);
-            return true;
-        case KC_F:
-            NavigationSetOrClearUnitAndSelection(WORD_UNIT, NO_SELECTION);
-            return true;
-
-        // Move modifiers
-        case KC_Z:
-            NavigationSetOrClearUnitAndSelection(DOC_UNIT, BOUNDARY_SELECTION);
-            return true;
-        case KC_X:
-            NavigationSetOrClearUnitAndSelection(PARA_UNIT, BOUNDARY_SELECTION);
-            return true;
-        case KC_C:
-            NavigationSetOrClearUnitAndSelection(LINE_UNIT, BOUNDARY_SELECTION);
-            return true;
-        case KC_V:
-            NavigationSetOrClearUnitAndSelection(WORD_UNIT, BOUNDARY_SELECTION);
+        case KC_BSPACE:
+            NavigationSetOrClearAction(DELETE_TO_BOUNDARY);
             return true;
     }
     return false;
@@ -256,9 +244,51 @@ NavigationBeforeAccelerator(void)
 
 
 void
-NavigationAction(NavigationDirection direction)
+NavigationSetOrClearUnit(NavigationUnit unit)
 {
-    NavigationSelection selection = navigation.machine.selection;
+    if (navigation.event.pressed)
+    {
+        navigation.machine.unitCode = navigation.event.code;
+        navigation.machine.unit = unit;
+    }
+    else if (navigation.event.released)
+    {
+        const bool someOtherUnitKeyAlreadyPressed =
+            (navigation.machine.unitCode != navigation.event.code);
+        if (someOtherUnitKeyAlreadyPressed)
+            return;
+
+        navigation.machine.unitCode = 0;
+        navigation.machine.unit = CHAR_UNIT;
+    }
+}
+
+
+void
+NavigationSetOrClearAction(NavigationAction action)
+{
+    if (navigation.event.pressed)
+    {
+        navigation.machine.actionCode = navigation.event.code;
+        navigation.machine.action = action;
+    }
+    else if (navigation.event.released)
+    {
+        const bool otherActionKeyAlreadyPressed =
+            (navigation.machine.actionCode != navigation.event.code);
+        if (otherActionKeyAlreadyPressed)
+            return;
+
+        navigation.machine.actionCode = 0;
+        navigation.machine.action = MOVE_CURSOR;
+    }
+}
+
+
+void
+NavigationPerform(NavigationDirection direction)
+{
+    NavigationAction action = navigation.machine.action;
 
     const macro_t* pMacro = NULL;
 
@@ -269,57 +299,57 @@ NavigationAction(NavigationDirection direction)
             switch (direction)
             {
                 case LEFT_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), T(LEFT), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), T(LEFT), U(LSHIFT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             break;
                     }
                     break;
 
                 case RIGHT_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), T(RIGHT), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), T(RIGHT), U(LSHIFT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             break;
                     }
                     break;
 
                 case UP_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), T(UP), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), T(UP), U(LSHIFT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             break;
                     }
                     break;
 
                 case DOWN_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), T(DOWN), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), T(DOWN), U(LSHIFT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             break;
                     }
                     break;
@@ -330,36 +360,36 @@ NavigationAction(NavigationDirection direction)
             switch (direction)
             {
                 case LEFT_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), D(LALT), T(LEFT), U(LALT), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT), END);
                             break;
-//                        case WHOLE_UNIT_SELECTION:
+//                        case DELETE_TO_BOUNDARY:
 //                            pMacro = MACRO(I(10),   D(LALT), T(RIGHT), U(LALT),   D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   END);
 //                            break;
-                        case WHOLE_UNIT_SELECTION:  //  one by one
+                        case DELETE_TO_BOUNDARY:  //  one by one
                             pMacro = MACRO(I(10),   T(RIGHT),   D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   END);
                             break;
                     }
                     break;
 
                 case RIGHT_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT), END);
                             break;
-//                        case WHOLE_UNIT_SELECTION:
+//                        case DELETE_TO_BOUNDARY:
 //                            pMacro = MACRO(I(10),   D(LALT), T(LEFT), U(LALT),   D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   END);
 //                            break;
-                        case WHOLE_UNIT_SELECTION:  //  one by one
+                        case DELETE_TO_BOUNDARY:  //  one by one
                             pMacro = MACRO(I(10),   T(LEFT),   D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   END);
                             break;
                     }
@@ -377,59 +407,59 @@ NavigationAction(NavigationDirection direction)
             switch (direction)
             {
                 case LEFT_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), D(LGUI), T(LEFT), U(LGUI), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
-                            pMacro = MACRO(I(10),   T(RIGHT),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
+                        case DELETE_TO_BOUNDARY:
+                            pMacro = MACRO(I(10),   D(LGUI), T(RIGHT), U(LGUI),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
                             break;
                     }
                     break;
 
                 case RIGHT_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), D(LGUI), T(RIGHT), U(LGUI), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
-                            pMacro = MACRO(I(10),   T(LEFT),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
+                        case DELETE_TO_BOUNDARY:
+                            pMacro = MACRO(I(10),   D(LGUI), T(LEFT), U(LGUI),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
                             break;
                     }
                     break;
 
                 case UP_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10),   T(UP),   D(LGUI), T(LEFT), U(LGUI),   END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10),   D(LSHIFT), T(UP), U(LSHIFT),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             break;
                     }
                     break;
 
                 case DOWN_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10),   T(DOWN),   D(LGUI), T(RIGHT), U(LGUI),   END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10),   D(LSHIFT), T(DOWN), U(LSHIFT),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             break;
                     }
                     break;
@@ -441,15 +471,15 @@ NavigationAction(NavigationDirection direction)
             {
                 case LEFT_DIRECTION:
                 case UP_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             pMacro = MACRO(I(10),   D(LCTRL), T(E), U(LCTRL),   D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT),   END);
                             break;
                     }
@@ -457,15 +487,15 @@ NavigationAction(NavigationDirection direction)
 
                 case RIGHT_DIRECTION:
                 case DOWN_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             pMacro = MACRO(I(10),   D(LCTRL), T(A), U(LCTRL),   D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   END);
                             break;
                     }
@@ -478,30 +508,30 @@ NavigationAction(NavigationDirection direction)
             {
                 case LEFT_DIRECTION:
                 case UP_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), D(LGUI), T(UP), U(LGUI), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             break;
                     }
                     break;
 
                 case RIGHT_DIRECTION:
                 case DOWN_DIRECTION:
-                    switch (selection)
+                    switch (action)
                     {
-                        case NO_SELECTION:
+                        case MOVE_CURSOR:
                             pMacro = MACRO(I(10), D(LGUI), T(DOWN), U(LGUI), END);
                             break;
-                        case BOUNDARY_SELECTION:
+                        case SELECT_TO_BOUNDARY:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT), END);
                             break;
-                        case WHOLE_UNIT_SELECTION:
+                        case DELETE_TO_BOUNDARY:
                             break;
                     }
                     break;
@@ -514,34 +544,6 @@ NavigationAction(NavigationDirection direction)
         return;
 
     action_macro_play(pMacro);
-}
-
-
-void
-NavigationSetOrClearUnitAndSelection
-    (
-        NavigationUnit unit,
-        NavigationSelection selection
-    )
-{
-    if (navigation.event.pressed)
-    {
-        navigation.machine.accleratorCode = navigation.event.code;
-        navigation.machine.unit = unit;
-        navigation.machine.selection = selection;
-    }
-    else if (navigation.event.released)
-    {
-        const bool someOtherAcceleratorKeyAlreadyPressed =
-            (navigation.machine.accleratorCode != navigation.event.code);
-        if (someOtherAcceleratorKeyAlreadyPressed)
-            return;
-
-        // todo: do full clear here?
-        navigation.machine.accleratorCode = 0;
-        navigation.machine.unit = CHAR_UNIT;
-        navigation.machine.selection = NO_SELECTION;
-    }
 }
 
 
@@ -568,9 +570,10 @@ NavigationAfter
 void
 NavigationClear(void)
 {
-    navigation.machine.accleratorCode = 0;
+    navigation.machine.unitCode = 0;
+    navigation.machine.actionCode = 0;
     navigation.machine.unit = CHAR_UNIT;
-    navigation.machine.selection = NO_SELECTION;
+    navigation.machine.action = MOVE_CURSOR;
 
     navigation.event.pKeyRecord = NULL;
     navigation.event.code = 0;
