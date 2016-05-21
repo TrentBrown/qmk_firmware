@@ -23,19 +23,16 @@ typedef struct NavigationSettings
 //{
 //    NORMAL_NAV_STATE,
 //
-//    WHOLE_PAGE_NAV_STATE,
 //    WHOLE_PARA_NAV_STATE,
 //    WHOLE_LINE_NAV_STATE,
 //    WHOLE_WORD_NAV_STATE,
 //    WHOLE_DOC_NAV_STATE,
 //
-//    SELECT_PAGE_NAV_STATE,
 //    SELECT_PARA_NAV_STATE,
 //    SELECT_LINE_NAV_STATE,
 //    SELECT_WORD_NAV_STATE,
 //    SELECT_DOC_NAV_STATE,
 //
-//    MOVE_PAGE_NAV_STATE,
 //    MOVE_PARA_NAV_STATE,
 //    MOVE_LINE_NAV_STATE,
 //    MOVE_WORD_NAV_STATE,
@@ -55,7 +52,6 @@ typedef enum NavigationDirection
 typedef enum NavigationUnit
 {
     CHAR_UNIT,
-    PAGE_UNIT,
     PARA_UNIT,
     LINE_UNIT,
     WORD_UNIT,
@@ -213,9 +209,6 @@ NavigationBeforeAccelerator(void)
     switch (navigation.event.code)
     {
         // Select whole modifiers
-//        case KC_Q:
-//            NavigationSetOrClearUnitAndSelection(PAGE_UNIT, WHOLE_UNIT_SELECTION);
-//            return true;
 //        case KC_W:
 //            NavigationSetOrClearUnitAndSelection(PARA_UNIT, WHOLE_UNIT_SELECTION);
 //            return true;
@@ -230,9 +223,6 @@ NavigationBeforeAccelerator(void)
 //            return true;
 
         // Select rest modifiers
-        case KC_A:
-            NavigationSetOrClearUnitAndSelection(PAGE_UNIT, NO_SELECTION);
-            return true;
         case KC_S:
             NavigationSetOrClearUnitAndSelection(PARA_UNIT, NO_SELECTION);
             return true;
@@ -247,9 +237,6 @@ NavigationBeforeAccelerator(void)
             return true;
 
         // Move modifiers
-        case KC_Z:
-            NavigationSetOrClearUnitAndSelection(PAGE_UNIT, BOUNDARY_SELECTION);
-            return true;
         case KC_X:
             NavigationSetOrClearUnitAndSelection(PARA_UNIT, BOUNDARY_SELECTION);
             return true;
@@ -269,237 +256,174 @@ NavigationBeforeAccelerator(void)
 void
 NavigationAction(NavigationDirection direction)
 {
-    bool shiftDown = false;
-    bool optionDown = false;
-    bool commandDown = false;
+    bool shift = false;
+    bool option = false;
+    bool command = false;
+    bool control = false;
+    
+    NavigationSelection selection = navigation.machine.selection;
 
-    switch (navigation.machine.selection)
-    {
-        case NO_SELECTION:
-            break;
-
-        case BOUNDARY_SELECTION:
-            shiftDown = true;
-            break;
-
-        case WHOLE_UNIT_SELECTION:
-            break;
-    }
-
-    uint16_t code;
+    uint16_t code = 0;
     switch (navigation.machine.unit)
     {
         case CHAR_UNIT:
+            if (selection == BOUNDARY_SELECTION)
+                shift = true;
             switch (direction)
             {
                 case UP_DIRECTION:
                     code = KC_UP;
                     break;
+
                 case DOWN_DIRECTION:
                     code = KC_DOWN;
                     break;
+
                 case RIGHT_DIRECTION:
                     code = KC_RIGHT;
                     break;
+
                 case LEFT_DIRECTION:
                     code = KC_LEFT;
                     break;
             }
             break;
 
-        case PAGE_UNIT:
-            break;
-
         case PARA_UNIT:
+            if (selection == BOUNDARY_SELECTION)
+            {
+                shift = true;
+                option = true;
+                switch (direction)
+                {
+                    case UP_DIRECTION:
+                    case LEFT_DIRECTION:
+                        code = KC_UP;
+                        break;
+
+                    case DOWN_DIRECTION:
+                    case RIGHT_DIRECTION:
+                        code = KC_DOWN;
+                        break;
+                }
+            }
+            else // No selection
+            {
+                control = true;
+                switch (direction)
+                {
+                    case UP_DIRECTION:
+                    case LEFT_DIRECTION:
+                        code = KC_A;
+                        break;
+
+                    case DOWN_DIRECTION:
+                    case RIGHT_DIRECTION:
+                        code = KC_E;
+                        break;
+                }
+            }
             break;
 
         case LINE_UNIT:
-            shiftDown = true;
             switch (direction)
             {
                 case UP_DIRECTION:
+                    if (selection == BOUNDARY_SELECTION)
+                        shift = true;
                     code = KC_UP;
                     break;
+
                 case DOWN_DIRECTION:
+                    if (selection == BOUNDARY_SELECTION)
+                        shift = true;
                     code = KC_DOWN;
                     break;
+
                 case RIGHT_DIRECTION:
+                    command = true;
+                    if (selection == BOUNDARY_SELECTION)
+                        shift = true;
                     code = KC_RIGHT;
                     break;
+
                 case LEFT_DIRECTION:
+                    command = true;
+                    if (selection == BOUNDARY_SELECTION)
+                        shift = true;
                     code = KC_LEFT;
                     break;
             }
             break;
 
         case WORD_UNIT:
-            commandDown = true;
             switch (direction)
             {
                 case UP_DIRECTION:
                     break;
+
                 case DOWN_DIRECTION:
                     break;
+
                 case RIGHT_DIRECTION:
+                    option = true;
+                    if (selection == BOUNDARY_SELECTION)
+                        shift = true;
                     code = KC_RIGHT;
                     break;
+
                 case LEFT_DIRECTION:
+                    option = true;
+                    if (selection == BOUNDARY_SELECTION)
+                        shift = true;
                     code = KC_LEFT;
                     break;
             }
             break;
 
         case DOC_UNIT:
-            commandDown = true;
+            command = true;
+            if (selection == BOUNDARY_SELECTION)
+                shift = true;
             switch (direction)
             {
                 case UP_DIRECTION:
-                    break;
-                case DOWN_DIRECTION:
-                    break;
-                case RIGHT_DIRECTION:
-                    break;
                 case LEFT_DIRECTION:
+                    code = KC_UP;
+                    break;
+
+                case DOWN_DIRECTION:
+                case RIGHT_DIRECTION:
+                    code = KC_DOWN;
                     break;
             }
             break;
     }
 
-    if (shiftDown)
+    if (code == 0)
+        return;
+
+    if (shift)
         register_code(KC_LSHIFT);
-    if (optionDown)
+    if (option)
         register_code(KC_LALT);
-    if (commandDown)
+    if (command)
         register_code(KC_LGUI);
+    if (control)
+        register_code(KC_LCTL);
 
     register_code(code);
     unregister_code(code);
 
-    if (commandDown)
+    if (control)
+        unregister_code(KC_LCTL);
+    if (command)
         unregister_code(KC_LGUI);
-    if (optionDown)
+    if (option)
         unregister_code(KC_LALT);
-    if (shiftDown)
+    if (shift)
         unregister_code(KC_LSHIFT);
 }
-
-
-//void
-//NavigationAction(NavigationDirection direction)
-//{
-//    bool shiftDown = false;
-//    bool optionDown = false;
-//    bool commandDown = false;
-//
-//    switch (navigation.machine.selection)
-//    {
-//        case NO_SELECTION:
-//            break;
-//
-//        case BOUNDARY_SELECTION:
-//            shiftDown = true;
-//            break;
-//
-//        case WHOLE_UNIT_SELECTION:
-//            break;
-//    }
-//
-//    uint16_t code;
-//    switch (navigation.machine.unit)
-//    {
-//        case CHAR_UNIT:
-//            switch (direction)
-//            {
-//                case UP_DIRECTION:
-//                    code = KC_UP;
-//                    break;
-//                case DOWN_DIRECTION:
-//                    code = KC_DOWN;
-//                    break;
-//                case RIGHT_DIRECTION:
-//                    code = KC_RIGHT;
-//                    break;
-//                case LEFT_DIRECTION:
-//                    code = KC_LEFT;
-//                    break;
-//            }
-//            break;
-//
-//        case PAGE_UNIT:
-//            break;
-//
-//        case PARA_UNIT:
-//            break;
-//
-//        case LINE_UNIT:
-//            shiftDown = true;
-//            switch (direction)
-//            {
-//                case UP_DIRECTION:
-//                    code = KC_UP;
-//                    break;
-//                case DOWN_DIRECTION:
-//                    code = KC_DOWN;
-//                    break;
-//                case RIGHT_DIRECTION:
-//                    code = KC_RIGHT;
-//                    break;
-//                case LEFT_DIRECTION:
-//                    code = KC_LEFT;
-//                    break;
-//            }
-//            break;
-//
-//        case WORD_UNIT:
-//            commandDown = true;
-//            switch (direction)
-//            {
-//                case UP_DIRECTION:
-//                    break;
-//                case DOWN_DIRECTION:
-//                    break;
-//                case RIGHT_DIRECTION:
-//                    code = KC_RIGHT;
-//                    break;
-//                case LEFT_DIRECTION:
-//                    code = KC_LEFT;
-//                    break;
-//            }
-//            break;
-//
-//        case DOC_UNIT:
-//            commandDown = true;
-//            switch (direction)
-//            {
-//                case UP_DIRECTION:
-//                    break;
-//                case DOWN_DIRECTION:
-//                    break;
-//                case RIGHT_DIRECTION:
-//                    break;
-//                case LEFT_DIRECTION:
-//                    break;
-//            }
-//            break;
-//    }
-//
-//    if (shiftDown)
-//        register_code(KC_LSHIFT);
-//    if (optionDown)
-//        register_code(KC_LALT);
-//    if (commandDown)
-//        register_code(KC_LGUI);
-//
-//    register_code(code);
-//    unregister_code(code);
-//
-//    if (commandDown)
-//        unregister_code(KC_LGUI);
-//    if (optionDown)
-//        unregister_code(KC_LALT);
-//    if (shiftDown)
-//        unregister_code(KC_LSHIFT);
-//}
 
 
 void
