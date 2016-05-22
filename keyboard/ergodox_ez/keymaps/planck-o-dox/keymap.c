@@ -9,6 +9,7 @@
 #include "plugin.h"
 
 // ultramod
+#include "plugins/reset/reset.h"
 #include "plugins/ultramod/ultramod.h"
 #include "plugins/navigation/navigation.h"
 
@@ -40,20 +41,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
 void
 matrix_init_user(void)
 {
+    // TODO: Once the PluginAddLast() is available, reorder the following to make more sense
+
     // The default brightness is blinding. Turn it down, please.
     ergodox_led_all_set(LED_BRIGHTNESS_LO);
 
-    // Set your personal preferences here. See ultramod.h for defaults.
+    // Ultramod plugin
     UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_SINGLE_TAP, 250);
     UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_DOUBLE_TAP, 250);
     UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_ONE_SHOT, 10000);
     UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_LOCKED, 10000);
-
     Plugin* pUltramodPlugin = UltramodCreatePlugin();
-    PluginAdd(pUltramodPlugin);
+    PluginAddFirst(pUltramodPlugin);
 
+    // Navigation plugin
     Plugin* pNavigationPlugin = NavigationCreatePlugin(CURSOR_AND_FKEY_RIGHT_KEYMAP);
-    PluginAdd(pNavigationPlugin);
+    PluginAddFirst(pNavigationPlugin);
+
+    // Reset plugin
+//    Plugin* pResetPlugin = ResetCreatePlugin();
+//    PluginAddFirst(pResetPlugin);
 };
 
 
@@ -71,5 +78,6 @@ matrix_scan_user(void)
 #include "macros.c"
 #include "actions.c"
 #include "plugin.c"
+#include "plugins/reset/reset.c"
 #include "plugins/ultramod/ultramod.c"
 #include "plugins/navigation/navigation.c"

@@ -113,6 +113,16 @@ void UltramodReset(void);
 void UltramodSettingsReset(void);
 void UltramodMachineReset(void);
 void UltramodEventReset(void);
+bool UltramodBefore
+    (
+        keyrecord_t* pKeyRecord,
+        action_t action
+    );
+bool UltramodAfter
+    (
+        keyrecord_t* pKeyRecord,
+        action_t action
+    );
 uint8_t ModFlagToBits(uint8_t flag);
 bool IsSameKey(keypos_t first, keypos_t second);
 bool TimedOut(uint16_t first, uint16_t second, uint16_t timeout);
@@ -120,10 +130,24 @@ bool CharacterBefore(void);
 bool ModifierBefore(void);
 bool CharacterAfter(void);
 bool ModifierAfter(void);
-void UltramodEscape(keyrecord_t* pKeyRecord);
 void SetNormalState(void);
 void UltramodMatrixScan(void);
 void UltramodSetLeds(void);
+
+
+Plugin*
+UltramodCreatePlugin(void)
+{
+    Plugin* pPlugin = (Plugin*)malloc(sizeof(Plugin));
+    pPlugin->pName = "ultramod";
+    pPlugin->matrixScan = &UltramodMatrixScan;
+    pPlugin->before = &UltramodBefore;
+    pPlugin->after = &UltramodAfter;
+    pPlugin->reset = &UltramodReset;
+    pPlugin->pPrevPlugin = NULL;
+    pPlugin->pNextPlugin = NULL;
+    return pPlugin;
+}
 
 
 void
@@ -272,9 +296,6 @@ bool
 CharacterBefore(void)
 {
     bool consumed = false;
-
-    if (ultramod.event.code == KC_ESCAPE)
-        UltramodEscape(ultramod.event.pKeyRecord);
 
     // todo: Why does this state not stick?
     if (ultramod.machine.state != NORMAL_STATE)
@@ -481,16 +502,9 @@ void UltramodMatrixScan(void)
 
 
 void
-UltramodEscape(keyrecord_t* pKeyRecord)
-{
-    if (pKeyRecord->event.pressed)
-        SetNormalState();
-}
-
-
-void
 SetNormalState(void)
 {
+    // TODO: Do we have to do this here?
     clear_keyboard();
     layer_clear();
 
@@ -594,16 +608,4 @@ IsSameKey
 }
 
 
-Plugin*
-UltramodCreatePlugin(void)
-{
-    Plugin* pPlugin = (Plugin*)malloc(sizeof(Plugin));
-    pPlugin->pName = "ultramod";
-    pPlugin->matrixScan = &UltramodMatrixScan;
-    pPlugin->before = &UltramodBefore;
-    pPlugin->after = &UltramodAfter;
-    pPlugin->pPrevPlugin = NULL;
-    pPlugin->pNextPlugin = NULL;
-    return pPlugin;
-}
 

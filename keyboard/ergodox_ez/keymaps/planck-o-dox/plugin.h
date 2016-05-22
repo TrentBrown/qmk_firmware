@@ -4,6 +4,7 @@
 typedef void (*PluginMatrixScanFunction)(void);
 typedef bool (*PluginBeforeFunction)(keyrecord_t* pKeyRecord, action_t action);
 typedef bool (*PluginAfterFunction)(keyrecord_t* pKeyRecord, action_t action);
+typedef void (*PluginResetFunction)(void);
 
 typedef struct Plugin
 {
@@ -11,14 +12,16 @@ typedef struct Plugin
     PluginMatrixScanFunction matrixScan;
     PluginBeforeFunction before;
     PluginAfterFunction after;
+    PluginResetFunction reset;
     struct Plugin* pPrevPlugin;
     struct Plugin* pNextPlugin;
 } Plugin;
 
 
-void PluginAdd(Plugin* pPlugin);
+void PluginAddFirst(Plugin* pPlugin);
 void PluginAddBefore(Plugin* pPlugin, Plugin* pOtherPlugin);
 void PluginAddAfter(Plugin* pPlugin, Plugin* pOtherPlugin);
+void PluginResetAll(void);
 
 Plugin* PluginFindNamed(const char* pName);
 

@@ -4,7 +4,7 @@
 Plugin* gpHeadPlugin = NULL;
 
 void
-PluginAdd(Plugin* pPlugin)
+PluginAddFirst(Plugin* pPlugin)
 {
     const bool listIsEmpty = (gpHeadPlugin == NULL);
     if (listIsEmpty)
@@ -22,6 +22,9 @@ PluginAdd(Plugin* pPlugin)
 
     gpHeadPlugin = pPlugin;
 }
+
+
+// TODO: Add PluginAddLast()
 
 
 void
@@ -59,6 +62,23 @@ PluginFindNamed(const char* pName)
             return pPlugin;
     }
     return NULL;
+}
+
+
+void
+PluginResetAll(void)
+{
+    Plugin* pPlugin;
+    for (pPlugin = gpHeadPlugin;
+         pPlugin != NULL;
+         pPlugin = pPlugin->pNextPlugin)
+    {
+        PluginResetFunction pluginReset = pPlugin->reset;
+        if (pluginReset == NULL)
+            continue;
+
+        pluginReset();
+    }
 }
 
 
@@ -127,3 +147,4 @@ plugin_process_action_after_hook
 
     return false;
 }
+
