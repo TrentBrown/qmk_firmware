@@ -19,52 +19,31 @@ typedef struct NavigationSettings
 } NavigationSettings;
 
 
-// State machine states
-//typedef enum NavigationMachineState
-//{
-//    NORMAL_NAV_STATE,
-//
-//    WHOLE_PARA_NAV_STATE,
-//    WHOLE_LINE_NAV_STATE,
-//    WHOLE_WORD_NAV_STATE,
-//    WHOLE_DOC_NAV_STATE,
-//
-//    SELECT_PARA_NAV_STATE,
-//    SELECT_LINE_NAV_STATE,
-//    SELECT_WORD_NAV_STATE,
-//    SELECT_DOC_NAV_STATE,
-//
-//    MOVE_PARA_NAV_STATE,
-//    MOVE_LINE_NAV_STATE,
-//    MOVE_WORD_NAV_STATE,
-//    MOVE_DOC_NAV_STATE
-//} NavigationMachineState;
-
-
 typedef enum NavigationDirection
 {
-    UP_DIRECTION,
-    DOWN_DIRECTION,
+    LEFT_DIRECTION,
     RIGHT_DIRECTION,
-    LEFT_DIRECTION
+    UP_DIRECTION,
+    DOWN_DIRECTION
  } NavigationDirection;
 
 
 typedef enum NavigationUnit
 {
     CHAR_UNIT,
-    PARA_UNIT,
-    LINE_UNIT,
     WORD_UNIT,
+    LINE_UNIT,
+    PARA_UNIT,
+    PAGE_UNIT,
     DOC_UNIT,
  } NavigationUnit;
 
 
 typedef enum NavigationAction
 {
-    MOVE_CURSOR,
-    SELECT_TO_BOUNDARY,
-    DELETE_TO_BOUNDARY,
+    MOVE_CURSOR_ACTION,
+    SELECT_TO_BOUNDARY_ACTION,
+    DELETE_TO_BOUNDARY_ACTION,
  } NavigationAction;
 
 
@@ -185,11 +164,6 @@ NavigationBeforePerform(void)
                 NavigationPerform(LEFT_DIRECTION);
             return true;
 
-        case KC_DOWN:
-            if (navigation.event.pressed)
-                NavigationPerform(DOWN_DIRECTION);
-            return true;
-
         case KC_RIGHT:
             if (navigation.event.pressed)
                 NavigationPerform(RIGHT_DIRECTION);
@@ -198,6 +172,11 @@ NavigationBeforePerform(void)
         case KC_UP:
             if (navigation.event.pressed)
                 NavigationPerform(UP_DIRECTION);
+            return true;
+
+        case KC_DOWN:
+            if (navigation.event.pressed)
+                NavigationPerform(DOWN_DIRECTION);
             return true;
     }
     return false;
@@ -210,7 +189,7 @@ NavigationBeforeUnit(void)
     switch (navigation.event.code)
     {
         case KC_A:
-            NavigationSetOrClearUnit(DOC_UNIT);
+            NavigationSetOrClearUnit(PAGE_UNIT);
             return true;
         case KC_S:
             NavigationSetOrClearUnit(PARA_UNIT);
@@ -220,6 +199,9 @@ NavigationBeforeUnit(void)
             return true;
         case KC_F:
             NavigationSetOrClearUnit(WORD_UNIT);
+            return true;
+        case KC_G:
+            NavigationSetOrClearUnit(DOC_UNIT);
             return true;
     }
     return false;
@@ -232,11 +214,13 @@ NavigationBeforeAction(void)
     switch (navigation.event.code)
     {
         case KC_LSHIFT:
-            NavigationSetOrClearAction(SELECT_TO_BOUNDARY);
+        case KC_RSHIFT:
+        case KC_SPACE:
+            NavigationSetOrClearAction(SELECT_TO_BOUNDARY_ACTION);
             return true;
 
         case KC_BSPACE:
-            NavigationSetOrClearAction(DELETE_TO_BOUNDARY);
+            NavigationSetOrClearAction(DELETE_TO_BOUNDARY_ACTION);
             return true;
     }
     return false;
@@ -280,7 +264,7 @@ NavigationSetOrClearAction(NavigationAction action)
             return;
 
         navigation.machine.actionCode = 0;
-        navigation.machine.action = MOVE_CURSOR;
+        navigation.machine.action = MOVE_CURSOR_ACTION;
     }
 }
 
@@ -301,13 +285,13 @@ NavigationPerform(NavigationDirection direction)
                 case LEFT_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), T(LEFT), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), T(LEFT), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), T(BSPACE), END);
                             break;
                     }
@@ -316,13 +300,13 @@ NavigationPerform(NavigationDirection direction)
                 case RIGHT_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), T(RIGHT), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), T(RIGHT), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), T(DELETE), END);
                             break;
                     }
@@ -331,13 +315,13 @@ NavigationPerform(NavigationDirection direction)
                 case UP_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), T(UP), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), T(UP), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             break;
                     }
                     break;
@@ -345,13 +329,13 @@ NavigationPerform(NavigationDirection direction)
                 case DOWN_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), T(DOWN), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), T(DOWN), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             break;
                     }
                     break;
@@ -364,13 +348,13 @@ NavigationPerform(NavigationDirection direction)
                 case LEFT_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), D(LALT), T(LEFT), U(LALT), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
@@ -379,13 +363,13 @@ NavigationPerform(NavigationDirection direction)
                 case RIGHT_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
@@ -405,13 +389,13 @@ NavigationPerform(NavigationDirection direction)
                 case LEFT_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), D(LGUI), T(LEFT), U(LGUI), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
@@ -420,13 +404,13 @@ NavigationPerform(NavigationDirection direction)
                 case RIGHT_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), D(LGUI), T(RIGHT), U(LGUI), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
@@ -435,13 +419,13 @@ NavigationPerform(NavigationDirection direction)
                 case UP_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), T(UP),   D(LGUI), T(LEFT), U(LGUI),   END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), T(UP), U(LSHIFT),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             break;
                     }
                     break;
@@ -449,13 +433,13 @@ NavigationPerform(NavigationDirection direction)
                 case DOWN_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), T(DOWN),   D(LGUI), T(RIGHT), U(LGUI),   END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), T(DOWN), U(LSHIFT),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             break;
                     }
                     break;
@@ -469,13 +453,13 @@ NavigationPerform(NavigationDirection direction)
                 case UP_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT),   T(BSPACE),   END);;
                             break;
                     }
@@ -485,13 +469,13 @@ NavigationPerform(NavigationDirection direction)
                 case DOWN_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   T(BSPACE),   END);
                             break;
                     }
@@ -506,13 +490,13 @@ NavigationPerform(NavigationDirection direction)
                 case UP_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), D(LGUI), T(UP), U(LGUI), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
@@ -522,13 +506,13 @@ NavigationPerform(NavigationDirection direction)
                 case DOWN_DIRECTION:
                     switch (action)
                     {
-                        case MOVE_CURSOR:
+                        case MOVE_CURSOR_ACTION:
                             pMacro = MACRO(I(10), D(LGUI), T(DOWN), U(LGUI), END);
                             break;
-                        case SELECT_TO_BOUNDARY:
+                        case SELECT_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT), END);
                             break;
-                        case DELETE_TO_BOUNDARY:
+                        case DELETE_TO_BOUNDARY_ACTION:
                             pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
                             break;
                     }
@@ -571,7 +555,7 @@ NavigationClear(void)
     navigation.machine.unitCode = 0;
     navigation.machine.actionCode = 0;
     navigation.machine.unit = CHAR_UNIT;
-    navigation.machine.action = MOVE_CURSOR;
+    navigation.machine.action = MOVE_CURSOR_ACTION;
 
     navigation.event.pKeyRecord = NULL;
     navigation.event.code = 0;
