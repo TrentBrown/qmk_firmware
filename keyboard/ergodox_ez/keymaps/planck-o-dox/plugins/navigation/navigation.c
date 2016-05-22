@@ -277,19 +277,50 @@ NavigationSetOrClearAction(NavigationAction action)
 }
 
 
+#define CHAR_MOVE_LEFT   T(LEFT)
+#define CHAR_MOVE_RIGHT  T(RIGHT)
+#define CHAR_MOVE_UP     T(UP)
+#define CHAR_MOVE_DOWN   T(DOWN)
+
+#define CHAR_SELECT_LEFT   D(LSHIFT), T(LEFT),  U(LSHIFT)
+#define CHAR_SELECT_RIGHT  D(LSHIFT), T(RIGHT), U(LSHIFT)
+#define CHAR_SELECT_UP     D(LSHIFT), T(UP),    U(LSHIFT)
+#define CHAR_SELECT_DOWN   D(LSHIFT), T(DOWN),  U(LSHIFT)
+
+
+#define WORD_MOVE_LEFT   D(LALT), T(LEFT),  U(LALT)
+#define WORD_MOVE_RIGHT  D(LALT), T(RIGHT), U(LALT)
+
+#define WORD_SELECT_LEFT   D(LSHIFT), D(LALT), T(LEFT),  U(LALT), U(LSHIFT)
+#define WORD_SELECT_RIGHT  D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT)
+
+
+#define LINE_MOVE_LEFT   D(LGUI), T(LEFT),  U(LGUI)
+#define LINE_MOVE_RIGHT  D(LGUI), T(RIGHT), U(LGUI)
+#define LINE_MOVE_UP     T(UP),   D(LGUI),  T(LEFT),  U(LGUI)
+#define LINE_MOVE_DOWN   T(DOWN), D(LGUI),  T(RIGHT), U(LGUI)
+
+#define LINE_SELECT_LEFT   D(LSHIFT), D(LGUI), T(LEFT),  U(LGUI), U(LSHIFT)
+#define LINE_SELECT_RIGHT  D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT)
+#define LINE_SELECT_UP     D(LSHIFT), T(UP),    U(LSHIFT)
+#define LINE_SELECT_DOWN   D(LSHIFT), T(DOWN),  U(LSHIFT)
+
+
+#define PARA_MOVE_LEFT   D(LCTRL), T(A), U(LCTRL)
+#define PARA_MOVE_RIGHT  D(LCTRL), T(E), U(LCTRL)
+
+#define PARA_SELECT_LEFT   D(LALT), D(LSHIFT), T(UP),  U(LSHIFT),  U(LALT)
+#define PARA_SELECT_RIGHT  D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT)
+
+
+#define DOC_MOVE_LEFT   D(LGUI), T(UP), U(LGUI)
+#define DOC_MOVE_RIGHT  D(LGUI), T(DOWN), U(LGUI)
+
+#define DOC_SELECT_LEFT   D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT)
+#define DOC_SELECT_RIGHT  D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT)
+
+
 // TODO: Factor out parts of this function. Is too big.
-// TODO: Try to find a way to factor out common macro sequences. Is there an "append"?
-
-#define WORD_MOVE_LEFT T(LEFT)
-#define WORD_MOVE_RIGHT T(RIGHT)
-#define WORD_MOVE_UP T(UP)
-#define WORD_MOVE_DOWN T(DOWN)
-
-#define WORD_SELECT_LEFT D(LSHIFT), T(LEFT), U(LSHIFT)
-#define WORD_SELECT_RIGHT D(LSHIFT), T(RIGHT), U(LSHIFT)
-#define WORD_SELECT_UP D(LSHIFT), T(UP), U(LSHIFT)
-#define WORD_SELECT_DOWN D(LSHIFT), T(DOWN), U(LSHIFT)
-
 void
 NavigationPerform(NavigationVector vector)
 {
@@ -311,10 +342,10 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), T(LEFT), END);
+                            pMacro = MACRO(I(10), CHAR_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), T(LEFT), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), CHAR_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
                             pMacro = MACRO(I(10), T(BSPACE), END);
@@ -327,10 +358,10 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), T(RIGHT), END);
+                            pMacro = MACRO(I(10), CHAR_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), T(RIGHT), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), CHAR_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
                             pMacro = MACRO(I(10), T(DELETE), END);
@@ -342,10 +373,10 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), T(UP), END);
+                            pMacro = MACRO(I(10), CHAR_MOVE_UP, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), T(UP), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), CHAR_SELECT_UP, END);
                             break;
                         case DELETE_ACTION:
                             break;
@@ -356,10 +387,10 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), T(DOWN), END);
+                            pMacro = MACRO(I(10), CHAR_MOVE_DOWN, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), T(DOWN), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), CHAR_SELECT_DOWN, END);
                             break;
                         case DELETE_ACTION:
                             break;
@@ -375,13 +406,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), T(LEFT), U(LALT), END);
+                            pMacro = MACRO(I(10), WORD_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), WORD_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), WORD_SELECT_LEFT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -390,13 +421,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), T(LEFT), U(LALT), END);  // Same as non-whole
+                            pMacro = MACRO(I(10), WORD_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT),   D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), WORD_MOVE_RIGHT, WORD_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT),   D(LSHIFT), D(LALT), T(LEFT), U(LALT), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), WORD_MOVE_RIGHT, WORD_SELECT_LEFT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -405,13 +436,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT), END);
+                            pMacro = MACRO(I(10), WORD_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), WORD_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), WORD_SELECT_RIGHT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -420,13 +451,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT), END);  // Same as non-whole
+                            pMacro = MACRO(I(10), WORD_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT),   D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), WORD_MOVE_LEFT, WORD_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), T(RIGHT), U(LALT),   D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), WORD_MOVE_LEFT, WORD_SELECT_RIGHT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -446,13 +477,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(LEFT), U(LGUI), END);
+                            pMacro = MACRO(I(10), LINE_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), LINE_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), LINE_SELECT_LEFT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -461,13 +492,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(LEFT), U(LGUI), END);  // Same as non-whole
+                            pMacro = MACRO(I(10), LINE_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(RIGHT), U(LGUI),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), LINE_MOVE_RIGHT, LINE_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(RIGHT), U(LGUI),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), LINE_MOVE_RIGHT, LINE_SELECT_LEFT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -476,13 +507,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(RIGHT), U(LGUI), END);
+                            pMacro = MACRO(I(10), LINE_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), LINE_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), LINE_SELECT_RIGHT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -491,13 +522,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(RIGHT), U(LGUI), END);  // Same as non-whole
+                            pMacro = MACRO(I(10), LINE_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(LEFT), U(LGUI),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), LINE_MOVE_LEFT, LINE_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(LEFT), U(LGUI),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), LINE_MOVE_LEFT, LINE_SELECT_RIGHT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -506,12 +537,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), T(UP),   D(LGUI), T(LEFT), U(LGUI),   END);
+                            pMacro = MACRO(I(10), LINE_MOVE_UP, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), T(UP), U(LSHIFT),   D(LSHIFT), D(LGUI), T(LEFT), U(LGUI), U(LSHIFT),   END);
+                            pMacro = MACRO(I(10), CHAR_SELECT_UP, LINE_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
+                            // TODO
                             break;
                     }
                     break;
@@ -520,12 +552,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), T(DOWN),   D(LGUI), T(RIGHT), U(LGUI),   END);
+                            pMacro = MACRO(I(10), LINE_MOVE_DOWN, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), T(DOWN), U(LSHIFT),   D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT),   END);
+                            pMacro = MACRO(I(10), CHAR_SELECT_DOWN, LINE_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
+                            // TODO
                             break;
                     }
                     break;
@@ -540,13 +573,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL), END);
+                            pMacro = MACRO(I(10), PARA_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT), END);
+                            pMacro = MACRO(I(10), PARA_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT),   T(BSPACE),   END);;
+                            pMacro = MACRO(I(10), PARA_SELECT_LEFT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -555,13 +588,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL), END);  // Same as non-whole
+                            pMacro = MACRO(I(10), PARA_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL),   D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT), END);
+                            pMacro = MACRO(I(10), PARA_MOVE_RIGHT, PARA_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL),   D(LALT), D(LSHIFT), T(UP), U(LSHIFT),   T(BSPACE),   END);;
+                            pMacro = MACRO(I(10), PARA_MOVE_RIGHT, PARA_SELECT_LEFT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -571,13 +604,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL), END);
+                            pMacro = MACRO(I(10), PARA_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
+                            pMacro = MACRO(I(10), PARA_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), PARA_SELECT_RIGHT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -586,13 +619,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL), END);  // Same as non-whole
+                            pMacro = MACRO(I(10), PARA_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL),   D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
+                            pMacro = MACRO(I(10), PARA_MOVE_LEFT, PARA_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL),   D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), PARA_MOVE_LEFT, PARA_SELECT_RIGHT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -600,70 +633,7 @@ NavigationPerform(NavigationVector vector)
             break;
 
         case PAGE_UNIT:
-            switch (vector)
-            {
-                case LEFT_VECTOR:
-                case UP_VECTOR:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL), END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT), END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT),   T(BSPACE),   END);;
-                            break;
-                    }
-                    break;
-
-                case LEFT_WHOLE_VECTOR:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL), END);  // Same as non-whole
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL),   D(LALT), D(LSHIFT), T(UP), U(LSHIFT), U(LALT), END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL),   D(LALT), D(LSHIFT), T(UP), U(LSHIFT),   T(BSPACE),   END);;
-                            break;
-                    }
-                    break;
-
-                case RIGHT_VECTOR:
-                case DOWN_VECTOR:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL), END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   T(BSPACE),   END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_WHOLE_VECTOR:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(E), U(LCTRL), END);  // Same as non-whole
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL),   D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT), END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LCTRL), T(A), U(LCTRL),   D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT),   T(BSPACE),   END);
-                            break;
-                    }
-                    break;
-            }
+            // TODO
             break;
 
         case DOC_UNIT:
@@ -674,13 +644,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(UP), U(LGUI), END);
+                            pMacro = MACRO(I(10), DOC_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), DOC_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), DOC_SELECT_LEFT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -689,13 +659,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(UP), U(LGUI), END);  // Same as non-whole
+                            pMacro = MACRO(I(10), DOC_MOVE_LEFT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(DOWN), U(LGUI),   D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), DOC_MOVE_RIGHT, DOC_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(DOWN), U(LGUI),   D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT),   T(BSPACE),   END);  // Completely equivalent to RIGHT_WHOLE_VECTOR
+                            pMacro = MACRO(I(10), DOC_MOVE_RIGHT, DOC_SELECT_LEFT, T(BSPACE), END);  // Completely equivalent to RIGHT_WHOLE_VECTOR
                             break;
                     }
                     break;
@@ -705,13 +675,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(DOWN), U(LGUI), END);
+                            pMacro = MACRO(I(10), DOC_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), DOC_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT),   T(BSPACE),   END);
+                            pMacro = MACRO(I(10), DOC_SELECT_RIGHT, T(BSPACE), END);
                             break;
                     }
                     break;
@@ -720,13 +690,13 @@ NavigationPerform(NavigationVector vector)
                     switch (action)
                     {
                         case MOVE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(DOWN), U(LGUI), END);  // Same as non-whole
+                            pMacro = MACRO(I(10), DOC_MOVE_RIGHT, END);
                             break;
                         case SELECT_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(UP), U(LGUI),   D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT), END);
+                            pMacro = MACRO(I(10), DOC_MOVE_LEFT, DOC_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(I(10), D(LGUI), T(UP), U(LGUI),   D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT),   T(BSPACE),   END);  // Completely equivalent to LEFT_WHOLE_VECTOR
+                            pMacro = MACRO(I(10), DOC_MOVE_LEFT, DOC_SELECT_RIGHT, T(BSPACE), END);  // Completely equivalent to LEFT_WHOLE_VECTOR
                             break;
                     }
                     break;
