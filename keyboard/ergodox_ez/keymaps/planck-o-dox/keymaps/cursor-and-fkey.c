@@ -53,7 +53,7 @@ Right layer key pressed
     |--------+------+------+------+------+------|   Ø  |           |  Ø   |------+------+------+------+------+--------|
     |   Ø    |      |      |      |      |      |      |           |      |  <   |   v  |   >  |      |  F12 |    Ø   |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-      |  Ø   |  Ø   |  Ø   |  Ø   |      |                                       |   Ø  |   Ø  | (CaF)|   Ø  |   Ø  |
+      |  Ø   |  Ø   |  Ø   |  Ø   |  Ø   |                                       |   Ø  |   Ø  | (CaF)|   Ø  |   Ø  |
       `----------------------------------'                                       `----------------------------------'
                                            ,-------------.       ,-------------.
                                            |   Ø  |   Ø  |       |  Ø   |  Ø   |
@@ -62,6 +62,7 @@ Right layer key pressed
                                     |Delete|Select|------|       |------|Delete|Select|
                                     |      |      |   Ø  |       |  Ø   |      |      |
                                     `--------------------'       `--------------------'
+
 
 Planck:
 
@@ -97,7 +98,7 @@ Right layer key pressed
         // --------------------------------------------------------------------------------
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
         KC_TRNS,    KC_F1,      KC_F2,      KC_F3,      KC_F4,      KC_F5,      KC_TRNS,
-        KC_TRNS,    KC_NO,      KC_NO,      KC_NO,      KC_UP,      KC_NO,
+        KC_TRNS,    KC_NO,      KC_NO,      KC_H,       KC_UP,      KC_K,
         KC_TRNS,    KC_NO,      KC_NO,      KC_LEFT,    KC_DOWN,    KC_RIGHT,   KC_TRNS,
         // --------------------------------------------------------------------------------
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
@@ -143,7 +144,7 @@ Right layer key pressed
         // --------------------------------------------------------------------------------
         KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
         KC_TRNS,    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
-                    KC_NO,      KC_UP,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
+                    KC_H,       KC_UP,      KC_K,       KC_NO,      KC_NO,      KC_TRNS,
         KC_TRNS,    KC_LEFT,    KC_DOWN,    KC_RIGHT,   KC_NO,      KC_NO,      KC_TRNS,
         // --------------------------------------------------------------------------------
                                 KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
