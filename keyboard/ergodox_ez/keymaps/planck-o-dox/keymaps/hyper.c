@@ -61,7 +61,7 @@ Ergodox:
 
 /*
 
-At first, I didn't get what a "hyper" key was, when I saw it on other people's layouts. Before the light went on in my head, I created a whole layer to map my application switching key to. Then I realized that this was pointless. The mapping from chorded-letters to an action has to be done by an external application, after all. This exactly what "hyper is for. For the sake of being interesting, I'm including here my "virtual" layer. I expect you'll have a very different set of applications in your world. These are mine:
+At first, I didn't get what a "hyper" key was, when I saw it on other people's layouts. Before the light went on in my head, I created a whole layer to map my application switching key to. Then I realized that this was pointless. The mapping from chorded-letters to an action has to be done by an external application, after all. This exactly what "hyper is for. For the sake of being interesting, I'm including here my "virtual" layer. I expect you'll have a very different set of applications in your world. There are many maps. This one is mine.
 
 
     Reasoning
@@ -90,7 +90,7 @@ At first, I didn't get what a "hyper" key was, when I saw it on other people's l
     P   "Password manager"  (1Password)
     Q
     R   "Radio" music streaming (Radium)
-    S   "Slack" or "Skype"
+    S   "Slack"
     T   "Terminal" app (iTerm2)
     U
     V   "Voice" (Skype or ScreenHero)

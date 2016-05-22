@@ -2,7 +2,7 @@
 
     Symbol Keymap
 
-    todo: Consider using ✕ char for X and back to ✓ for V as complementary symbols and then put ∞ on ("Never ends")
+    todo: Consider using ✕ char for X and back to ✓ for V as complementary symbols and then put ∞ on ("Never ends" or "Nfinity")
 
     todo: Decide whether you like ∞ (LALT(KC_8)) or ≠ (LALT(KC_EQL)) better on the N key.
 
@@ -19,7 +19,7 @@ Ergodox:
     |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
     |   Ø    |  @   |  *   |  -   |  !   |  `   |------|           |------|   #  |   '  |   "  |   &  |   +  |    Ø   |
     |--------+------+------+------+------+------|   Ø  |           |  Ø   |------+------+------+------+------+--------|
-    |   Ø    | "Ø"  |  ✕   |  ^   |  ✓   |  •   |      |           |      |   ≠  |   $  |   ©  |   …  |   \  |    Ø   |
+    |   Ø    | "Ø"  |  ✕   |  ^   |  √   |  •   |      |           |      |   ∞  |   $  |   ©  |   …  |   \  |    Ø   |
     `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
       |  Ø   |  Ø   |  Ø   |  Ø   |(Sym) |                                       | (Sym)|   Ø  |   Ø  |   Ø  |   Ø  |
       `----------------------------------'                                       `----------------------------------'
@@ -39,7 +39,7 @@ Planck:
     |-----------------------------------------------------------------------|
     | Ø   |  @  |  *  |  -  |  !  |  `  |  #  |  '  |  "  |  &  |  +  |   Ø |
     |-----------------------------------------------------------------------|
-    | Ø   | "Ø" |  ✕  |  ^  |  ∞  |  •  |  ≠  |  $  |  ©  |  …  |  \  |   Ø |
+    | Ø   | "Ø" |  ✕  |  ^  |  √  |  •  |  ∞  |  $  |  ©  |  …  |  \  |   Ø |
     |-----------------------------------------------------------------------|
     | Ø   |  Ø  |  Ø  |  Ø  |(Sym)|  Ø  |  Ø  |(Sym)|  Ø  |  Ø  |  Ø  |   Ø |
     `-----------------------------------------------------------------------'
@@ -117,7 +117,7 @@ What I came up with:
 | K   | "      | Can't think of a mnemonic. Just want this on home row under a strong finger because it's used so much.|
 | L   | &#124; | Lame: "Lampersand", "Link"                                                                            |
 | M   | $      | "Money"                                                                                               |
-| N   | ≠      | "Not equal" (Am torn between this and "eN-dash" or "!=" sequence)                                     |
+| N   | ∞      | "Nfinity" Not a useful char, but fun to drop into a text conversation. "I <3 u ∞"                     |
 | O   | °      | Looks circular.                                                                                       |
 | P   | %      | "Percent"                                                                                             |
 | ;   | +      | Same position as on the number layer.                                                                 |
@@ -126,7 +126,7 @@ What I came up with:
 | S   | *      | "Star", "Splat", "aSteriSk"                                                                           |
 | T   | ~      | "Tilde"                                                                                               |
 | U   | _      | "Underscore"  Would have liked this on the home row, but at least it's no longer a double-pinkie char.|
-| V   | ∞      | "Very big". Not a useful char, but fun to drop into a text conversation. "I <3 u ∞"                   |
+| V   | √      | Checkmark looks like a "v"                                                                            |
 | W   | ≈      | "Water", "Wave", "eqWivalent" Whatever...                                                             |
 | X   | ¬      | Character denotes negation, kinda. "Ex it out."                                                       |
 | Y   | —      | "wYde dash" (em-dash). I'm a typography geek. "Please come to my cocktail party from 6:00—10:00 PM, Saturday"   |
