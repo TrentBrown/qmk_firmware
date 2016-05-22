@@ -131,6 +131,22 @@ NavigationCreatePlugin(uint8_t layer)
     return pPlugin;
 }
 
+
+void
+NavigationReset(void)
+{
+    navigation.machine.unitCode = 0;
+    navigation.machine.actionCode = 0;
+    navigation.machine.unit = CHAR_UNIT;
+    navigation.machine.action = MOVE_ACTION;
+
+    navigation.event.pKeyRecord = NULL;
+    navigation.event.code = 0;
+    navigation.event.pressed = false;
+    navigation.event.released = false;
+}
+
+
 bool
 NavigationBefore
     (
@@ -302,25 +318,25 @@ NavigationSetOrClearAction(NavigationAction action)
 
 #define LINE_SELECT_LEFT   D(LSHIFT), D(LGUI), T(LEFT),  U(LGUI), U(LSHIFT)
 #define LINE_SELECT_RIGHT  D(LSHIFT), D(LGUI), T(RIGHT), U(LGUI), U(LSHIFT)
-#define LINE_SELECT_UP     D(LSHIFT), T(UP),    U(LSHIFT)
-#define LINE_SELECT_DOWN   D(LSHIFT), T(DOWN),  U(LSHIFT)
+#define LINE_SELECT_UP     D(LSHIFT), T(UP),   U(LSHIFT)
+#define LINE_SELECT_DOWN   D(LSHIFT), T(DOWN), U(LSHIFT)
 
 
 #define PARA_MOVE_LEFT   D(LCTRL), T(A), U(LCTRL)
 #define PARA_MOVE_RIGHT  D(LCTRL), T(E), U(LCTRL)
 
-#define PARA_SELECT_LEFT   D(LALT), D(LSHIFT), T(UP),  U(LSHIFT),  U(LALT)
+#define PARA_SELECT_LEFT   D(LALT), D(LSHIFT), T(UP),   U(LSHIFT), U(LALT)
 #define PARA_SELECT_RIGHT  D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT)
 
 
-#define DOC_MOVE_LEFT   D(LGUI), T(UP), U(LGUI)
+#define DOC_MOVE_LEFT   D(LGUI), T(UP),   U(LGUI)
 #define DOC_MOVE_RIGHT  D(LGUI), T(DOWN), U(LGUI)
 
-#define DOC_SELECT_LEFT   D(LSHIFT), D(LGUI), T(UP), U(LGUI), U(LSHIFT)
+#define DOC_SELECT_LEFT   D(LSHIFT), D(LGUI), T(UP),   U(LGUI), U(LSHIFT)
 #define DOC_SELECT_RIGHT  D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT)
 
 
-// TODO: Factor out parts of this function. Is too big.
+// TODO: Factor out parts of this function. Is too big. Plus, being able to return from within case statement will be less verboses.
 void
 NavigationPerform(NavigationVector vector)
 {
@@ -729,20 +745,5 @@ NavigationAfter
     bool consumed = false;
 
     return consumed;
-}
-
-
-void
-NavigationReset(void)
-{
-    navigation.machine.unitCode = 0;
-    navigation.machine.actionCode = 0;
-    navigation.machine.unit = CHAR_UNIT;
-    navigation.machine.action = MOVE_ACTION;
-
-    navigation.event.pKeyRecord = NULL;
-    navigation.event.code = 0;
-    navigation.event.pressed = false;
-    navigation.event.released = false;
 }
 
