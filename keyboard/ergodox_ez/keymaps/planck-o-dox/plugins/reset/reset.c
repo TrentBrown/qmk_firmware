@@ -23,6 +23,9 @@ ResetCreatePlugin(void)
     pPlugin->pName = "reset";
     pPlugin->matrixScan = NULL;
     pPlugin->before = &ResetBefore;
+    pPlugin->after = NULL;
+    pPlugin->reset = NULL;
+    pPlugin->pPrevPlugin = NULL;
     pPlugin->pNextPlugin = NULL;
     return pPlugin;
 }

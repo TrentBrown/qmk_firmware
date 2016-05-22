@@ -59,8 +59,8 @@ matrix_init_user(void)
     PluginAddFirst(pNavigationPlugin);
 
     // Reset plugin
-//    Plugin* pResetPlugin = ResetCreatePlugin();
-//    PluginAddFirst(pResetPlugin);
+    Plugin* pResetPlugin = ResetCreatePlugin();
+    PluginAddFirst(pResetPlugin);
 };
 
 
