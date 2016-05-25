@@ -8,6 +8,8 @@
 #include "reset.h"
 
 
+// TODO: Rename this "Reset-on-Escape", or something. Also: Should it emit the escape key directly, itself? Optionally?
+
 // Forward declarations of local functions
 bool ResetBefore
     (

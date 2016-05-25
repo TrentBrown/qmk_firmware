@@ -19,18 +19,18 @@ typedef struct NavigationSettings
 } NavigationSettings;
 
 
-typedef enum NavigationVector
+typedef enum NavigationDirection
 {
-    LEFT_VECTOR,
-    LEFT_WHOLE_VECTOR,
+    LEFT_DIRECTION,
+    LEFT_DIRECTION_WHOLE,
 
-    RIGHT_VECTOR,
-    RIGHT_WHOLE_VECTOR,
+    RIGHT_DIRECTION,
+    RIGHT_DIRECTION_WHOLE,
 
-    UP_VECTOR,
+    UP_DIRECTION,
 
-    DOWN_VECTOR
-} NavigationVector;
+    DOWN_DIRECTION
+} NavigationDirection;
 
 
 typedef enum NavigationUnit
@@ -110,7 +110,7 @@ NavigationAfter
 void NavigationSetOrClearUnit(NavigationUnit unit);
 void NavigationSetOrClearAction(NavigationAction action);
 
-void NavigationPerform(NavigationVector vector);
+void NavigationPerform(NavigationDirection direction);
 
 
 Plugin*
@@ -182,25 +182,25 @@ NavigationBeforePerform(void)
     switch (navigation.event.code)
     {
         case KC_LEFT:
-            NavigationPerform(LEFT_VECTOR);
+            NavigationPerform(LEFT_DIRECTION);
             return true;
         case KC_H:
-            NavigationPerform(LEFT_WHOLE_VECTOR);
+            NavigationPerform(LEFT_DIRECTION_WHOLE);
             return true;
 
         case KC_RIGHT:
-            NavigationPerform(RIGHT_VECTOR);
+            NavigationPerform(RIGHT_DIRECTION);
             return true;
         case KC_K:
-            NavigationPerform(RIGHT_WHOLE_VECTOR);
+            NavigationPerform(RIGHT_DIRECTION_WHOLE);
             return true;
 
         case KC_UP:
-            NavigationPerform(UP_VECTOR);
+            NavigationPerform(UP_DIRECTION);
             return true;
 
         case KC_DOWN:
-            NavigationPerform(DOWN_VECTOR);
+            NavigationPerform(DOWN_DIRECTION);
             return true;
     }
     return false;
@@ -293,6 +293,8 @@ NavigationSetOrClearAction(NavigationAction action)
 }
 
 
+// Character
+
 #define CHAR_MOVE_LEFT   T(LEFT)
 #define CHAR_MOVE_RIGHT  T(RIGHT)
 #define CHAR_MOVE_UP     T(UP)
@@ -304,12 +306,16 @@ NavigationSetOrClearAction(NavigationAction action)
 #define CHAR_SELECT_DOWN   D(LSHIFT), T(DOWN),  U(LSHIFT)
 
 
+// Word
+
 #define WORD_MOVE_LEFT   D(LALT), T(LEFT),  U(LALT)
 #define WORD_MOVE_RIGHT  D(LALT), T(RIGHT), U(LALT)
 
 #define WORD_SELECT_LEFT   D(LSHIFT), D(LALT), T(LEFT),  U(LALT), U(LSHIFT)
 #define WORD_SELECT_RIGHT  D(LSHIFT), D(LALT), T(RIGHT), U(LALT), U(LSHIFT)
 
+
+// Line
 
 #define LINE_MOVE_LEFT   D(LGUI), T(LEFT),  U(LGUI)
 #define LINE_MOVE_RIGHT  D(LGUI), T(RIGHT), U(LGUI)
@@ -322,12 +328,16 @@ NavigationSetOrClearAction(NavigationAction action)
 #define LINE_SELECT_DOWN   D(LSHIFT), T(DOWN), U(LSHIFT)
 
 
+// Paragraph
+
 #define PARA_MOVE_LEFT   D(LCTRL), T(A), U(LCTRL)
 #define PARA_MOVE_RIGHT  D(LCTRL), T(E), U(LCTRL)
 
 #define PARA_SELECT_LEFT   D(LALT), D(LSHIFT), T(UP),   U(LSHIFT), U(LALT)
 #define PARA_SELECT_RIGHT  D(LALT), D(LSHIFT), T(DOWN), U(LSHIFT), U(LALT)
 
+
+// Document
 
 #define DOC_MOVE_LEFT   D(LGUI), T(UP),   U(LGUI)
 #define DOC_MOVE_RIGHT  D(LGUI), T(DOWN), U(LGUI)
@@ -338,7 +348,7 @@ NavigationSetOrClearAction(NavigationAction action)
 
 // TODO: Factor out parts of this function. Is too big. Plus, being able to return from within case statement will be less verboses.
 void
-NavigationPerform(NavigationVector vector)
+NavigationPerform(NavigationDirection direction)
 {
     if (!navigation.event.pressed)
         return;
@@ -351,10 +361,10 @@ NavigationPerform(NavigationVector vector)
     {
         case CHAR_UNIT:
 
-            switch (vector)
+            switch (direction)
             {
-                case LEFT_VECTOR:
-                case LEFT_WHOLE_VECTOR:
+                case LEFT_DIRECTION:
+                case LEFT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -369,8 +379,8 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case RIGHT_VECTOR:
-                case RIGHT_WHOLE_VECTOR:
+                case RIGHT_DIRECTION:
+                case RIGHT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -385,7 +395,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case UP_VECTOR:
+                case UP_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -399,7 +409,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case DOWN_VECTOR:
+                case DOWN_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -416,9 +426,9 @@ NavigationPerform(NavigationVector vector)
             break;
 
         case WORD_UNIT:
-            switch (vector)
+            switch (direction)
             {
-                case LEFT_VECTOR:
+                case LEFT_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -433,7 +443,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case LEFT_WHOLE_VECTOR:
+                case LEFT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -448,7 +458,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case RIGHT_VECTOR:
+                case RIGHT_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -463,7 +473,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case RIGHT_WHOLE_VECTOR:
+                case RIGHT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -478,18 +488,18 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case UP_VECTOR:
+                case UP_DIRECTION:
                     break;
 
-                case DOWN_VECTOR:
+                case DOWN_DIRECTION:
                     break;
             }
             break;
 
         case LINE_UNIT:
-            switch (vector)
+            switch (direction)
             {
-                case LEFT_VECTOR:
+                case LEFT_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -504,7 +514,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case LEFT_WHOLE_VECTOR:
+                case LEFT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -519,7 +529,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case RIGHT_VECTOR:
+                case RIGHT_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -534,7 +544,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case RIGHT_WHOLE_VECTOR:
+                case RIGHT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -549,7 +559,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case UP_VECTOR:
+                case UP_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -564,7 +574,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case DOWN_VECTOR:
+                case DOWN_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -582,10 +592,10 @@ NavigationPerform(NavigationVector vector)
             break;
 
         case PARA_UNIT:
-            switch (vector)
+            switch (direction)
             {
-                case LEFT_VECTOR:
-                case UP_VECTOR:
+                case LEFT_DIRECTION:
+                case UP_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -600,7 +610,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case LEFT_WHOLE_VECTOR:
+                case LEFT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -615,8 +625,8 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case RIGHT_VECTOR:
-                case DOWN_VECTOR:
+                case RIGHT_DIRECTION:
+                case DOWN_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -631,7 +641,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case RIGHT_WHOLE_VECTOR:
+                case RIGHT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -653,10 +663,10 @@ NavigationPerform(NavigationVector vector)
             break;
 
         case DOC_UNIT:
-            switch (vector)
+            switch (direction)
             {
-                case LEFT_VECTOR:
-                case UP_VECTOR:
+                case LEFT_DIRECTION:
+                case UP_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -671,7 +681,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case LEFT_WHOLE_VECTOR:
+                case LEFT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -681,13 +691,13 @@ NavigationPerform(NavigationVector vector)
                             pMacro = MACRO(DOC_MOVE_RIGHT, DOC_SELECT_LEFT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(DOC_MOVE_RIGHT, DOC_SELECT_LEFT, T(BSPACE), END);  // Completely equivalent to RIGHT_WHOLE_VECTOR
+                            pMacro = MACRO(DOC_MOVE_RIGHT, DOC_SELECT_LEFT, T(BSPACE), END);  // Completely equivalent to RIGHT_DIRECTION_WHOLE
                             break;
                     }
                     break;
 
-                case RIGHT_VECTOR:
-                case DOWN_VECTOR:
+                case RIGHT_DIRECTION:
+                case DOWN_DIRECTION:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -702,7 +712,7 @@ NavigationPerform(NavigationVector vector)
                     }
                     break;
 
-                case RIGHT_WHOLE_VECTOR:
+                case RIGHT_DIRECTION_WHOLE:
                     switch (action)
                     {
                         case MOVE_ACTION:
@@ -712,7 +722,7 @@ NavigationPerform(NavigationVector vector)
                             pMacro = MACRO(DOC_MOVE_LEFT, DOC_SELECT_RIGHT, END);
                             break;
                         case DELETE_ACTION:
-                            pMacro = MACRO(DOC_MOVE_LEFT, DOC_SELECT_RIGHT, T(BSPACE), END);  // Completely equivalent to LEFT_WHOLE_VECTOR
+                            pMacro = MACRO(DOC_MOVE_LEFT, DOC_SELECT_RIGHT, T(BSPACE), END);  // Completely equivalent to LEFT_DIRECTION_WHOLE
                             break;
                     }
                     break;
