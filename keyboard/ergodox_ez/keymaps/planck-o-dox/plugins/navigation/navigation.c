@@ -96,6 +96,37 @@ NavigationBefore
         action_t action
     );
 bool NavigationBeforePerform(void);
+const macro_t* pMacro NavigationPerformChar
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    );
+const macro_t* pMacro NavigationPerformWord
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    );
+const macro_t* pMacro NavigationPerformLine
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    );
+const macro_t* pMacro NavigationPerformPara
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    );
+const macro_t* pMacro NavigationPerformPage
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    );
+const macro_t* pMacro NavigationPerformDoc
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    );
+
 bool NavigationBeforeUnit(void);
 bool NavigationBeforeAction(void);
 
@@ -346,7 +377,6 @@ NavigationSetOrClearAction(NavigationAction action)
 #define DOC_SELECT_RIGHT  D(LSHIFT), D(LGUI), T(DOWN), U(LGUI), U(LSHIFT)
 
 
-// TODO: Factor out parts of this function. Is too big. Plus, being able to return from within case statement will be less verboses.
 void
 NavigationPerform(NavigationDirection direction)
 {
@@ -360,373 +390,22 @@ NavigationPerform(NavigationDirection direction)
     switch (navigation.machine.unit)
     {
         case CHAR_UNIT:
-
-            switch (direction)
-            {
-                case LEFT_DIRECTION:
-                case LEFT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(CHAR_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(CHAR_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION:
-                case RIGHT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(CHAR_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(CHAR_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(T(DELETE), END);
-                            break;
-                    }
-                    break;
-
-                case UP_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(CHAR_MOVE_UP, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(CHAR_SELECT_UP, END);
-                            break;
-                        case DELETE_ACTION:
-                            break;
-                    }
-                    break;
-
-                case DOWN_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(CHAR_MOVE_DOWN, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(CHAR_SELECT_DOWN, END);
-                            break;
-                        case DELETE_ACTION:
-                            break;
-                    }
-                    break;
-            }
+            pMacro = NavigationPerformChar(direction, action);
             break;
-
         case WORD_UNIT:
-            switch (direction)
-            {
-                case LEFT_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(WORD_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(WORD_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(WORD_SELECT_LEFT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case LEFT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(WORD_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(WORD_MOVE_RIGHT, WORD_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(WORD_MOVE_RIGHT, WORD_SELECT_LEFT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(WORD_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(WORD_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(WORD_SELECT_RIGHT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(WORD_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(WORD_MOVE_LEFT, WORD_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(WORD_MOVE_LEFT, WORD_SELECT_RIGHT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case UP_DIRECTION:
-                    break;
-
-                case DOWN_DIRECTION:
-                    break;
-            }
+            pMacro = NavigationPerformWord(direction, action);
             break;
-
         case LINE_UNIT:
-            switch (direction)
-            {
-                case LEFT_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(LINE_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(LINE_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(LINE_SELECT_LEFT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case LEFT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(LINE_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(LINE_MOVE_RIGHT, LINE_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(LINE_MOVE_RIGHT, LINE_SELECT_LEFT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(LINE_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(LINE_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(LINE_SELECT_RIGHT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(LINE_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(LINE_MOVE_LEFT, LINE_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(LINE_MOVE_LEFT, LINE_SELECT_RIGHT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case UP_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(LINE_MOVE_UP, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(CHAR_SELECT_UP, LINE_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            // TODO
-                            break;
-                    }
-                    break;
-
-                case DOWN_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(LINE_MOVE_DOWN, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(CHAR_SELECT_DOWN, LINE_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            // TODO
-                            break;
-                    }
-                    break;
-            }
+            pMacro = NavigationPerformLine(direction, action);
             break;
-
         case PARA_UNIT:
-            switch (direction)
-            {
-                case LEFT_DIRECTION:
-                case UP_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(PARA_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(PARA_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(PARA_SELECT_LEFT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case LEFT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(PARA_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(PARA_MOVE_RIGHT, PARA_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(PARA_MOVE_RIGHT, PARA_SELECT_LEFT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION:
-                case DOWN_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(PARA_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(PARA_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(PARA_SELECT_RIGHT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(PARA_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(PARA_MOVE_LEFT, PARA_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(PARA_MOVE_LEFT, PARA_SELECT_RIGHT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-            }
+            pMacro = NavigationPerformPara(direction, action);
             break;
-
         case PAGE_UNIT:
-            // TODO
+            pMacro = NavigationPerformPage(direction, action);
             break;
-
         case DOC_UNIT:
-            switch (direction)
-            {
-                case LEFT_DIRECTION:
-                case UP_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(DOC_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(DOC_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(DOC_SELECT_LEFT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case LEFT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(DOC_MOVE_LEFT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(DOC_MOVE_RIGHT, DOC_SELECT_LEFT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(DOC_MOVE_RIGHT, DOC_SELECT_LEFT, T(BSPACE), END);  // Completely equivalent to RIGHT_DIRECTION_WHOLE
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION:
-                case DOWN_DIRECTION:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(DOC_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(DOC_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(DOC_SELECT_RIGHT, T(BSPACE), END);
-                            break;
-                    }
-                    break;
-
-                case RIGHT_DIRECTION_WHOLE:
-                    switch (action)
-                    {
-                        case MOVE_ACTION:
-                            pMacro = MACRO(DOC_MOVE_RIGHT, END);
-                            break;
-                        case SELECT_ACTION:
-                            pMacro = MACRO(DOC_MOVE_LEFT, DOC_SELECT_RIGHT, END);
-                            break;
-                        case DELETE_ACTION:
-                            pMacro = MACRO(DOC_MOVE_LEFT, DOC_SELECT_RIGHT, T(BSPACE), END);  // Completely equivalent to LEFT_DIRECTION_WHOLE
-                            break;
-                    }
-                    break;
-            }
+            pMacro = NavigationPerformDoc(direction, action);
             break;
     }
 
@@ -735,6 +414,341 @@ NavigationPerform(NavigationDirection direction)
         return;
 
     action_macro_play(pMacro);
+}
+
+
+const macro_t* pMacro
+NavigationPerformChar(NavigationDirection direction, NavigationAction action)
+{
+    switch (direction)
+    {
+        case LEFT_DIRECTION:
+        case LEFT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(CHAR_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(CHAR_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION:
+        case RIGHT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(CHAR_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(CHAR_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(T(DELETE), END);
+            }
+            break;
+
+        case UP_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(CHAR_MOVE_UP, END);
+                case SELECT_ACTION:
+                    return MACRO(CHAR_SELECT_UP, END);
+                case DELETE_ACTION:
+                    return NULL;  // ???
+            }
+            break;
+
+        case DOWN_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(CHAR_MOVE_DOWN, END);
+                case SELECT_ACTION:
+                    return MACRO(CHAR_SELECT_DOWN, END);
+                case DELETE_ACTION:
+                    return NULL;  // ???
+            }
+            break;
+    }
+    return NULL;
+}
+
+
+const macro_t* pMacro
+NavigationPerformWord(NavigationDirection direction, NavigationAction action)
+{
+    switch (direction)
+    {
+        case LEFT_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(WORD_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(WORD_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(WORD_SELECT_LEFT, T(BSPACE), END);
+            }
+            break;
+
+        case LEFT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(WORD_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(WORD_MOVE_RIGHT, WORD_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(WORD_MOVE_RIGHT, WORD_SELECT_LEFT, T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(WORD_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(WORD_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(WORD_SELECT_RIGHT, T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(WORD_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(WORD_MOVE_LEFT, WORD_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(WORD_MOVE_LEFT, WORD_SELECT_RIGHT, T(BSPACE), END);
+            }
+            break;
+
+        case UP_DIRECTION:
+            break;
+
+        case DOWN_DIRECTION:
+            break;
+    }
+}
+
+const macro_t* pMacro NavigationPerformLine
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    )
+{
+    switch (direction)
+    {
+        case LEFT_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(LINE_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(LINE_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(LINE_SELECT_LEFT, T(BSPACE), END);
+            }
+            break;
+
+        case LEFT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(LINE_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(LINE_MOVE_RIGHT, LINE_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(LINE_MOVE_RIGHT, LINE_SELECT_LEFT, T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(LINE_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(LINE_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(LINE_SELECT_RIGHT, T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(LINE_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(LINE_MOVE_LEFT, LINE_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(LINE_MOVE_LEFT, LINE_SELECT_RIGHT, T(BSPACE), END);
+            }
+            break;
+
+        case UP_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(LINE_MOVE_UP, END);
+                case SELECT_ACTION:
+                    return MACRO(CHAR_SELECT_UP, LINE_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    // TODO
+            }
+            break;
+
+        case DOWN_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(LINE_MOVE_DOWN, END);
+                case SELECT_ACTION:
+                    return MACRO(CHAR_SELECT_DOWN, LINE_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    // TODO
+            }
+            break;
+    }
+}
+
+
+const macro_t* pMacro NavigationPerformPara
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    )
+{
+    switch (direction)
+    {
+        case LEFT_DIRECTION:
+        case UP_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(PARA_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(PARA_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(PARA_SELECT_LEFT, T(BSPACE), END);
+            }
+            break;
+
+        case LEFT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(PARA_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(PARA_MOVE_RIGHT, PARA_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(PARA_MOVE_RIGHT, PARA_SELECT_LEFT, T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION:
+        case DOWN_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(PARA_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(PARA_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(PARA_SELECT_RIGHT, T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(PARA_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(PARA_MOVE_LEFT, PARA_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(PARA_MOVE_LEFT, PARA_SELECT_RIGHT, T(BSPACE), END);
+            }
+            break;
+    }
+}
+
+
+const macro_t* pMacro NavigationPerformPage
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    )
+{
+    // TODO
+}
+
+
+const macro_t* pMacro NavigationPerformDoc
+    (
+        NavigationDirection direction,
+        NavigationAction action
+    )
+{
+    switch (direction)
+    {
+        case LEFT_DIRECTION:
+        case UP_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(DOC_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(DOC_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(DOC_SELECT_LEFT, T(BSPACE), END);
+            }
+            break;
+
+        case LEFT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(DOC_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(DOC_MOVE_RIGHT, DOC_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(DOC_MOVE_RIGHT, DOC_SELECT_LEFT, T(BSPACE), END);  // Completely equivalent to RIGHT_DIRECTION_WHOLE
+            }
+            break;
+
+        case RIGHT_DIRECTION:
+        case DOWN_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(DOC_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(DOC_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(DOC_SELECT_RIGHT, T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION_WHOLE:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(DOC_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(DOC_MOVE_LEFT, DOC_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(DOC_MOVE_LEFT, DOC_SELECT_RIGHT, T(BSPACE), END);  // Completely equivalent to LEFT_DIRECTION_WHOLE
+            }
+            break;
+    }
 }
 
 
