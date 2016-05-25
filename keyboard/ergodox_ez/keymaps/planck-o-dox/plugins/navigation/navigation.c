@@ -96,32 +96,32 @@ NavigationBefore
         action_t action
     );
 bool NavigationBeforePerform(void);
-const macro_t* pMacro NavigationPerformChar
+const macro_t* NavigationPerformChar
     (
         NavigationDirection direction,
         NavigationAction action
     );
-const macro_t* pMacro NavigationPerformWord
+const macro_t* NavigationPerformWord
     (
         NavigationDirection direction,
         NavigationAction action
     );
-const macro_t* pMacro NavigationPerformLine
+const macro_t* NavigationPerformLine
     (
         NavigationDirection direction,
         NavigationAction action
     );
-const macro_t* pMacro NavigationPerformPara
+const macro_t* NavigationPerformPara
     (
         NavigationDirection direction,
         NavigationAction action
     );
-const macro_t* pMacro NavigationPerformPage
+const macro_t* NavigationPerformPage
     (
         NavigationDirection direction,
         NavigationAction action
     );
-const macro_t* pMacro NavigationPerformDoc
+const macro_t* NavigationPerformDoc
     (
         NavigationDirection direction,
         NavigationAction action
@@ -359,6 +359,15 @@ NavigationSetOrClearAction(NavigationAction action)
 #define LINE_SELECT_DOWN   D(LSHIFT), T(DOWN), U(LSHIFT)
 
 
+// Page
+
+#define PAGE_MOVE_LEFT   D(LALT), T(PGUP), U(LALT)
+#define PAGE_MOVE_RIGHT  D(LALT), T(PGDOWN), U(LALT)
+
+#define PAGE_SELECT_LEFT   D(LSHIFT), T(PGUP),   U(LSHIFT)
+#define PAGE_SELECT_RIGHT  D(LSHIFT), T(PGDOWN), U(LSHIFT)
+
+
 // Paragraph
 
 #define PARA_MOVE_LEFT   D(LCTRL), T(A), U(LCTRL)
@@ -417,7 +426,7 @@ NavigationPerform(NavigationDirection direction)
 }
 
 
-const macro_t* pMacro
+const macro_t*
 NavigationPerformChar(NavigationDirection direction, NavigationAction action)
 {
     switch (direction)
@@ -476,7 +485,7 @@ NavigationPerformChar(NavigationDirection direction, NavigationAction action)
 }
 
 
-const macro_t* pMacro
+const macro_t*
 NavigationPerformWord(NavigationDirection direction, NavigationAction action)
 {
     switch (direction)
@@ -537,7 +546,8 @@ NavigationPerformWord(NavigationDirection direction, NavigationAction action)
     }
 }
 
-const macro_t* pMacro NavigationPerformLine
+const macro_t*
+NavigationPerformLine
     (
         NavigationDirection direction,
         NavigationAction action
@@ -602,6 +612,7 @@ const macro_t* pMacro NavigationPerformLine
                     return MACRO(CHAR_SELECT_UP, LINE_SELECT_LEFT, END);
                 case DELETE_ACTION:
                     // TODO
+                    break;
             }
             break;
 
@@ -614,13 +625,15 @@ const macro_t* pMacro NavigationPerformLine
                     return MACRO(CHAR_SELECT_DOWN, LINE_SELECT_RIGHT, END);
                 case DELETE_ACTION:
                     // TODO
+                    break;
             }
             break;
     }
 }
 
 
-const macro_t* pMacro NavigationPerformPara
+const macro_t*
+NavigationPerformPara
     (
         NavigationDirection direction,
         NavigationAction action
@@ -681,17 +694,54 @@ const macro_t* pMacro NavigationPerformPara
 }
 
 
-const macro_t* pMacro NavigationPerformPage
+const macro_t*
+NavigationPerformPage
     (
         NavigationDirection direction,
         NavigationAction action
     )
 {
-    // TODO
+    switch (direction)
+    {
+        case LEFT_DIRECTION:
+        case UP_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(PAGE_MOVE_LEFT, END);
+                case SELECT_ACTION:
+                    return MACRO(PAGE_SELECT_LEFT, END);
+                case DELETE_ACTION:
+                    return MACRO(PAGE_SELECT_LEFT, T(BSPACE), END);
+            }
+            break;
+
+        case LEFT_DIRECTION_WHOLE:
+            // Would not work right, at least in most Mac apps, as it would go a half page below
+            break;
+
+        case RIGHT_DIRECTION:
+        case DOWN_DIRECTION:
+            switch (action)
+            {
+                case MOVE_ACTION:
+                    return MACRO(PAGE_MOVE_RIGHT, END);
+                case SELECT_ACTION:
+                    return MACRO(PAGE_SELECT_RIGHT, END);
+                case DELETE_ACTION:
+                    return MACRO(PAGE_SELECT_RIGHT, T(BSPACE), END);
+            }
+            break;
+
+        case RIGHT_DIRECTION_WHOLE:
+            // Would not work right, at least in most Mac apps, as it would go a half page above
+            break;
+    }
 }
 
 
-const macro_t* pMacro NavigationPerformDoc
+const macro_t*
+NavigationPerformDoc
     (
         NavigationDirection direction,
         NavigationAction action
