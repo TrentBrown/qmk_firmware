@@ -54,6 +54,7 @@ Plus and division are in the same positions as on the base layer.
 */
 
 
+#ifdef ERGODOX
 [BRACKET_AND_NUMBER_KEYMAP] = KEYMAP
     (
         // Left
@@ -85,7 +86,18 @@ Plus and division are in the same positions as on the base layer.
         KC_TRNS,
         KC_TRNS,        KC_TRNS,    KC_TRNS
     )
+#endif // ERGODOX
 
+ 
+#ifdef PLANCK
+   [BRACKET_AND_NUMBER_KEYMAP] =
+    {
+        {KC_TRNS, E(LXC),  E(RXC),  KC_LBRACKET,    KC_RBRACKET,  KC_NO,   KC_ASTR,  KC_7,    KC_8,    KC_9,    KC_MINUS, KC_TRNS},
+        {KC_TRNS, KC_LCBR, KC_RCBR, KC_LPRN,        KC_RPRN,      KC_NO,   KC_0,     KC_4,    KC_5,    KC_6,    KC_PLUS,  KC_TRNS},
+        {KC_TRNS, E(LCC),  E(RCC),  LSFT(KC_COMMA), LSFT(KC_DOT), KC_NO,   KC_DOT,   KC_1,    KC_2,    KC_3,    KC_TRNS,  KC_TRNS},
+        {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,        KC_TRNS,      KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS}
+    }
+#endif // PLANCK
 
 /*
 
@@ -131,7 +143,7 @@ Hold right shift, tap left and right with adjacent fingers using left hand.
 
 Used frequency of use to determine which get the most accessible keys and strongest fingers:
 
-1. Parenthises
+1. Parentheses
 2. Curly brackets
 3. Square bracket
 4. Angle brackets

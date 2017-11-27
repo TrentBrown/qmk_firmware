@@ -544,6 +544,7 @@ NavigationPerformWord(NavigationDirection direction, NavigationAction action)
         case DOWN_DIRECTION:
             break;
     }
+    return NULL;
 }
 
 const macro_t*
@@ -629,6 +630,7 @@ NavigationPerformLine
             }
             break;
     }
+    return NULL;
 }
 
 
@@ -691,6 +693,7 @@ NavigationPerformPara
             }
             break;
     }
+    return NULL;
 }
 
 
@@ -737,6 +740,7 @@ NavigationPerformPage
             // Would not work right, at least in most Mac apps, as it would go a half page above
             break;
     }
+    return NULL;
 }
 
 
@@ -799,6 +803,7 @@ NavigationPerformDoc
             }
             break;
     }
+    return NULL;
 }
 
 

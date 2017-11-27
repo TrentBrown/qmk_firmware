@@ -26,6 +26,7 @@ Ergodox:
 
 */
 
+#ifdef ERGODOX
 [HYPER_KEYMAP] = KEYMAP
     (
         // Left
@@ -57,7 +58,17 @@ Ergodox:
         KC_TRNS,
         KC_TRNS,    KC_TRNS,    KC_TRNS
     )
+#endif // ERGODOX
 
+#ifdef PLANCK
+    [HYPER_KEYMAP] =
+    {
+        {KC_TRNS, HYPR(KC_Q), HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T), HYPR(KC_Y), HYPR(KC_U), HYPR(KC_I), HYPR(KC_O), HYPR(KC_P), KC_TRNS},
+        {KC_TRNS, HYPR(KC_A), HYPR(KC_S), HYPR(KC_D), HYPR(KC_F), HYPR(KC_G), HYPR(KC_H), HYPR(KC_J), HYPR(KC_K), HYPR(KC_L), KC_NO,      KC_TRNS},
+        {KC_TRNS, HYPR(KC_N), HYPR(KC_M), KC_NO,      KC_NO,      KC_NO,      HYPR(KC_N), HYPR(KC_M), KC_NO,      KC_NO,      KC_NO,      KC_TRNS},
+        {KC_TRNS, KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS}
+    }
+#endif // PLANCK
 
 /*
 

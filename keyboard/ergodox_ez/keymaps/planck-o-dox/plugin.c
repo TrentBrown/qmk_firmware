@@ -1,3 +1,5 @@
+#include <string.h>
+
 // plugin
 #include "plugin.h"
 

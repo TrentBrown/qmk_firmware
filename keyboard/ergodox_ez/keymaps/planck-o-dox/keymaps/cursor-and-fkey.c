@@ -92,6 +92,7 @@ Right layer key pressed
 
 */
 
+#ifdef ERGODOX
 [CURSOR_AND_FKEY_LEFT_KEYMAP] = KEYMAP
     (
         // Left
@@ -134,7 +135,7 @@ Right layer key pressed
         KC_TRNS,    KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
         KC_TRNS,    KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_TRNS,
         // --------------------------------------------------------------------------------
-        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_LSHIFT,
+        KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,
 
                                                                     KC_TRNS,    KC_TRNS,
                                                                                 KC_TRNS,
@@ -155,6 +156,26 @@ Right layer key pressed
         KC_TRNS,    KC_TRNS,    KC_TRNS
 
     )
+#endif // ERGODOX
+
+
+#ifdef PLANCK
+    [CURSOR_AND_FKEY_LEFT_KEYMAP] =
+    {
+        {KC_TRNS, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,    KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_TRNS},
+        {KC_TRNS, KC_NO,   KC_NO,   KC_H,    KC_UP,   KC_K,     KC_NO,   KC_F4,   KC_F5,   KC_F6,   KC_F11,  KC_TRNS},
+        {KC_TRNS, KC_NO,   KC_NO,   KC_LEFT, KC_DOWN, KC_RIGHT, KC_NO,  KC_F1,   KC_F2,   KC_F3,   KC_F12,  KC_TRNS},
+        {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS}
+    },
+
+    [CURSOR_AND_FKEY_RIGHT_KEYMAP] =
+    {
+        {KC_TRNS, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,   KC_NO,   KC_TRNS},
+        {KC_TRNS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_UP,   KC_K,     KC_NO,   KC_NO,   KC_TRNS},
+        {KC_TRNS, KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_LEFT, KC_DOWN, KC_RIGHT, KC_NO,   KC_NO,   KC_TRNS},
+        {KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS}
+    }
+#endif // PLANCK
 
 /*
 

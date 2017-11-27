@@ -46,6 +46,7 @@ Planck:
 
 */
 
+#ifdef ERGODOX
 [SYMBOL_KEYMAP] = KEYMAP
     (
         // Left
@@ -77,6 +78,17 @@ Planck:
         KC_TRNS,
         KC_TRNS,    KC_TRNS,    KC_TRNS
     )
+#endif // ERGODOX
+
+#ifdef PLANCK
+    [SYMBOL_KEYMAP] =
+    {
+        {KC_TRNS, LALT(LSFT(KC_SLSH)), LALT(KC_X), KC_EQUAL,   LALT(KC_R), KC_TILD,    LALT(LSFT(KC_MINS)), KC_UNDS,  KC_PIPE,       LSFT(LALT(KC_8)), KC_PERC,   KC_TRNS},
+        {KC_TRNS, KC_AT,               KC_ASTR,    KC_MINUS,   KC_EXLM,    KC_GRAVE,   KC_HASH,             KC_QUOTE, LSFT(KC_QUOT), KC_AMPR,          KC_PLUS,   KC_TRNS},
+        {KC_TRNS, LALT(KC_O),          LALT(KC_L), KC_CIRC,    LALT(KC_5), LALT(KC_8), LALT(KC_EQL),        KC_DLR,   LALT(KC_G),    LALT(KC_SCLN),    KC_BSLASH, KC_TRNS},
+        {KC_TRNS, KC_TRNS,             KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,    KC_TRNS,             KC_TRNS,  KC_TRNS,       KC_TRNS,          KC_TRNS,   KC_TRNS}
+    }
+#endif // PLANCK
 
 /*
 

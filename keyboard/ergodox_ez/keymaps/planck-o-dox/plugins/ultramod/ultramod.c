@@ -174,7 +174,9 @@ UltramodReset(void)
     clear_keyboard();
     layer_clear();
 
+#ifdef ERGODOX
     ergodox_led_all_off();
+#endif // ERGODOX
 
     UltramodSettingsReset();
     UltramodEventReset();
@@ -508,7 +510,9 @@ SetNormalState(void)
     clear_keyboard();
     layer_clear();
 
+#ifdef ERGODOX
     ergodox_led_all_off();
+#endif // ERGODOX
 
     UltramodEventReset();
     UltramodMachineReset();
@@ -517,6 +521,8 @@ SetNormalState(void)
 
 void UltramodSetLeds(void)
 {
+#ifdef ERGODOX
+
     ergodox_led_all_off();
 
     // todo: Consider changing these so that they progress from left to right, or maybe right to left
@@ -542,6 +548,8 @@ void UltramodSetLeds(void)
 
     // Something seems to keep resetting the brightness
     ergodox_led_all_set(LED_BRIGHTNESS_LO);
+
+#endif // ERGODOX
 }
 
 

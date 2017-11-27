@@ -18,7 +18,7 @@ is probably fine, I guess. I would miss single-shot though, at least on the left
 Ergodox:
 
     ,--------------------------------------------------.           ,--------------------------------------------------.
-    |        | Undo | Cut  | Copy |Paste | PAMS | P/P  |           | Mute | PAMS | Paste| Copy |  Cut | Undo |SwapApps|
+    | Escape | Undo | Cut  | Copy |Paste | PAMS | P/P  |           | Mute | PAMS | Paste| Copy |  Cut | Undo |SwapApps|
     |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
     | Tab    |  Q   |  W   |  E   |  R   |  T   |Prev  |           | Vol+ |   Y  |   U  |   I  |   O  |   P  | Escape |
     |--------+------+------+------+------+------|Track |           |      |------+------+------+------+------+--------|
@@ -52,12 +52,13 @@ Planck:
 */
 
 
+#ifdef ERGODOX
 [BASE_KEYMAP] = KEYMAP
     (
         // Left
 
         // --------------------------------------------------------------------------------
-        KC_NO,      LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), E(PAMS),    KC_MPLY,
+        KC_ESCAPE,  LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), E(PAMS),    KC_MPLY,
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_MPRV,
         KC_LSHIFT,  KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
         KC_LGUI,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_MNXT,
@@ -83,14 +84,18 @@ Planck:
         KC_PGUP,
         KC_PGDOWN,  KC_BSPACE,  KC_SPACE
     )
+#endif // ERGODOX
 
 
-//[BASE_KEYMAP] = {
-//  {KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
-//  {KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT},
-//  {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT },
-//  {M(0),    KC_LCTL, KC_LALT, KC_LGUI, MO(_LW), KC_SPC,  KC_SPC,  MO(_RS), KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT}
-//},
+#ifdef PLANCK
+[BASE_KEYMAP] =
+    {
+        {KC_TAB,  KC_Q,    KC_W,        KC_E,       KC_R,       KC_T,    KC_Y,    KC_U,       KC_I,       KC_O,       KC_P,    KC_ESCAPE},
+        {KC_LSFT, KC_A,    KC_S,        KC_D,       KC_F,       KC_G,    KC_H,    KC_J,       KC_K,       KC_L,       KC_SCLN, KC_RSFT},
+        {KC_LGUI, KC_Z,    KC_X,        KC_C,       KC_V,       KC_B,    KC_N,    KC_M,       KC_COMM,    KC_DOT,     KC_SLSH, KC_ENT},
+        {KC_LCTL, KC_LALT, MO(A(FKEY)), MO(A(BAN)), MO(A(SYM)), KC_BSPC, KC_SPC,  MO(A(SYM)), MO(A(BAN)), MO(A(NAV)), KC_RALT, KC_RCTL}
+    }
+#endif // PLANCK
 
 /*
 

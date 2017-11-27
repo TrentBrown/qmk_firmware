@@ -5,6 +5,8 @@
 #include "sleep_led.h"
 #include "action.h"
 
+#define ERGODOX
+
 // plugin
 #include "plugin.h"
 

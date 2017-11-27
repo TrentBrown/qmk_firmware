@@ -1,3 +1,6 @@
+#ifndef __KEYMAP
+#define __KEYMAP
+
 // Base
 #define BASE_KEYMAP 0
 #define BAS_KEYMAP BASE_KEYMAP
@@ -30,3 +33,5 @@
 // Define a macro that lets us use more abbreviated reference to a named keymap.
 // For example: K(EMO) --> EMO_KEYMAP --> EMOTICON_KEYMAP --> 6
 #define K(name) name##_KEYMAP
+
+#endif //__KEYMAP

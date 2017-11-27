@@ -44,6 +44,7 @@ Planck:
 ¯\_(ツ)_/¯
 */
 
+#ifdef ERGODOX
 [EMOTICON_KEYMAP] = KEYMAP
     (
         // Left
@@ -75,7 +76,17 @@ Planck:
         KC_TRNS,
         KC_TRNS,    KC_TRNS,    KC_TRNS
     )
+#endif // ERGODOX
 
+#ifdef PLANCK
+    [EMOTICON_KEYMAP] =
+    {
+        {KC_TRNS, E(QUIET), E(WINKING),   E(EXTREME), E(ROLLING),  E(TOUNGUE), E(YAY),   E(UNHAPPY), E(INNOCENT), E(OH),       E(PERPLEXED), KC_TRNS},
+        {KC_TRNS, E(ANGRY), E(SKEPTICAL), E(DUNCE),   E(FROWNING), E(GUILTY),  E(HAPPY), E(JUST),    E(KISSING),  E(LAUGHING), KC_NO,        KC_TRNS},
+        {KC_TRNS, E(ZZZ),   E(X_PARROT),  E(CRYING),  E(VEXED),    E(BORED),   E(N),     E(MEH),     E(HEART),    KC_NO,       KC_NO,        KC_TRNS},
+        {KC_TRNS, KC_TRNS,  KC_TRNS,      KC_TRNS,    KC_TRNS,     KC_TRNS,    KC_TRNS,  KC_TRNS,    KC_TRNS,     KC_TRNS,     KC_TRNS,      KC_TRNS}
+    }
+#endif // PLANCK
 
 /*
 
