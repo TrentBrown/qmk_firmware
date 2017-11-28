@@ -52,7 +52,7 @@ matrix_init_user(void)
     UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_SINGLE_TAP, 250);
     UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_DOUBLE_TAP, 250);
     UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_ONE_SHOT, 10000);
-    UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_LOCKED, 10000);
+    UltramodConfigureTimeout(ULTRAMOD_TIMEOUT_LOCKED, 30000);
     Plugin* pUltramodPlugin = UltramodCreatePlugin();
     PluginAddFirst(pUltramodPlugin);
 

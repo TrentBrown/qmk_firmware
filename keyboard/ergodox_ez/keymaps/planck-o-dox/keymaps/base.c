@@ -58,7 +58,7 @@ Planck:
         // Left
 
         // --------------------------------------------------------------------------------
-        KC_ESCAPE,  LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), E(PAMS),    KC_MPLY,
+        KC_ENTER,   LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), E(PAMS),    KC_MPLY,
         KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       KC_MPRV,
         KC_LSHIFT,  KC_A,       KC_S,       KC_D,       KC_F,       KC_G,
         KC_LGUI,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       KC_MNXT,
@@ -73,12 +73,12 @@ Planck:
         // Right  KC_MPRV,    KC_MPLY,    KC_MNXT
 
         // -----------------------------------------------------------------------------------
-        KC_MUTE,    E(PAMS),    LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z), LGUI(KC_TAB),
-        KC_VOLU,    KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_ESCAPE,
-                    KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,  KC_RSHIFT,
-        KC_VOLD,    KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,   KC_ENTER,
+        KC_MUTE,    E(PAMS),    LGUI(KC_V), LGUI(KC_C), LGUI(KC_X), LGUI(KC_Z),   LGUI(KC_TAB),
+        KC_VOLU,    KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,         LGUI(KC_TAB),
+                    KC_H,       KC_J,       KC_K,       KC_L,       KC_SCOLON,    KC_RSHIFT,
+        KC_VOLD,    KC_N,       KC_M,       KC_COMMA,   KC_DOT,     KC_SLASH,     KC_ENTER,
         // -----------------------------------------------------------------------------------
-                                MO(A(SYM)), MO(A(BAN)), MO(A(NAV)), KC_RALT,    KC_RCTRL,
+                                MO(A(SYM)), MO(A(BAN)), MO(A(NAV)), FUNC(A(RSTP)), KC_ESCAPE,
 
         MO(A(EMO)), MO(A(HYP)),
         KC_PGUP,
@@ -90,10 +90,10 @@ Planck:
 #ifdef PLANCK
 [BASE_KEYMAP] =
     {
-        {KC_TAB,  KC_Q,    KC_W,        KC_E,       KC_R,       KC_T,    KC_Y,    KC_U,       KC_I,       KC_O,       KC_P,    KC_ESCAPE},
-        {KC_LSFT, KC_A,    KC_S,        KC_D,       KC_F,       KC_G,    KC_H,    KC_J,       KC_K,       KC_L,       KC_SCLN, KC_RSFT},
-        {KC_LGUI, KC_Z,    KC_X,        KC_C,       KC_V,       KC_B,    KC_N,    KC_M,       KC_COMM,    KC_DOT,     KC_SLSH, KC_ENT},
-        {KC_LCTL, KC_LALT, MO(A(FKEY)), MO(A(BAN)), MO(A(SYM)), KC_BSPC, KC_SPC,  MO(A(SYM)), MO(A(BAN)), MO(A(NAV)), KC_RALT, KC_RCTL}
+        {KC_TAB,  KC_Q,    KC_W,        KC_E,       KC_R,       KC_T,    KC_Y,    KC_U,       KC_I,       KC_O,       KC_P,          LGUI(KC_TAB)},
+        {KC_LSFT, KC_A,    KC_S,        KC_D,       KC_F,       KC_G,    KC_H,    KC_J,       KC_K,       KC_L,       KC_SCLN,       KC_RSFT},
+        {KC_LGUI, KC_Z,    KC_X,        KC_C,       KC_V,       KC_B,    KC_N,    KC_M,       KC_COMM,    KC_DOT,     KC_SLSH,       KC_ENT},
+        {KC_LCTL, KC_LALT, MO(A(FKEY)), MO(A(BAN)), MO(A(SYM)), KC_BSPC, KC_SPC,  MO(A(SYM)), MO(A(BAN)), MO(A(NAV)), FUNC(A(RSTP)), KC_ESCAPE}
     }
 #endif // PLANCK
 
